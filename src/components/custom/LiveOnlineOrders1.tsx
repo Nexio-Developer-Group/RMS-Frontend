@@ -57,7 +57,7 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
                 <div className="card-footer border-t border-teal-300 pt-3 justify-between items-center -mx-4 px-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-teal-500">
-                            <span> <Timer /> </span>
+                            <span> <Timer className="w-4 h-4 align-items-center"/> </span>
                             <span>{placedAgo}</span>
                         </div>
                         <div className="flex items-center gap-2">
