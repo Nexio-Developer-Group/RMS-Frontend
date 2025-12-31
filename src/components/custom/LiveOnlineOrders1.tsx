@@ -30,7 +30,7 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
         className = "" }) => {
         const itemSummary = items.map((i) => `${i.quantity}X ${i.name}`).join(", ");
         return (
-            <div className={`border rounded-xl p-4 shadow-sm bg-white border-teal-300 w-100 ${className}`}>
+            <div className={`border rounded-xl p-4 bg-white border-teal-300 w-100 ${className} shadow-[0_4px_0_0_#0000001A]`}>
 
                 {/* Card Header */}
                 <div className="card-header">
