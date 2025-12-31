@@ -5,11 +5,20 @@ import { useAuth } from '@/auth'
 import { useThemeStore } from '@/store/themeStore'
 import PostLoginLayout from './PostLoginLayout'
 import PreLoginLayout from './PreLoginLayout'
+import { useLocation } from 'react-router-dom'
 
 const Layout = ({ children }: CommonProps) => {
     const layoutType = useThemeStore((state) => state.layout.type)
 
     const { authenticated } = useAuth()
+
+    const location = useLocation()
+
+    const isNoLayoutRoute = location.pathname === '/components'
+
+    if (isNoLayoutRoute) {
+        return <>{children}</>
+    }
 
     return (
         <Suspense

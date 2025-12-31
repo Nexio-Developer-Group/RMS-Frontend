@@ -30,11 +30,6 @@ const sideNavStyle = {
     minWidth: SIDE_NAV_WIDTH,
 }
 
-const sideNavCollapseStyle = {
-    width: SIDE_NAV_COLLAPSED_WIDTH,
-    minWidth: SIDE_NAV_COLLAPSED_WIDTH,
-}
-
 const SideNav = ({
     translationSetup = true,
     background = true,
@@ -44,9 +39,6 @@ const SideNav = ({
 }: SideNavProps) => {
     const defaultMode = useThemeStore((state) => state.mode)
     const direction = useThemeStore((state) => state.direction)
-    const sideNavCollapse = useThemeStore(
-        (state) => state.layout.sideNavCollapse,
-    )
 
     const currentRouteKey = useRouteKeyStore((state) => state.currentRouteKey)
 
@@ -54,11 +46,10 @@ const SideNav = ({
 
     return (
         <div
-            style={sideNavCollapse ? sideNavCollapseStyle : sideNavStyle}
+            style={sideNavStyle}
             className={classNames(
                 'side-nav',
                 background && 'side-nav-bg',
-                !sideNavCollapse && 'side-nav-expand',
                 className,
             )}
         >
@@ -70,19 +61,13 @@ const SideNav = ({
                 <Logo
                     imgClass="max-h-10"
                     mode={mode || defaultMode}
-                    type={sideNavCollapse ? 'streamline' : 'full'}
-                    className={classNames(
-                        sideNavCollapse && 'ltr:ml-[11.5px] ltr:mr-[11.5px]',
-                        sideNavCollapse
-                            ? SIDE_NAV_CONTENT_GUTTER
-                            : LOGO_X_GUTTER,
-                    )}
+                    type="full"
+                    className={LOGO_X_GUTTER}
                 />
             </Link>
             <div className={classNames('side-nav-content', contentClass)}>
                 <ScrollBar style={{ height: '100%' }} direction={direction}>
                     <VerticalMenuContent
-                        collapsed={sideNavCollapse}
                         navigationTree={navigationConfig}
                         routeKey={currentRouteKey}
                         direction={direction}

@@ -8,6 +8,7 @@ import appConfig from '@/configs/app.config'
 import { useAuth } from '@/auth'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import type { LayoutType } from '@/@types/theme'
+import { lazy } from 'react'
 
 interface ViewsProps {
     pageContainerType?: 'default' | 'gutterless' | 'contained'
@@ -17,6 +18,8 @@ interface ViewsProps {
 type AllRoutesProps = ViewsProps
 
 const { authenticatedEntryPath } = appConfig
+
+const Components = lazy(() => import('@/views/library/Components'))
 
 const AllRoutes = (props: AllRoutesProps) => {
     const { user } = useAuth()
@@ -65,6 +68,15 @@ const AllRoutes = (props: AllRoutesProps) => {
                     />
                 ))}
             </Route>
+            <Route
+                path="/components"
+                element={
+                    <AppRoute
+                        routeKey="components"
+                        component={Components}
+                    />
+                }
+            />
         </Routes>
     )
 }

@@ -16,23 +16,23 @@ const CollapsibleSide = ({ children }: CommonProps) => {
             type={LAYOUT_COLLAPSIBLE_SIDE}
             className="app-layout-collapsible-side flex flex-auto flex-col"
         >
+            <Header
+                className="shadow-sm dark:shadow-2xl"
+                headerStart={
+                    <>
+                        {smaller.lg && <MobileNav />}
+                        {larger.lg && <SideNavToggle />}
+                    </>
+                }
+                headerEnd={
+                    <>
+                        <UserProfileDropdown hoverable={false} />
+                    </>
+                }
+            />
             <div className="flex flex-auto min-w-0">
                 {larger.lg && <SideNav />}
                 <div className="flex flex-col flex-auto min-h-screen min-w-0 relative w-full">
-                    <Header
-                        className="shadow-sm dark:shadow-2xl"
-                        headerStart={
-                            <>
-                                {smaller.lg && <MobileNav />}
-                                {larger.lg && <SideNavToggle />}
-                            </>
-                        }
-                        headerEnd={
-                            <>
-                                <UserProfileDropdown hoverable={false} />
-                            </>
-                        }
-                    />
                     <div className="h-full flex flex-auto flex-col">
                         {children}
                     </div>
