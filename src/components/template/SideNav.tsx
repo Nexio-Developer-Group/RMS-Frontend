@@ -51,7 +51,7 @@ const SideNav = ({
                 className,
             )}
         >
-            <Link
+            {/* <Link
                 to={appConfig.authenticatedEntryPath}
                 className="side-nav-header flex flex-col justify-center"
                 style={{ height: HEADER_HEIGHT }}
@@ -62,7 +62,7 @@ const SideNav = ({
                     type="full"
                     className={LOGO_X_GUTTER}
                 />
-            </Link>
+            </Link> */}
             <div className={classNames('side-nav-content', contentClass)}>
                 <ScrollBar style={{ height: '100%' }} direction={direction}>
                     <VerticalMenuContent

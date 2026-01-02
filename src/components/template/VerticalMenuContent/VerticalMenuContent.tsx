@@ -93,7 +93,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
                                 sideCollapsed={collapsed}
                                 direction={direction}
                                 indent={nextCascade >= 2}
-                                dotIndent={nextCascade >= 2}
+                                dotIndent={false}
                                 renderAsIcon={nextCascade <= 1}
                                 userAuthority={userAuthority}
                                 t={t as TraslationFn}
@@ -124,6 +124,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
                                 </MenuGroup>
                             </AuthorityCheck>
                         )}
+                        {cascade === 0 && <div className="border-b border-gray-100 dark:border-gray-700 my-1 opacity-50" />}
                     </Fragment>
                 ))}
             </>
@@ -132,7 +133,7 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
 
     return (
         <Menu
-            className="px-4 pb-4"
+            className="px-3 pb-2 mt-4"
             sideCollapsed={collapsed}
             defaultActiveKeys={activedRoute?.key ? [activedRoute.key] : []}
             defaultExpandedKeys={defaulExpandKey}

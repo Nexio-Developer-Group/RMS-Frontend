@@ -30,7 +30,7 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
         className = "" }) => {
         const itemSummary = items.map((i) => `${i.quantity}X ${i.name}`).join(", ");
         return (
-            <div className={`border rounded-xl p-4 bg-white border-teal-300 w-100 ${className} shadow-[0_4px_0_0_#0000001A]`}>
+            <div className={`border rounded-xl p-4 bg-white border-teal-300 ${className} shadow-[0_4px_0_0_#0000001A]`}>
 
                 {/* Card Header */}
                 <div className="card-header">
@@ -66,7 +66,7 @@ const LiveOnlineOrders1: React.FC<OnlineCardProps> = memo(
                             > <X /></button>
 
                             <button onClick={() => onAccept(orderId)}
-                                className={"bg-green-600 flex items-center gap-2 text-green-100 px-4 py-2 rounded-lg w-auto h-8 flex items-center"}>
+                                className={"bg-green-600 flex items-center gap-2 text-green-100 px-4 py-2 rounded-lg w-auto h-8"}>
                                 <Check className="w-4"/> Accept</button>
                         </div>
                     </div>

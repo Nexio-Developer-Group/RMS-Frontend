@@ -41,10 +41,10 @@ const DefaultItem = ({
             <MenuCollapse
                 key={nav.key}
                 label={
-                    <>
+                    <div className="flex items-center gap-2">
                         <VerticalMenuIcon icon={nav.icon} />
                         <span>{t(nav.translateKey, nav.title)}</span>
-                    </>
+                    </div>
                 }
                 eventKey={nav.key}
                 expanded={false}

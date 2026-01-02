@@ -1,6 +1,6 @@
 import React from "react";
-import LiveOnlineOrders1 from "@/components/custom/LiveOnlineOrders1";
-import RecentOrders1 from "@/components/custom/RecentOrders1";
+import LiveOnlineOrders1 from "@/components/custom/LiveOnlineOrders";
+import RecentOrders1 from "@/components/custom/RecentOrders";
 
 export type ComponentsData = {
   id: string;

@@ -1,9 +1,11 @@
+import classNames from '@/utils/classNames'
 import Tooltip from '@/components/ui/Tooltip'
 import Menu from '@/components/ui/Menu'
 import AuthorityCheck from '@/components/shared/AuthorityCheck'
 import VerticalMenuIcon from './VerticalMenuIcon'
 import { Link } from 'react-router-dom'
 import Dropdown from '@/components/ui/Dropdown'
+import { TbChevronRight } from 'react-icons/tb'
 import type { CommonProps } from '@/@types/common'
 import type { Direction } from '@/@types/theme'
 import type { NavigationTree } from '@/@types/navigation'
@@ -38,7 +40,7 @@ interface DefaultItemProps {
     showTitle?: boolean
 }
 
-interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps {}
+interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps { }
 
 const CollapsedItem = ({
     nav,
@@ -98,10 +100,10 @@ const DefaultItem = (props: DefaultItemProps) => {
 
     return (
         <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
-            <MenuItem key={nav.key} eventKey={nav.key} dotIndent={indent}>
+            <MenuItem key={nav.key} eventKey={nav.key} dotIndent={false}>
                 <Link
                     to={nav.path}
-                    className="flex items-center gap-2 h-full w-full"
+                    className="flex items-center justify-between gap-2 h-full w-full"
                     target={nav.isExternalLink ? '_blank' : ''}
                     onClick={() =>
                         onLinkClick?.({
@@ -111,8 +113,13 @@ const DefaultItem = (props: DefaultItemProps) => {
                         })
                     }
                 >
-                    {showIcon && <VerticalMenuIcon icon={nav.icon} />}
-                    {showTitle && <span>{t(nav.translateKey, nav.title)}</span>}
+                    <div className="flex items-center gap-2">
+                        {showIcon && <VerticalMenuIcon icon={nav.icon} />}
+                        <span className={classNames(indent && 'font-normal')}>
+                            {t(nav.translateKey, nav.title)}
+                        </span>
+                    </div>
+                    {showIcon && !indent && <TbChevronRight className="text-xs" />}
                 </Link>
             </MenuItem>
         </AuthorityCheck>

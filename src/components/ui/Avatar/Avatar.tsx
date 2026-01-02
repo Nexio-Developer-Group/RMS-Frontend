@@ -54,17 +54,18 @@ const Avatar = (props: AvatarProps) => {
 
     useEffect(() => {
         innerScale()
-    }, [scale, children])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [children])
 
     const sizeStyle =
         typeof size === 'number'
             ? {
-                  width: size,
-                  height: size,
-                  minWidth: size,
-                  lineHeight: `${size}px`,
-                  fontSize: icon ? size / 2 : 12,
-              }
+                width: size,
+                height: size,
+                minWidth: size,
+                lineHeight: `${size}px`,
+                fontSize: icon ? size / 2 : 12,
+            }
             : {}
 
     const classes = classNames(
@@ -99,9 +100,8 @@ const Avatar = (props: AvatarProps) => {
         children = (
             <span
                 ref={avatarChildren}
-                className={`avatar-string ${
-                    typeof size === 'number' ? '' : `avatar-inner-${size}`
-                }`}
+                className={`avatar-string ${typeof size === 'number' ? '' : `avatar-inner-${size}`
+                    }`}
                 style={{
                     ...childrenSizeStyle,
                     ...stringCentralized,

@@ -1,21 +1,36 @@
+import { ReactNode } from 'react'
 import {
-    PiHouseLineDuotone,
-    PiArrowsInDuotone,
-    PiBookOpenUserDuotone,
-    PiBookBookmarkDuotone,
-    PiAcornDuotone,
-    PiBagSimpleDuotone
+    PiSquaresFourDuotone,
+    PiStorefrontDuotone,
+    PiHouseDuotone,
+    PiClipboardTextDuotone,
+    PiScrollDuotone,
+    PiTableDuotone,
+    PiUsersDuotone,
+    PiCookingPotDuotone,
+    PiReceiptDuotone,
+    PiUserListDuotone,
+    PiChartLineUpDuotone,
 } from 'react-icons/pi'
 
-export type NavigationIcons = Record<string, JSX.Element>
+export type NavigationIcons = Record<string, ReactNode>
 
 const navigationIcon: NavigationIcons = {
-    home: <PiHouseLineDuotone />,
-    singleMenu: <PiAcornDuotone />,
-    collapseMenu: <PiArrowsInDuotone />,
-    groupSingleMenu: <PiBookOpenUserDuotone />,
-    groupCollapseMenu: <PiBookBookmarkDuotone />,
-    groupMenu: <PiBagSimpleDuotone />
+    home: <PiHouseDuotone />,
+    dashboard: <PiSquaresFourDuotone />,
+    orders: <PiClipboardTextDuotone />,
+    menu: <PiScrollDuotone />,
+    tableManagement: <PiTableDuotone />,
+    staffs: <PiUsersDuotone />,
+    kitchenManagement: <PiCookingPotDuotone />,
+    expenseTracker: <PiReceiptDuotone />,
+    customers: <PiUserListDuotone />,
+    report: <PiChartLineUpDuotone />,
+    singleMenu: <PiSquaresFourDuotone />,
+    collapseMenu: <PiSquaresFourDuotone />,
+    groupSingleMenu: <PiSquaresFourDuotone />,
+    groupCollapseMenu: <PiSquaresFourDuotone />,
+    groupMenu: <PiSquaresFourDuotone />
 }
 
 export default navigationIcon

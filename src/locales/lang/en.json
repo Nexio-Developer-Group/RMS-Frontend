@@ -1,6 +1,25 @@
 {
     "nav": {
         "home": "Home",
+        "dashboard": "Dashboard",
+        "menu": "Menu",
+        "tableManagement": "Table Management",
+        "staffs": "Staffs",
+        "kitchenManagement": "Kitchen Management",
+        "expenseTracker": "Expense Tracker",
+        "customers": "Customers",
+        "report": "Report",
+        "orders": {
+            "orders": "Orders",
+            "panel": "Order Panel",
+            "all": "All Orders"
+        },
+        "admin": {
+            "dashboard": "Admin Dashboard"
+        },
+        "user": {
+            "home": "User Home"
+        },
         "singleMenuItem": "Single menu item",
         "collapseMenu": {
             "collapseMenu": "Collapse menu item",

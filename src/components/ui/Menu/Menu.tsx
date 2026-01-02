@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { MenuContextProvider } from './context/menuContext'
 import type { CommonProps } from '../@types/common'
-import type { Ref } from 'react'
+import { forwardRef } from 'react'
 
 export interface MenuProps extends CommonProps {
     defaultActiveKeys?: Array<string>
@@ -9,11 +9,10 @@ export interface MenuProps extends CommonProps {
     defaultCollapseActiveKeys?: Array<string>
     menuItemHeight?: number
     onSelect?: (eventKey: string, e: MouseEvent) => void
-    ref?: Ref<HTMLDivElement>
     sideCollapsed?: boolean
 }
 
-const Menu = (props: MenuProps) => {
+const Menu = forwardRef<HTMLDivElement, MenuProps>((props, ref) => {
     const {
         children,
         className,
@@ -22,7 +21,6 @@ const Menu = (props: MenuProps) => {
         defaultCollapseActiveKeys = [],
         menuItemHeight = 48,
         onSelect,
-        ref,
         sideCollapsed = false,
         ...rest
     } = props
@@ -47,6 +45,6 @@ const Menu = (props: MenuProps) => {
             </MenuContextProvider>
         </nav>
     )
-}
+})
 
 export default Menu

@@ -4,6 +4,7 @@ import {
     useContext,
     useEffect,
     useImperativeHandle,
+    forwardRef
 } from 'react'
 import DropdownToggle from './DropdownToggle'
 import DropdownSubItem from './DropdownSubItem'
@@ -42,15 +43,14 @@ import type { HTMLProps, FocusEvent, MouseEvent, ReactNode, Ref } from 'react'
 
 export interface DropdownMenuProps
     extends CommonProps,
-        DropdownToggleSharedProps,
-        DropdownSubItemSharedProps {
+    DropdownToggleSharedProps,
+    DropdownSubItemSharedProps {
     activeKey?: string
     title?: string | ReactNode
     menuClass?: string
     trigger?: 'click' | 'hover' | 'context'
     placement?: Placement
     onOpen?: (bool: boolean) => void
-    ref?: Ref<HTMLElement | DropdownMenuRef>
 }
 
 export type DropdownMenuRef = {
@@ -58,7 +58,7 @@ export type DropdownMenuRef = {
     handleDropdownClose: () => void
 }
 
-const DropdownMenu = (props: DropdownMenuProps & HTMLProps<HTMLElement>) => {
+const DropdownMenu = forwardRef<HTMLElement | DropdownMenuRef, DropdownMenuProps & HTMLProps<HTMLElement>>((props, ref) => {
     const {
         children,
         title,
@@ -69,7 +69,6 @@ const DropdownMenu = (props: DropdownMenuProps & HTMLProps<HTMLElement>) => {
         placement,
         trigger = 'click',
         onOpen,
-        ref,
         ...rest
     } = props
 
@@ -241,11 +240,11 @@ const DropdownMenu = (props: DropdownMenuProps & HTMLProps<HTMLElement>) => {
         ),
         ...(trigger === 'context'
             ? {
-                  onContextMenu: (e: MouseEvent<HTMLElement>) => {
-                      e.preventDefault()
-                      handleOpen(true)
-                  },
-              }
+                onContextMenu: (e: MouseEvent<HTMLElement>) => {
+                    e.preventDefault()
+                    handleOpen(true)
+                },
+            }
             : {}),
     }
 
@@ -321,6 +320,6 @@ const DropdownMenu = (props: DropdownMenuProps & HTMLProps<HTMLElement>) => {
             </MenuContext.Provider>
         </FloatingNode>
     )
-}
+})
 
 export default DropdownMenu

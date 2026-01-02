@@ -3,19 +3,18 @@ import DropdownMenu from './DropdownMenu'
 import { FloatingTree, useFloatingParentNodeId } from '@floating-ui/react'
 import type { DropdownMenuProps, DropdownMenuRef } from './DropdownMenu'
 import type { HTMLProps, Ref } from 'react'
+import { forwardRef } from 'react'
 
 export type DropdownRef = DropdownMenuRef
 export interface DropdownProps extends DropdownMenuProps {
     eventKey?: string
     id?: string
-    ref?: Ref<DropdownRef>
 }
 
-const Dropdown = ({
+const Dropdown = forwardRef<DropdownRef, DropdownProps & HTMLProps<HTMLElement>>(({
     activeKey,
-    ref,
     ...props
-}: DropdownProps & HTMLProps<HTMLElement>) => {
+}, ref) => {
     const parentId = useFloatingParentNodeId()
 
     if (parentId === null) {
@@ -29,6 +28,6 @@ const Dropdown = ({
     }
 
     return <DropdownMenu {...props} ref={ref} />
-}
+})
 
 export default Dropdown

@@ -26,18 +26,33 @@ const AllRoutes = (props: AllRoutesProps) => {
 
     return (
         <Routes>
-            <Route path="/" element={<ProtectedRoute />}>
+            <Route element={<PublicRoute />}>
+                {publicRoutes.map((route) => (
+                    <Route
+                        key={route.key}
+                        path={route.path}
+                        element={
+                            <AppRoute
+                                routeKey={route.key}
+                                component={route.component}
+                                {...route.meta}
+                            />
+                        }
+                    />
+                ))}
+            </Route>
+            <Route element={<ProtectedRoute />}>
                 <Route
                     path="/"
                     element={<Navigate replace to={authenticatedEntryPath} />}
                 />
-                {protectedRoutes.map((route, index) => (
+                {protectedRoutes.map((route) => (
                     <Route
-                        key={route.key + index}
+                        key={route.key}
                         path={route.path}
                         element={
                             <AuthorityGuard
-                                userAuthority={user.authority}
+                                userAuthority={user.authority ?? []}
                                 authority={route.authority}
                             >
                                 <PageContainer {...props} {...route.meta}>
@@ -51,22 +66,6 @@ const AllRoutes = (props: AllRoutesProps) => {
                         }
                     />
                 ))}
-                <Route path="*" element={<Navigate replace to="/" />} />
-            </Route>
-            <Route path="/" element={<PublicRoute />}>
-                {publicRoutes.map((route) => (
-                    <Route
-                        key={route.path}
-                        path={route.path}
-                        element={
-                            <AppRoute
-                                routeKey={route.key}
-                                component={route.component}
-                                {...route.meta}
-                            />
-                        }
-                    />
-                ))}
             </Route>
             <Route
                 path="/components"
@@ -77,6 +76,7 @@ const AllRoutes = (props: AllRoutesProps) => {
                     />
                 }
             />
+            <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
     )
 }

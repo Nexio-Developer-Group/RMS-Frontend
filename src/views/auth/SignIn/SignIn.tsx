@@ -23,13 +23,13 @@ export const SignInBase = ({
 
     return (
         <>
-            <div className="mb-8">
-                <Logo type="streamline" mode={mode} imgClass="mx-auto" logoWidth={60} />
+            <div className="mb-6">
+                <Logo type="full" mode={mode} imgClass="mx-auto" logoWidth={140} />
             </div>
             <div className="mb-10">
-                <h2 className="mb-2">Welcome back!</h2>
-                <p className="font-semibold heading-text">
-                    Please enter your credentials to sign in!
+                <h1 className="text-3xl font-bold mb-2">Sign In</h1>
+                <p className="text-muted-foreground">
+                    Welcome back! Please enter your credentials to access your dashboard.
                 </p>
             </div>
             {message && (
@@ -41,22 +41,23 @@ export const SignInBase = ({
                 disableSubmit={disableSubmit}
                 setMessage={setMessage}
                 passwordHint={
-                    <div className="mb-7 mt-2">
+                    <div className="mb-6 mt-2 text-right">
                         <ActionLink
                             to={forgetPasswordUrl}
-                            className="font-semibold heading-text mt-2 underline"
+                            className="text-sm font-medium text-primary hover:underline"
                             themeColor={false}
                         >
-                            Forgot password
+                            Forgot password?
                         </ActionLink>
                     </div>
                 }
             />
+            {/* 
             <div className="mt-8">
                 <div className="flex items-center gap-2 mb-6">
                     <div className="border-t border-gray-200 dark:border-gray-800 flex-1 mt-[1px]" />
-                    <p className="font-semibold heading-text">
-                        or countinue with
+                    <p className="font-semibold text-xs uppercase text-muted-foreground px-2">
+                        or continue with
                     </p>
                     <div className="border-t border-gray-200 dark:border-gray-800 flex-1 mt-[1px]" />
                 </div>
@@ -66,17 +67,18 @@ export const SignInBase = ({
                 />
             </div>
             <div>
-                <div className="mt-6 text-center">
-                    <span>{`Don't have an account yet?`} </span>
+                <div className="mt-8 text-center text-sm">
+                    <span className="text-muted-foreground">{`Don't have an account yet?`} </span>
                     <ActionLink
                         to={signUpUrl}
-                        className="heading-text font-bold"
+                        className="text-primary font-bold hover:underline"
                         themeColor={false}
                     >
                         Sign up
                     </ActionLink>
                 </div>
             </div>
+            */}
         </>
     )
 }

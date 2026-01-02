@@ -61,7 +61,7 @@ const MenuCollapse = (props: MenuCollapseProps) => {
         ((defaultCollapseActiveKeys &&
             defaultCollapseActiveKeys.includes(eventKey as string)) ||
             active) &&
-            'menu-collapse-item-active',
+        'menu-collapse-item-active',
         className,
     )
 
@@ -76,7 +76,7 @@ const MenuCollapse = (props: MenuCollapseProps) => {
                     {dotIndent && (
                         <PiDotOutlineFill
                             className={classNames(
-                                'text-3xl w-[24px]',
+                                'text-xl w-[18px]',
                                 !active && 'opacity-25',
                             )}
                         />
@@ -88,8 +88,8 @@ const MenuCollapse = (props: MenuCollapseProps) => {
                     initial={{ transform: 'rotate(0deg)' }}
                     animate={{
                         transform: isExpanded
-                            ? 'rotate(-180deg)'
-                            : 'rotate(0deg)',
+                            ? 'rotate(0deg)'
+                            : 'rotate(-90deg)',
                     }}
                     transition={{ duration: 0.15 }}
                 >
@@ -98,9 +98,10 @@ const MenuCollapse = (props: MenuCollapseProps) => {
             </div>
             <CollapseContextProvider value={isExpanded}>
                 <motion.ul
-                    className={
-                        indent ? (direction === 'rtl' ? 'mr-8' : 'ml-8') : ''
-                    }
+                    className={classNames(
+                        indent ? (direction === 'rtl' ? 'mr-2' : 'ml-2') : '',
+                        'border-l border-slate-200 dark:border-gray-700 ml-4 mt-1',
+                    )}
                     initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
                     animate={{
                         opacity: isExpanded ? 1 : 0,

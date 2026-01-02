@@ -9,7 +9,6 @@ import {
 } from '@/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
 import type { Meta, PageHeaderProps } from '@/@types/routes'
-import type { FooterPageContainerType } from '@/components/template/Footer'
 import type { ReactNode, ElementType, ComponentPropsWithRef } from 'react'
 
 export interface PageContainerProps extends CommonProps, Meta {
@@ -31,7 +30,6 @@ interface PageContainerBodyProps {
 interface PageContainerFooterProps {
     className?: string
     footer?: boolean
-    pageContainerType: FooterPageContainerType
 }
 
 const CustomHeader = <T extends ElementType>({
@@ -102,13 +100,12 @@ export const PageContainerBody = ({
 
 export const PageContainerFooter = ({
     footer,
-    pageContainerType,
     className,
 }: PageContainerFooterProps) => {
     if (!footer) return null
 
     return (
-        <Footer className={className} pageContainerType={pageContainerType} />
+        <></>
     )
 }
 
