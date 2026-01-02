@@ -10,8 +10,6 @@ import appConfig from '@/configs/app.config'
 import { Link } from 'react-router-dom'
 import {
     SIDE_NAV_WIDTH,
-    SIDE_NAV_COLLAPSED_WIDTH,
-    SIDE_NAV_CONTENT_GUTTER,
     HEADER_HEIGHT,
     LOGO_X_GUTTER,
 } from '@/constants/theme.constant'

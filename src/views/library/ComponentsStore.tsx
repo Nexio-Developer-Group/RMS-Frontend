@@ -41,5 +41,21 @@ export const componentsStore: ComponentsData[] = [
         placedAgo="2 minutes ago"
       />
     ),
-  }
+  },
+  {
+    id: "comp1",
+    name: "Live Online Orders #1",
+    tags: "Order POS",
+    preview: () => (
+      <LiveOnlineOrders1
+        orderId="SWI-3325"
+        platform="Swiggy"
+        amount={99.99}
+        items={[{ name: "Product A", quantity: 1 }, { name: "Product B", quantity: 2 }]}
+        placedAgo="5 minutes ago"
+        onAccept={() => { }}
+        onReject={() => { }}
+      />
+    ),
+  },
 ];
