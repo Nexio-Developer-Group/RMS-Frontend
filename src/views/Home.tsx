@@ -1,4 +1,4 @@
-import TenantAdminDashboard from './tenant_admin'
+import TenantAdminDashboard from './tenant_admin/dashboard'
 
 const Home = () => {
     return (
