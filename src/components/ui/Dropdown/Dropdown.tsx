@@ -11,10 +11,10 @@ export interface DropdownProps extends DropdownMenuProps {
     id?: string
 }
 
-const Dropdown = forwardRef<DropdownRef, DropdownProps & HTMLProps<HTMLElement>>(({
-    activeKey,
-    ...props
-}, ref) => {
+const Dropdown = forwardRef<
+    DropdownRef,
+    DropdownProps & HTMLProps<HTMLElement>
+>(({ activeKey, ...props }, ref) => {
     const parentId = useFloatingParentNodeId()
 
     if (parentId === null) {

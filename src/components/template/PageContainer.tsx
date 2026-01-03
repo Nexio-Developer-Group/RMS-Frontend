@@ -104,9 +104,7 @@ export const PageContainerFooter = ({
 }: PageContainerFooterProps) => {
     if (!footer) return null
 
-    return (
-        <></>
-    )
+    return <></>
 }
 
 const PageContainer = (props: PageContainerProps) => {

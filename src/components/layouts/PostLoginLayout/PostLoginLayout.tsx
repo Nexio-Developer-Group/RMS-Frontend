@@ -1,8 +1,6 @@
 import { lazy, Suspense } from 'react'
 import type { ReactNode } from 'react'
-import {
-    LAYOUT_COLLAPSIBLE_SIDE,
-} from '@/constants/theme.constant'
+import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
 import Loading from '@/components/shared/Loading'
 import type { CommonProps } from '@/@types/common'
 import type { LazyExoticComponent } from 'react'
@@ -24,15 +22,16 @@ const layouts: Layouts = {
 }
 
 const PostLoginLayout = ({ layoutType, children }: PostLoginLayoutProps) => {
-    const AppLayout =
-        layouts[layoutType] ?? layouts[Object.keys(layouts)[0]];
+    const AppLayout = layouts[layoutType] ?? layouts[Object.keys(layouts)[0]]
 
     return (
-        <Suspense fallback={(
-            <div className="flex flex-auto flex-col h-screen">
-                <Loading loading={true} />
-            </div>
-        )}>
+        <Suspense
+            fallback={
+                <div className="flex flex-auto flex-col h-screen">
+                    <Loading loading={true} />
+                </div>
+            }
+        >
             <AppLayout>{children}</AppLayout>
         </Suspense>
     )

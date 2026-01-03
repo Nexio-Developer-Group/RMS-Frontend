@@ -6,52 +6,60 @@ import {
     Smartphone,
     Truck,
     CreditCard,
-    Clock
-} from "lucide-react";
+    Clock,
+} from 'lucide-react'
 
 const Features = () => {
     const features = [
         {
             icon: Receipt,
-            title: "Quick Billing",
-            description: "Generate bills in 3 clicks. Split bills, merge tables, and apply discounts easily."
+            title: 'Quick Billing',
+            description:
+                'Generate bills in 3 clicks. Split bills, merge tables, and apply discounts easily.',
         },
         {
             icon: Package,
-            title: "Inventory Management",
-            description: "Track stock levels, get low-stock alerts, and auto-deduct items on sales."
+            title: 'Inventory Management',
+            description:
+                'Track stock levels, get low-stock alerts, and auto-deduct items on sales.',
         },
         {
             icon: BarChart3,
-            title: "Real-time Analytics",
-            description: "Get insights on sales, popular items, and peak hours with detailed reports."
+            title: 'Real-time Analytics',
+            description:
+                'Get insights on sales, popular items, and peak hours with detailed reports.',
         },
         {
             icon: Users,
-            title: "Staff Management",
-            description: "Manage roles, track attendance, and monitor performance of your team."
+            title: 'Staff Management',
+            description:
+                'Manage roles, track attendance, and monitor performance of your team.',
         },
         {
             icon: Smartphone,
-            title: "Mobile App",
-            description: "Manage your restaurant from anywhere with our powerful mobile app."
+            title: 'Mobile App',
+            description:
+                'Manage your restaurant from anywhere with our powerful mobile app.',
         },
         {
             icon: Truck,
-            title: "Delivery Integration",
-            description: "Seamlessly integrate with Swiggy, Zomato, and other delivery platforms."
+            title: 'Delivery Integration',
+            description:
+                'Seamlessly integrate with Swiggy, Zomato, and other delivery platforms.',
         },
         {
             icon: CreditCard,
-            title: "Multiple Payments",
-            description: "Accept UPI, cards, wallets, and cash payments with ease."
+            title: 'Multiple Payments',
+            description:
+                'Accept UPI, cards, wallets, and cash payments with ease.',
         },
         {
             icon: Clock,
-            title: "KOT Management",
-            description: "Automated Kitchen Order Tickets for smooth kitchen operations."
+            title: 'KOT Management',
+            description:
+                'Automated Kitchen Order Tickets for smooth kitchen operations.',
         },
-    ];
+    ]
 
     return (
         <section id="features" className="py-16 lg:py-24">
@@ -65,7 +73,8 @@ const Features = () => {
                         A restaurant POS made for all your needs
                     </h2>
                     <p className="text-lg text-muted-foreground">
-                        A quick and easy-to-use restaurant billing software that makes managing high order volumes butter smooth
+                        A quick and easy-to-use restaurant billing software that
+                        makes managing high order volumes butter smooth
                     </p>
                 </div>
 
@@ -90,7 +99,7 @@ const Features = () => {
                 </div>
             </div>
         </section>
-    );
-};
+    )
+}
 
-export default Features;
+export default Features

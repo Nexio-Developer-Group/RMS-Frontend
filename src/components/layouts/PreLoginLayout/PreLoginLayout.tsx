@@ -21,11 +21,7 @@ const PreLoginLayout = ({ children }: CommonProps) => {
         return <OpenLayout>{children}</OpenLayout>
     }
 
-    return (
-        <div className="flex flex-auto flex-col h-screen">
-            {children}
-        </div>
-    )
+    return <div className="flex flex-auto flex-col h-screen">{children}</div>
 }
 
 export default PreLoginLayout

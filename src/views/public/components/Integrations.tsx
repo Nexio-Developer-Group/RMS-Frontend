@@ -1,17 +1,17 @@
-import { Button } from "@/components/shadcn/ui/button";
-import { ArrowRight } from "lucide-react";
+import { Button } from '@/components/shadcn/ui/button'
+import { ArrowRight } from 'lucide-react'
 
 const Integrations = () => {
     const integrations = [
-        { name: "Swiggy", category: "Delivery" },
-        { name: "Zomato", category: "Delivery" },
-        { name: "Razorpay", category: "Payments" },
-        { name: "Paytm", category: "Payments" },
-        { name: "PhonePe", category: "Payments" },
-        { name: "Google Pay", category: "Payments" },
-        { name: "Tally", category: "Accounting" },
-        { name: "WhatsApp", category: "Communication" },
-    ];
+        { name: 'Swiggy', category: 'Delivery' },
+        { name: 'Zomato', category: 'Delivery' },
+        { name: 'Razorpay', category: 'Payments' },
+        { name: 'Paytm', category: 'Payments' },
+        { name: 'PhonePe', category: 'Payments' },
+        { name: 'Google Pay', category: 'Payments' },
+        { name: 'Tally', category: 'Accounting' },
+        { name: 'WhatsApp', category: 'Communication' },
+    ]
 
     return (
         <section id="integrations" className="py-16 lg:py-24">
@@ -25,7 +25,8 @@ const Integrations = () => {
                         Multiple integrations - single dashboard
                     </h2>
                     <p className="text-lg text-muted-foreground">
-                        Integrate with all your favorite apps and manage everything from one place
+                        Integrate with all your favorite apps and manage
+                        everything from one place
                     </p>
                 </div>
 
@@ -41,8 +42,12 @@ const Integrations = () => {
                                     {integration.name.charAt(0)}
                                 </span>
                             </div>
-                            <h3 className="font-semibold text-foreground">{integration.name}</h3>
-                            <p className="text-sm text-muted-foreground">{integration.category}</p>
+                            <h3 className="font-semibold text-foreground">
+                                {integration.name}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                                {integration.category}
+                            </p>
                         </div>
                     ))}
                 </div>
@@ -56,7 +61,7 @@ const Integrations = () => {
                 </div>
             </div>
         </section>
-    );
-};
+    )
+}
 
-export default Integrations;
+export default Integrations

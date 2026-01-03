@@ -1,22 +1,22 @@
-import React, { memo } from "react";
-import { Timer } from "lucide-react";
+import React, { memo } from 'react'
+import { Timer } from 'lucide-react'
 
 export type OrderItem = {
-    name: string;
-    quantity: number;
-};
+    name: string
+    quantity: number
+}
 
 export type RecentOrders1Props = {
-    orderId: string;
-    orderType: string;
-    tableNumber: string;
-    amount: number;
-    currency?: string;
-    items: OrderItem[];
-    status: string;
-    placedAgo: string;
-    className?: string;
-};
+    orderId: string
+    orderType: string
+    tableNumber: string
+    amount: number
+    currency?: string
+    items: OrderItem[]
+    status: string
+    placedAgo: string
+    className?: string
+}
 
 const RecentOrders1: React.FC<RecentOrders1Props> = memo(
     ({
@@ -25,17 +25,19 @@ const RecentOrders1: React.FC<RecentOrders1Props> = memo(
         tableNumber,
         amount,
         items,
-        currency = "$",
+        currency = '$',
         status,
         placedAgo,
-        className = "",
+        className = '',
     }) => {
         const itemSummary = items
             .map((i) => `${i.quantity}x ${i.name}`)
-            .join(", ");
+            .join(', ')
 
         return (
-            <div className={`bg-white border border-teal-300 w-100 rounded-2xl shadow-[4px_0_0_0_#0000001A] px-5 py-4 ${className}`}>
+            <div
+                className={`bg-white border border-teal-300 w-100 rounded-2xl shadow-[4px_0_0_0_#0000001A] px-5 py-4 ${className}`}
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div className="flex flex-wrap items-center gap-2">
@@ -78,8 +80,8 @@ const RecentOrders1: React.FC<RecentOrders1Props> = memo(
                     </span>
                 </div>
             </div>
-        );
-    }
-);
+        )
+    },
+)
 
-export default RecentOrders1;
+export default RecentOrders1

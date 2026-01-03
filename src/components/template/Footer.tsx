@@ -10,9 +10,9 @@ import {
     Youtube,
     MapPin,
     Phone,
-    Mail
-} from "lucide-react";
-import Logo from './Logo';
+    Mail,
+} from 'lucide-react'
+import Logo from './Logo'
 
 type FooterProps = {
     className?: string
@@ -21,31 +21,34 @@ type FooterProps = {
 const FooterContent = () => {
     const footerLinks = {
         product: [
-            { label: "Features", href: "#features" },
-            { label: "Billing", href: "#billing" },
-            { label: "Inventory", href: "#inventory" },
-            { label: "Integrations", href: "#integrations" },
-            { label: "Pricing", href: "#pricing" },
+            { label: 'Features', href: '#features' },
+            { label: 'Billing', href: '#billing' },
+            { label: 'Inventory', href: '#inventory' },
+            { label: 'Integrations', href: '#integrations' },
+            { label: 'Pricing', href: '#pricing' },
         ],
         company: [
-            { label: "About Us", href: "#" },
-            { label: "Careers", href: "#" },
-            { label: "Blog", href: "#" },
-            { label: "Press", href: "#" },
-            { label: "Partners", href: "#" },
+            { label: 'About Us', href: '#' },
+            { label: 'Careers', href: '#' },
+            { label: 'Blog', href: '#' },
+            { label: 'Press', href: '#' },
+            { label: 'Partners', href: '#' },
         ],
         support: [
-            { label: "Help Center", href: "#" },
-            { label: "Contact Us", href: "#" },
-            { label: "API Documentation", href: "https://rms.nexiotech.cloud/api/api" },
-            { label: "Status", href: "#" },
+            { label: 'Help Center', href: '#' },
+            { label: 'Contact Us', href: '#' },
+            {
+                label: 'API Documentation',
+                href: 'https://rms.nexiotech.cloud/api/api',
+            },
+            { label: 'Status', href: '#' },
         ],
         legal: [
-            { label: "Privacy Policy", href: "/privacy-policy" },
-            { label: "Terms of Service", href: "/terms-and-conditions" },
-            { label: "Cookie Policy", href: "/cookie-policy" },
+            { label: 'Privacy Policy', href: '/privacy-policy' },
+            { label: 'Terms of Service', href: '/terms-and-conditions' },
+            { label: 'Cookie Policy', href: '/cookie-policy' },
         ],
-    };
+    }
 
     return (
         <div className="flex items-center bg-foreground dark:bg-gray-900 text-background dark:text-foreground justify-between w-full">
@@ -59,7 +62,9 @@ const FooterContent = () => {
                             </Link>
                         </div>
                         <p className="text-background/70 dark:text-foreground mb-6">
-                            India's #1 Restaurant POS software trusted by over 1,00,000 restaurants to manage their operations efficiently.
+                            India's #1 Restaurant POS software trusted by over
+                            1,00,000 restaurants to manage their operations
+                            efficiently.
                         </p>
 
                         {/* Contact Info */}
@@ -151,24 +156,40 @@ const FooterContent = () => {
                 {/* Bottom Bar */}
                 <div className="mt-12 pt-8 border-t border-background/10 dark:border-background/10 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-background/60 dark:text-foreground text-sm">
-                        © {new Date().getFullYear()} RestoPOS. All rights reserved.
+                        © {new Date().getFullYear()} RestoPOS. All rights
+                        reserved.
                     </p>
 
                     {/* Social Links */}
                     <div className="flex items-center gap-4">
-                        <a href="#" className="text-background/60 dark:text-foreground hover:text-background transition-colors">
+                        <a
+                            href="#"
+                            className="text-background/60 dark:text-foreground hover:text-background transition-colors"
+                        >
                             <Facebook size={20} />
                         </a>
-                        <a href="#" className="text-background/60 dark:text-foreground hover:text-background transition-colors">
+                        <a
+                            href="#"
+                            className="text-background/60 dark:text-foreground hover:text-background transition-colors"
+                        >
                             <Twitter size={20} />
                         </a>
-                        <a href="#" className="text-background/60 dark:text-foreground hover:text-background transition-colors">
+                        <a
+                            href="#"
+                            className="text-background/60 dark:text-foreground hover:text-background transition-colors"
+                        >
                             <Instagram size={20} />
                         </a>
-                        <a href="#" className="text-background/60 dark:text-foreground hover:text-background transition-colors">
+                        <a
+                            href="#"
+                            className="text-background/60 dark:text-foreground hover:text-background transition-colors"
+                        >
                             <Linkedin size={20} />
                         </a>
-                        <a href="#" className="text-background/60 dark:text-foreground hover:text-background transition-colors">
+                        <a
+                            href="#"
+                            className="text-background/60 dark:text-foreground hover:text-background transition-colors"
+                        >
                             <Youtube size={20} />
                         </a>
                     </div>
@@ -178,9 +199,7 @@ const FooterContent = () => {
     )
 }
 
-export default function Footer({
-    className,
-}: FooterProps) {
+export default function Footer({ className }: FooterProps) {
     return (
         <footer
             className={classNames(

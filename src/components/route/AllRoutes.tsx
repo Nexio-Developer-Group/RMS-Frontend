@@ -70,10 +70,7 @@ const AllRoutes = (props: AllRoutesProps) => {
             <Route
                 path="/components"
                 element={
-                    <AppRoute
-                        routeKey="components"
-                        component={Components}
-                    />
+                    <AppRoute routeKey="components" component={Components} />
                 }
             />
             <Route path="*" element={<Navigate replace to="/" />} />

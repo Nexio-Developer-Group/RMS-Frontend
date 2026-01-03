@@ -1,6 +1,4 @@
-import {
-    NAV_ITEM_TYPE_ITEM,
-} from '@/constants/navigation.constant'
+import { NAV_ITEM_TYPE_ITEM } from '@/constants/navigation.constant'
 import { ADMIN } from '@/constants/roles.constant'
 import type { NavigationTree } from '@/@types/navigation'
 

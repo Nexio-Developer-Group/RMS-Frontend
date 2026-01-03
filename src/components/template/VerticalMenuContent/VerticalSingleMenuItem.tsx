@@ -40,7 +40,7 @@ interface DefaultItemProps {
     showTitle?: boolean
 }
 
-interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps { }
+interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps {}
 
 const CollapsedItem = ({
     nav,
@@ -50,7 +50,7 @@ const CollapsedItem = ({
     onLinkClick,
     userAuthority,
     t,
-    currentKey
+    currentKey,
 }: CollapsedItemProps) => {
     return (
         <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
@@ -119,7 +119,9 @@ const DefaultItem = (props: DefaultItemProps) => {
                             {t(nav.translateKey, nav.title)}
                         </span>
                     </div>
-                    {showIcon && !indent && <TbChevronRight className="text-xs" />}
+                    {showIcon && !indent && (
+                        <TbChevronRight className="text-xs" />
+                    )}
                 </Link>
             </MenuItem>
         </AuthorityCheck>
@@ -138,7 +140,7 @@ const VerticalSingleMenuItem = ({
     showTitle,
     t,
     currentKey,
-    parentKeys
+    parentKeys,
 }: Omit<VerticalMenuItemProps, 'title' | 'translateKey'>) => {
     return (
         <>

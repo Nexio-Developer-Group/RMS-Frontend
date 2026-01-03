@@ -19,17 +19,23 @@ export const SignInBase = ({
 }: SignInProps) => {
     const [message, setMessage] = useTimeOutMessage()
 
-    const mode = useThemeStore(state => state.mode)
+    const mode = useThemeStore((state) => state.mode)
 
     return (
         <>
             <div className="mb-6">
-                <Logo type="full" mode={mode} imgClass="mx-auto" logoWidth={140} />
+                <Logo
+                    type="full"
+                    mode={mode}
+                    imgClass="mx-auto"
+                    logoWidth={140}
+                />
             </div>
             <div className="mb-10">
                 <h1 className="text-3xl font-bold mb-2">Sign In</h1>
                 <p className="text-muted-foreground">
-                    Welcome back! Please enter your credentials to access your dashboard.
+                    Welcome back! Please enter your credentials to access your
+                    dashboard.
                 </p>
             </div>
             {message && (

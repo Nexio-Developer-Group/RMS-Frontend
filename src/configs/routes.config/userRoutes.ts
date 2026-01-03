@@ -36,13 +36,17 @@ const userRoutes: Routes = [
     {
         key: 'groupMenu.collapse.item1',
         path: '/group-collapse-menu-item-view-1',
-        component: lazy(() => import('@/views/demo/GroupCollapseMenuItemView1')),
+        component: lazy(
+            () => import('@/views/demo/GroupCollapseMenuItemView1'),
+        ),
         authority: [USER],
     },
     {
         key: 'groupMenu.collapse.item2',
         path: '/group-collapse-menu-item-view-2',
-        component: lazy(() => import('@/views/demo/GroupCollapseMenuItemView2')),
+        component: lazy(
+            () => import('@/views/demo/GroupCollapseMenuItemView2'),
+        ),
         authority: [USER],
     },
 ]

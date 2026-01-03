@@ -18,32 +18,43 @@ const OpenLayout = ({ children }: OpenLayoutProps) => {
                     </Link>
                 </div>
                 <div className="flex items-center gap-8">
-                    <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
+                    <a
+                        href="#features"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
                         Features
                     </a>
-                    <a href="#billing" className="text-muted-foreground hover:text-foreground transition-colors">
+                    <a
+                        href="#billing"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
                         Billing
                     </a>
-                    <a href="#inventory" className="text-muted-foreground hover:text-foreground transition-colors">
+                    <a
+                        href="#inventory"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
                         Inventory
                     </a>
-                    <a href="#integrations" className="text-muted-foreground hover:text-foreground transition-colors">
+                    <a
+                        href="#integrations"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
                         Integrations
                     </a>
-                    <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+                    <a
+                        href="#pricing"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                    >
                         Pricing
                     </a>
                     <Link to="/sign-in">
-                        <Button variant="default">
-                            Sign In
-                        </Button>
+                        <Button variant="default">Sign In</Button>
                     </Link>
                 </div>
             </header>
-            <main className='grow'>
-                {children}
-            </main>
-            <Footer className='mt-32' />
+            <main className="grow">{children}</main>
+            <Footer className="mt-32" />
         </div>
     )
 }

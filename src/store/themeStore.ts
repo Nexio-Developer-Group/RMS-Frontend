@@ -16,24 +16,22 @@ type ThemeAction = {
 
 const inititialThemeState = themeConfig
 
-export const useThemeStore = create<ThemeState & ThemeAction>()(
-    (set) => ({
-        ...inititialThemeState,
-        setSchema: (payload) => set(() => ({ themeSchema: payload })),
-        setMode: (payload) => set(() => ({ mode: payload })),
-        setSideNavCollapse: (payload) =>
-            set((state) => ({
-                layout: { ...state.layout, sideNavCollapse: payload },
-            })),
-        setDirection: (payload) => set(() => ({ direction: payload })),
-        setPanelExpand: (payload) => set(() => ({ panelExpand: payload })),
-        setLayout: (payload) =>
-            set((state) => ({
-                layout: { ...state.layout, type: payload },
-            })),
-        setPreviousLayout: (payload) =>
-            set((state) => ({
-                layout: { ...state.layout, previousType: payload },
-            })),
-    })
-)
+export const useThemeStore = create<ThemeState & ThemeAction>()((set) => ({
+    ...inititialThemeState,
+    setSchema: (payload) => set(() => ({ themeSchema: payload })),
+    setMode: (payload) => set(() => ({ mode: payload })),
+    setSideNavCollapse: (payload) =>
+        set((state) => ({
+            layout: { ...state.layout, sideNavCollapse: payload },
+        })),
+    setDirection: (payload) => set(() => ({ direction: payload })),
+    setPanelExpand: (payload) => set(() => ({ panelExpand: payload })),
+    setLayout: (payload) =>
+        set((state) => ({
+            layout: { ...state.layout, type: payload },
+        })),
+    setPreviousLayout: (payload) =>
+        set((state) => ({
+            layout: { ...state.layout, previousType: payload },
+        })),
+}))

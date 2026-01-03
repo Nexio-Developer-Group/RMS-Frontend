@@ -4,7 +4,7 @@ import {
     useContext,
     useEffect,
     useImperativeHandle,
-    forwardRef
+    forwardRef,
 } from 'react'
 import DropdownToggle from './DropdownToggle'
 import DropdownSubItem from './DropdownSubItem'
@@ -43,8 +43,8 @@ import type { HTMLProps, FocusEvent, MouseEvent, ReactNode, Ref } from 'react'
 
 export interface DropdownMenuProps
     extends CommonProps,
-    DropdownToggleSharedProps,
-    DropdownSubItemSharedProps {
+        DropdownToggleSharedProps,
+        DropdownSubItemSharedProps {
     activeKey?: string
     title?: string | ReactNode
     menuClass?: string
@@ -58,7 +58,10 @@ export type DropdownMenuRef = {
     handleDropdownClose: () => void
 }
 
-const DropdownMenu = forwardRef<HTMLElement | DropdownMenuRef, DropdownMenuProps & HTMLProps<HTMLElement>>((props, ref) => {
+const DropdownMenu = forwardRef<
+    HTMLElement | DropdownMenuRef,
+    DropdownMenuProps & HTMLProps<HTMLElement>
+>((props, ref) => {
     const {
         children,
         title,
@@ -240,11 +243,11 @@ const DropdownMenu = forwardRef<HTMLElement | DropdownMenuRef, DropdownMenuProps
         ),
         ...(trigger === 'context'
             ? {
-                onContextMenu: (e: MouseEvent<HTMLElement>) => {
-                    e.preventDefault()
-                    handleOpen(true)
-                },
-            }
+                  onContextMenu: (e: MouseEvent<HTMLElement>) => {
+                      e.preventDefault()
+                      handleOpen(true)
+                  },
+              }
             : {}),
     }
 

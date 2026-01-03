@@ -15,7 +15,7 @@ import { forwardRef } from 'react'
 
 export interface ButtonProps
     extends CommonProps,
-    Omit<ComponentPropsWithRef<'button'>, 'onClick'> {
+        Omit<ComponentPropsWithRef<'button'>, 'onClick'> {
     asElement?: ElementType
     active?: boolean
     block?: boolean
@@ -161,8 +161,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
         activeColor,
         textColor,
     }: ButtonColor) => {
-        return `${bgColor} ${unclickable ? disabledClass : hoverColor + ' ' + activeColor
-            } ${textColor}`
+        return `${bgColor} ${
+            unclickable ? disabledClass : hoverColor + ' ' + activeColor
+        } ${textColor}`
     }
 
     const btnColor = () => {

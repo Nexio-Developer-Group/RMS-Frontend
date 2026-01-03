@@ -6,10 +6,7 @@ import userRoutes from './userRoutes'
 import commonRoutes from './commonRoutes'
 import type { Routes } from '@/@types/routes'
 
-export const publicRoutes: Routes = [
-    ...authRoute,
-    ...openRoutes,
-]
+export const publicRoutes: Routes = [...authRoute, ...openRoutes]
 
 export const protectedRoutes: Routes = [
     ...adminRoutes,

@@ -1,6 +1,6 @@
 import {
     NAV_ITEM_TYPE_ITEM,
-    NAV_ITEM_TYPE_COLLAPSE
+    NAV_ITEM_TYPE_COLLAPSE,
 } from '@/constants/navigation.constant'
 import { TENANT_ADMIN } from '@/constants/roles.constant'
 import type { NavigationTree } from '@/@types/navigation'

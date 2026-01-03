@@ -63,9 +63,10 @@ const DropdownToggleDefaultContent = ({
     )
 }
 
-const DropdownToggle = forwardRef<HTMLDivElement, DropdownToggleProps & HTMLProps<HTMLDivElement>>((
-    props, ref
-) => {
+const DropdownToggle = forwardRef<
+    HTMLDivElement,
+    DropdownToggleProps & HTMLProps<HTMLDivElement>
+>((props, ref) => {
     const {
         className,
         renderTitle,

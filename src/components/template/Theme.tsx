@@ -7,7 +7,6 @@ import useDirection from '@/utils/hooks/useDirection'
 import type { CommonProps } from '@/@types/common'
 
 const Theme = (props: CommonProps) => {
-
     useDarkMode()
     useDirection()
 

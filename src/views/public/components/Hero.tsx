@@ -1,6 +1,6 @@
-import { ArrowRight, Play } from "lucide-react";
-import heroImage from "@/assets/mockup/hero-illustration.png";
-import { Button } from "@/components/shadcn/ui/button";
+import { ArrowRight, Play } from 'lucide-react'
+import heroImage from '@/assets/mockup/hero-illustration.png'
+import { Button } from '@/components/shadcn/ui/button'
 
 const Hero = () => {
     return (
@@ -15,12 +15,15 @@ const Hero = () => {
                         </div>
 
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
-                            Restaurant POS software{" "}
+                            Restaurant POS software{' '}
                             <span className="text-primary">made simple!</span>
                         </h1>
 
                         <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
-                            A quick and easy-to-use restaurant billing software that makes managing high order volumes butter smooth. Take orders, generate KOT, and accept payments effortlessly.
+                            A quick and easy-to-use restaurant billing software
+                            that makes managing high order volumes butter
+                            smooth. Take orders, generate KOT, and accept
+                            payments effortlessly.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -28,7 +31,11 @@ const Hero = () => {
                                 Start Free Trial
                                 <ArrowRight size={18} />
                             </Button>
-                            <Button size="lg" variant="outline" className="gap-2">
+                            <Button
+                                size="lg"
+                                variant="outline"
+                                className="gap-2"
+                            >
                                 <Play size={18} />
                                 Watch Demo
                             </Button>
@@ -37,16 +44,28 @@ const Hero = () => {
                         {/* Stats */}
                         <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-border">
                             <div>
-                                <div className="text-2xl lg:text-3xl font-bold text-foreground">1L+</div>
-                                <div className="text-sm text-muted-foreground">Restaurants</div>
+                                <div className="text-2xl lg:text-3xl font-bold text-foreground">
+                                    1L+
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                    Restaurants
+                                </div>
                             </div>
                             <div>
-                                <div className="text-2xl lg:text-3xl font-bold text-foreground">50Cr+</div>
-                                <div className="text-sm text-muted-foreground">Orders/Month</div>
+                                <div className="text-2xl lg:text-3xl font-bold text-foreground">
+                                    50Cr+
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                    Orders/Month
+                                </div>
                             </div>
                             <div>
-                                <div className="text-2xl lg:text-3xl font-bold text-foreground">200+</div>
-                                <div className="text-sm text-muted-foreground">Cities</div>
+                                <div className="text-2xl lg:text-3xl font-bold text-foreground">
+                                    200+
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                    Cities
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,7 +82,7 @@ const Hero = () => {
                 </div>
             </div>
         </section>
-    );
-};
+    )
+}
 
-export default Hero;
+export default Hero

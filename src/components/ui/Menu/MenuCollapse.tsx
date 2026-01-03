@@ -61,7 +61,7 @@ const MenuCollapse = (props: MenuCollapseProps) => {
         ((defaultCollapseActiveKeys &&
             defaultCollapseActiveKeys.includes(eventKey as string)) ||
             active) &&
-        'menu-collapse-item-active',
+            'menu-collapse-item-active',
         className,
     )
 

@@ -30,7 +30,7 @@ const navigationIcon: NavigationIcons = {
     collapseMenu: <PiSquaresFourDuotone />,
     groupSingleMenu: <PiSquaresFourDuotone />,
     groupCollapseMenu: <PiSquaresFourDuotone />,
-    groupMenu: <PiSquaresFourDuotone />
+    groupMenu: <PiSquaresFourDuotone />,
 }
 
 export default navigationIcon

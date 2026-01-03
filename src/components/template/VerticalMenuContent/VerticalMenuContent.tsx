@@ -109,7 +109,10 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
                             </VerticalCollapsedMenuItem>
                         )}
                         {nav.type === NAV_ITEM_TYPE_TITLE && (
-                            <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
+                            <AuthorityCheck
+                                userAuthority={userAuthority}
+                                authority={nav.authority}
+                            >
                                 <MenuGroup
                                     key={nav.key}
                                     label={t(nav.translateKey) || nav.title}
@@ -124,7 +127,9 @@ const VerticalMenuContent = (props: VerticalMenuContentProps) => {
                                 </MenuGroup>
                             </AuthorityCheck>
                         )}
-                        {cascade === 0 && <div className="border-b border-gray-100 dark:border-gray-700 my-1 opacity-50" />}
+                        {cascade === 0 && (
+                            <div className="border-b border-gray-100 dark:border-gray-700 my-1 opacity-50" />
+                        )}
                     </Fragment>
                 ))}
             </>
