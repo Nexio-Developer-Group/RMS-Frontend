@@ -57,9 +57,12 @@ const TenantAdminDashboard = () => {
 
     return (
         <div className='space-y-4'>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[82.5vh] overflow-hidden">
-                <div className="lg:col-span-2 space-y-4">
-                    <div className="bg-card border rounded-md">
+            <div className="gap-4 flex flex-col h-[70vh]
+  md:h-[60vh]
+  xl:h-[70vh]
+  2xl:h-[66vh] md:flex-row min-h-0">
+                <div className="flex-col hidden md:flex gap-4 flex-1 h-full min-h-0">
+                    <div className="bg-card border rounded-md shrink-0">
                         <div className="flex items-center justify-between px-4 py-2 border-b ">
                             <h2 className="text-lg font-bold text-foreground">Status</h2>
                             <div className="flex items-center gap-4">
@@ -114,11 +117,11 @@ const TenantAdminDashboard = () => {
                             />
                         </div>
                     </div>
-                    <DashboardChart className='border h-full' />
+                    <DashboardChart className='border flex-1 min-h-0' />
                 </div>
 
                 {/* Live Online Orders */}
-                <div className="flex flex-col bg-card rounded-lg border overflow-scroll border-blue-200 dark:border-blue-800">
+                <div className="flex flex-col w-full xl:w-[30%] 2xl:w-[28%] bg-card rounded-lg border h-full min-h-0 border-blue-200 dark:border-blue-800">
                     <div className="flex items-center justify-between rounded-t-lg p-3 border-b bg-blue-100 dark:bg-blue-950/70">
                         <h3 className="text-base font-semibold text-foreground">
                             Live Online Orders
@@ -126,7 +129,7 @@ const TenantAdminDashboard = () => {
                         <RefetchLoader isRefetching={isOnlineOrdersRefetching} handleRefetch={handleOnlineOrdersRefetch} />
                     </div>
 
-                    <div className="overflow-y-auto p-4 space-y-4 flex-1">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
                         {onlineOrders.length === 0 ? (
                             <div className="text-center text-muted-foreground py-8">
                                 No online orders at the moment

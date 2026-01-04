@@ -94,8 +94,8 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                 }
                 headerEnd={
                     <div className="flex items-center gap-2 sm:gap-3">
-                        <Select defaultValue="ahmedabad-1">
-                            <SelectTrigger className="w-[220px] h-9 text-xs font-semibold">
+                        <Select  defaultValue="ahmedabad-1">
+                            <SelectTrigger className="w-[230px] hidden md:flex h-9 text-xs font-semibold">
                                 <SelectValue placeholder="Select Location" />
                             </SelectTrigger>
                             <SelectContent>
@@ -118,7 +118,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                         </Select>
 
                         <Select defaultValue="last-30-days">
-                            <SelectTrigger className="w-[140px] h-9 text-xs font-semibold">
+                            <SelectTrigger className="w-[140px] hidden md:flex h-9 text-xs font-semibold">
                                 <SelectValue placeholder="Select Range" />
                             </SelectTrigger>
                             <SelectContent>
@@ -159,7 +159,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                 size="sm"
                                 shape="circle"
                                 variant="plain"
-                                className="w-9 h-9 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 hidden sm:flex"
+                                className="w-9 h-9 border hidden md:flex border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
                                 icon={
                                     <PiArrowClockwiseBold className="text-lg text-slate-600 dark:text-slate-400" />
                                 }
@@ -168,7 +168,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                 size="sm"
                                 shape="circle"
                                 variant="plain"
-                                className="w-9 h-9 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                                className="w-9 h-9 border hidden md:flex border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
                                 icon={
                                     <PiBellDuotone className="text-xl text-slate-600 dark:text-slate-400" />
                                 }

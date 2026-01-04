@@ -36,7 +36,7 @@ const RecentOrders: React.FC<RecentOrders1Props> = memo(
 
         return (
             <div
-                className={`bg-white border border-teal-300 min-w-[60vh] rounded-2xl shadow-[4px_0_0_0_#0000001A] px-5 py-4 ${className}`}
+                className={`bg-white border border-teal-300 min-w-full md:min-w-100 rounded-2xl shadow-[4px_0_0_0_#0000001A] px-5 py-4 ${className}`}
             >
                 {/* Header */}
                 <div className="flex items-center justify-between">
@@ -63,7 +63,7 @@ const RecentOrders: React.FC<RecentOrders1Props> = memo(
                 </div>
 
                 {/* Items */}
-                <p className="mt-3 text-sm line-clamp-2 min-h-20 leading-relaxed text-teal-500 border-t border-b border-teal-300 py-3 -mx-5 px-5">
+                <p className="mt-3 text-sm line-clamp-2 min-h-16 max-h-16 leading-relaxed text-teal-500 border-t border-b border-teal-300 py-3 -mx-5 px-5">
                     {itemSummary}
                 </p>
 

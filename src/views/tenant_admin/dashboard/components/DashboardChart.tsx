@@ -53,8 +53,8 @@ const DashboardChart = ({ className }: { className?: string }) => {
     }
 
     return (
-        <div className={cn("bg-card rounded-lg", className)}>
-            <div className="flex items-center border-b border-border px-4 py-2 justify-between">
+        <div className={cn("bg-card rounded-lg flex flex-col h-full min-h-0", className)}>
+            <div className="flex items-center border-b px-4 py-2 justify-between shrink-0">
                 <div className="flex gap-2 flex-wrap">
                     <Tabs defaultValue="sales" className="w-full">
                         <TabsList className="flex gap-1">
@@ -110,8 +110,8 @@ const DashboardChart = ({ className }: { className?: string }) => {
                 </div>
             </div>
 
-            <div className="p-6">
-                <ChartContainer config={chartConfig} className="h-[350px] w-full">
+            <div className="flex-1 p-4 min-h-0">
+                <ChartContainer config={chartConfig} className="h-full w-full">
                     <LineChart
                         accessibilityLayer
                         data={chartData}

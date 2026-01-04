@@ -44,7 +44,7 @@ mock.onPost(`/sign-up`).reply((config) => {
         avatar: '',
         userName,
         email,
-        authority: ['admin', 'user'],
+        authority: ['ADMIN', 'USER'],
     }
 
     return new Promise(function (resolve) {

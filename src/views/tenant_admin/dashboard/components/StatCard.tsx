@@ -14,13 +14,13 @@ interface StatCardProps {
 
 const StatCard = ({ title, value, trend, subtitle, className }: StatCardProps) => {
     return (
-        <div className={cn("px-4 py-4 justify-center flex flex-col", className)}>
+        <div className={cn("px-4 py-4 min-h-0 justify-center flex flex-col", className)}>
             <div>
                 <p className="text-sm text-muted-foreground font-normal mb-1">{title}</p>
                 <div className='flex gap-2 items-baseline '>
 
                     <div className="flex flex-wrap items-baseline gap-2">
-                        <h3 className="text-2xl font-bold text-blue-800 dark:text-blue-400">{value}</h3>
+                        <h3 className="text-lg md:text-2xl font-bold text-blue-800 dark:text-blue-400">{value}</h3>
                         {trend && (
                             <span
                                 className={cn(

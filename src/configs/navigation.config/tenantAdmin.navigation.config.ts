@@ -17,10 +17,10 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         subMenu: [],
     },
     {
-        key: 'orders',
+        key: 'POS',
         path: '',
-        title: 'Orders',
-        translateKey: 'nav.orders.orders',
+        title: 'POS',
+        translateKey: 'nav.orders.pos',
         icon: 'orders',
         type: NAV_ITEM_TYPE_COLLAPSE,
         authority: [TENANT_ADMIN],
