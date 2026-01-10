@@ -7,7 +7,7 @@ const mockData: DashboardData = {
         totalRevenue: 12000,
         totalRevenueGrowth: 12,
         profitVsGoal: 85,
-        profitVsGoalGrowth: 12,
+        profitVsGoalGrowth: -5,
         moneyLost: 890000, // 8.9L
         itemSold: 45680,
         itemSoldGrowth: 12,

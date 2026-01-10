@@ -83,6 +83,13 @@ const mockPOSData: POSData = {
             category: 'pizza',
             image: '/placeholder-pizza.jpg',
         },
+        {
+            id: '11',
+            name: 'Veg Cheese Burger',
+            price: 15,
+            category: 'burger',
+            image: '/placeholder-burger.jpg',
+        },
     ],
     tables: [
         { id: 't1', number: 'Table 1', capacity: 2, status: 'available' },

@@ -14,13 +14,13 @@ interface StatCardProps {
 
 const StatCard = ({ title, value, trend, subtitle, className }: StatCardProps) => {
     return (
-        <div className={cn("px-4 py-4 min-h-0 justify-center flex flex-col", className)}>
+        <div className={cn("px-3 py-3 md:px-4 md:py-4 min-h-0 justify-center flex flex-col", className)}>
             <div>
-                <p className="text-sm text-muted-foreground font-normal mb-1">{title}</p>
+                <p className="text-sm text-teal-600 font-normal mb-1">{title}</p>
                 <div className='flex gap-2 items-baseline '>
 
-                    <div className="flex flex-wrap items-baseline gap-2">
-                        <h3 className="text-lg md:text-2xl font-bold text-blue-800 dark:text-blue-400">{value}</h3>
+                    <h3 className="text-lg md:text-2xl font-bold text-blue-800 dark:text-blue-400">{value}</h3>
+                    <div className="flex items-baseline gap-2">
                         {trend && (
                             <span
                                 className={cn(
@@ -35,12 +35,12 @@ const StatCard = ({ title, value, trend, subtitle, className }: StatCardProps) =
                                 ) : (
                                     <TrendingDown className="h-3 w-3" />
                                 )}
-                                {trend.isPositive ? '+' : ''}{trend.value}% vs goal
-                                
+                                {trend.isPositive ? '+' : ''}{trend.value}%
+
                             </span>
                         )}
                         {subtitle && (
-                            <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
+                            <p className="text-xs text-muted-foreground">{subtitle}</p>
                         )}
                     </div>
                 </div>

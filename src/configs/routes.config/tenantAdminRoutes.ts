@@ -21,6 +21,48 @@ const tenantAdminRoutes: Routes = [
         component: lazy(() => import('@/views/tenant_admin/orders/allOrders')), // Placeholder
         authority: [TENANT_ADMIN],
     },
+    {
+        key: 'menu',
+        path: '/menu',
+        component: lazy(() => import('@/views/tenant_admin/menu_management')), // Placeholder
+        authority: [TENANT_ADMIN],
+    },
+    {
+        key: 'tableManagement',
+        path: '/table-management',
+        component: lazy(() => import('@/views/tenant_admin/table_management')), // Placeholder
+        authority: [TENANT_ADMIN],
+    },
+    {
+        key: 'staffs',
+        path: '/staffs',
+        component: lazy(() => import('@/views/tenant_admin/staff_management')), // Placeholder
+        authority: [TENANT_ADMIN],
+    },
+    {
+        key: 'kitchenManagement',
+        path: '/kitchen-management',
+        component: lazy(() => import('@/views/tenant_admin/kitchen_management')), // Placeholder
+        authority: [TENANT_ADMIN],  
+    },
+    {
+        key: 'expenseTracker',
+        path: '/expense-tracker',
+        component: lazy(() => import('@/views/tenant_admin/expense_tracker')), // Placeholder
+        authority: [TENANT_ADMIN],
+    },
+    {
+        key: 'customers',
+        path: '/customers',
+        component: lazy(() => import('@/views/tenant_admin/customers')), // Placeholder
+        authority: [TENANT_ADMIN],
+    },
+    {
+        key: 'report',
+        path: '/report',
+        component: lazy(() => import('@/views/tenant_admin/reports')), // Placeholder
+        authority: [TENANT_ADMIN],
+    },
 ]
 
 export default tenantAdminRoutes
