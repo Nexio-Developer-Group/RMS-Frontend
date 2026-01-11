@@ -40,7 +40,7 @@ const TenantAdminDashboard = () => {
 
     if (isLoading) {
         return (
-            <div className="flex h-full items-center justify-center min-h-[400px]">
+            <div className="flex h-full items-center justify-center min-h-100">
                 <Loading loading={true} />
             </div>
         )
@@ -64,7 +64,7 @@ const TenantAdminDashboard = () => {
                             <h2 className="text-lg font-bold text-foreground">Status</h2>
                             <div className="flex items-center gap-4">
                                 <Select defaultValue="30days">
-                                    <SelectTrigger className="w-[140px]">
+                                    <SelectTrigger className="w-35">
                                         <SelectValue placeholder="Period" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -97,13 +97,13 @@ const TenantAdminDashboard = () => {
                                     value: stats.profitVsGoalGrowth,
                                     isPositive: stats.profitVsGoalGrowth > 0,
                                 }}
-                                subtitle="vs goal"
+                                // subtitle="vs goal"
                             />
                             <StatCard
                                 title="Money Lost"
                                 className='border-r'
                                 value={`₹${(stats.moneyLost / 100000).toFixed(1)}L`}
-                                subtitle="Stock issues & low traffic"
+                                // subtitle="Stock issues & low traffic"
                             />
                             <StatCard
                                 title="Item Sold"

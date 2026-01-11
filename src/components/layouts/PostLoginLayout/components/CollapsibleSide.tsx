@@ -95,7 +95,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                 headerEnd={
                     <div className="flex items-center gap-2 sm:gap-3">
                         <Select  defaultValue="ahmedabad-1">
-                            <SelectTrigger className="w-[230px] hidden md:flex h-9 text-xs font-semibold">
+                            <SelectTrigger className="w-[57.5] hidden md:flex h-9 text-xs font-semibold">
                                 <SelectValue placeholder="Select Location" />
                             </SelectTrigger>
                             <SelectContent>
@@ -118,7 +118,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                         </Select>
 
                         <Select defaultValue="last-30-days">
-                            <SelectTrigger className="w-[140px] hidden md:flex h-9 text-xs font-semibold">
+                            <SelectTrigger className="w-[35] hidden md:flex h-9 text-xs font-semibold">
                                 <SelectValue placeholder="Select Range" />
                             </SelectTrigger>
                             <SelectContent>

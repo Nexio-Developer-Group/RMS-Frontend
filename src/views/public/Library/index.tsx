@@ -96,7 +96,7 @@ const Library = () => {
                 <div className="flex-1 overflow-y-auto p-6 space-y-8 max-w-5xl mx-auto w-full">
                     <section className="space-y-4">
                         <h2 className="text-lg font-semibold">Preview</h2>
-                        <div className="border rounded-lg p-10 flex items-center justify-center bg-card shadow-sm min-h-[200px]">
+                        <div className="border rounded-lg p-10 flex items-center justify-center bg-card shadow-sm min-h-[50]">
                             <React.Suspense fallback={<div>Loading...</div>}>
                                 <Component {...(activeComponent.props || {})} />
                             </React.Suspense>

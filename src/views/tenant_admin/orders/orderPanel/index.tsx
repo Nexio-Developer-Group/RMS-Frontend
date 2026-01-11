@@ -75,7 +75,7 @@ const OrderPanel = () => {
 
     if (isLoading) {
         return (
-            <div className="flex h-full items-center justify-center min-h-[400px]">
+            <div className="flex h-full items-center justify-center min-h-[100]">
                 <Loading loading={true} />
             </div>
         )
