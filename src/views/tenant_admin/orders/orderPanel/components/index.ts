@@ -1,7 +1,7 @@
 export { default as CategorySidebar } from './CategorySidebar'
 export { default as MobileCategoryMenu } from './MobileCategoryMenu'
 export { default as OrderTypeHeader } from './OrderTypeHeader'
-export { default as SearchBar } from './SearchBar'
+export { default as SearchBar } from '../../../components/SearchBar'
 export { default as ProductCard } from './ProductCard'
 export { default as MenuGrid } from './MenuGrid'
 export { default as CurrentOrderPanel } from './CurrentOrderPanel'

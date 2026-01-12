@@ -97,13 +97,13 @@ const TenantAdminDashboard = () => {
                                     value: stats.profitVsGoalGrowth,
                                     isPositive: stats.profitVsGoalGrowth > 0,
                                 }}
-                                // subtitle="vs goal"
+                                subtitle="vs goal"
                             />
                             <StatCard
                                 title="Money Lost"
                                 className='border-r'
                                 value={`₹${(stats.moneyLost / 100000).toFixed(1)}L`}
-                                // subtitle="Stock issues & low traffic"
+                                subtitle="Stock issues & low traffic"
                             />
                             <StatCard
                                 title="Item Sold"
