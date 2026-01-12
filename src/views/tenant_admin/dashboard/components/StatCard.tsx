@@ -20,7 +20,7 @@ const StatCard = ({ title, value, trend, subtitle, className }: StatCardProps) =
                 <div className='flex gap-2 items-baseline '>
 
                     <h3 className="text-lg md:text-2xl font-bold text-blue-800 dark:text-blue-400">{value}</h3>
-                    <div className="flex items-baseline gap-2">
+                    <div className="flex gap-2">
                         {trend && (
                             <span
                                 className={cn(
@@ -40,7 +40,7 @@ const StatCard = ({ title, value, trend, subtitle, className }: StatCardProps) =
                             </span>
                         )}
                         {subtitle && (
-                            <p className="text-xs text-muted-foreground">{subtitle}</p>
+                            <p className="text-xs text-muted-foreground items-center">{subtitle}</p>
                         )}
                     </div>
                 </div>
