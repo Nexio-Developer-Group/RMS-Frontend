@@ -22,6 +22,12 @@ const tenantAdminRoutes: Routes = [
         authority: [TENANT_ADMIN],
     },
     {
+        key: 'online_orders',
+        path: '/online-orders',
+        component: lazy(() => import('@/views/tenant_admin/online_orders')), // Placeholder
+        authority: [TENANT_ADMIN],
+    },
+    {
         key: 'menu',
         path: '/menu',
         component: lazy(() => import('@/views/tenant_admin/menu_management')), // Placeholder

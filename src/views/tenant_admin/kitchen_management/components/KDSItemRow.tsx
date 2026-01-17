@@ -13,10 +13,15 @@ export const KDSItemRow = ({ item, onApprove }: Props) => {
     <div className="flex items-center justify-between gap-4 py-3 border-b last:border-b-0">
       {/* Left: Item Info */}
       <div className="flex items-center gap-2 text-sm">
-        <span className="font-medium text-foreground">
-          {item.quantity} × {item.name}
-        </span>
-        <span className="text-muted-foreground">
+        <div className="flex gap-1">
+          <span className="font-medium text-teal-600">
+            {item.quantity} ×
+          </span>
+          <span className="text-md font-semibold text-foreground">
+            {item.name}
+          </span>
+        </div>
+        <span className="text-md font-semibold text-foreground">
           ${item.price}
         </span>
       </div>

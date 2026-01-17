@@ -47,6 +47,16 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
             },
         ],
     },
+        {
+        key: 'online_orders',
+        path: '/online-orders',
+        title: 'Online Orders',
+        translateKey: 'nav.onlineOrders',
+        icon: 'orders',
+        type: NAV_ITEM_TYPE_ITEM,
+        authority: [TENANT_ADMIN],
+        subMenu: [],
+    },
     {
         key: 'menu',
         path: '/menu',

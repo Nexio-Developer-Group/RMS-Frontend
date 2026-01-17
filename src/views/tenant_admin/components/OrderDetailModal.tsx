@@ -33,71 +33,79 @@ const resolveCharges = (order: Order): OrderChargeLine[] =>
     { label: "Total", amount: order.total, emphasized: true },
   ];
 
-export function OrderDetailModal({ orderId, order, loading, onClose }: Props) {
+const OrderDetailModal: React.FC<Props> = ({ orderId, order, loading, onClose }) => {
   const isOpen = !!orderId;
-
   if (!isOpen) return null;
 
   const chargeLines = order ? resolveCharges(order) : [];
 
+  const renderModifiers = (modifiers?: any[]) =>
+    modifiers && modifiers.length > 0
+      ? modifiers
+          .map((mod) =>
+            `${mod.label}${
+              typeof mod.price === "number" ? ` : ${formatMoney(mod.price)}` : ""
+            }`
+          )
+          .join(", ")
+      : null;
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[95vw] sm:max-w-3xl lg:max-w-5xl max-h-[90vh] overflow-hidden p-0 flex flex-col">
+      <DialogContent className="max-w-[95vw] sm:max-w-3xl lg:max-w-5xl max-h-[90vh] overflow-hidden p-0 flex flex-col bg-card text-foreground">
         <DialogHeader className="sr-only">
           <DialogTitle>Order detail</DialogTitle>
         </DialogHeader>
 
         {loading && !order ? (
-          <div className="px-6 py-12 text-center text-sm text-muted-foreground">
+          <div className="px-6 py-12 text-center text-sm text-muted-foreground bg-card">
             Loading order details...
           </div>
         ) : order ? (
           <>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 border-b bg-teal-50 px-4 sm:px-6 py-3 sm:py-4 shrink-0">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 border-b bg-card px-4 sm:px-6 py-3 sm:py-4 shrink-0">
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <DialogTitle className="text-base sm:text-lg font-bold text-slate-900">
+                <DialogTitle className="text-base sm:text-lg font-bold text-foreground">
                   #{order.orderCode ?? order.id.toString().padStart(4, "0")}
                 </DialogTitle>
-                <Badge className="rounded-md border border-teal-200 bg-white px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-teal-800">
+
+                <Badge className="rounded-md border border-teal-200 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-teal-800 bg-card">
                   {order.type}
                 </Badge>
               </div>
 
-              <Badge className="rounded-full bg-orange-100 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-orange-800">
+              <Badge className="rounded-full bg-orange-100 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-orange-800 bg-card">
                 {order.status}
               </Badge>
             </div>
 
-            <div className="space-y-4 sm:space-y-6 bg-white px-4 sm:px-6 py-4 sm:py-5 overflow-y-auto flex-1">
+            {/* Body */}
+            <div className="sm:space-y-6 px-5 overflow-y-auto flex-1 bg-card text-foreground">
+              {/* Stats Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
                 <StatCard
                   title="Created by"
                   value={order.createdBy}
                   subtitle={order.customer}
-                  className="h-full rounded-lg border bg-white shadow-sm"
                 />
-                <StatCard
-                  title="Times"
-                  value={order.time}
-                  className="h-full rounded-lg border bg-white shadow-sm"
-                />
+                <StatCard title="Times" value={order.time} />
                 <StatCard
                   title="Payment"
                   value={order.paymentNote || order.paymentStatus || order.payment}
                   subtitle={order.payment}
-                  className="h-full rounded-lg border bg-white shadow-sm"
                 />
                 <StatCard
                   title="Seating"
                   value={order.table || "—"}
                   subtitle={order.seatingArea}
-                  className="h-full rounded-lg border bg-white shadow-sm"
                 />
               </div>
 
-              <div className="overflow-hidden rounded-lg border">
-                {/* Desktop header */}
-                <div className="hidden sm:grid grid-cols-12 bg-slate-50 px-3 sm:px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              {/* Items Table */}
+              <div className="overflow-hidden rounded-lg border bg-card">
+                {/* Desktop Header */}
+                <div className="hidden sm:grid grid-cols-12 bg-card px-3 sm:px-4 py-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   <div className="col-span-6">Items</div>
                   <div className="col-span-2 text-center">Qty</div>
                   <div className="col-span-2 text-center">Amount</div>
@@ -108,60 +116,78 @@ export function OrderDetailModal({ orderId, order, loading, onClose }: Props) {
                   {order.items.map((item, index) => (
                     <div
                       key={`${item.name}-${index}`}
-                      className="px-3 sm:px-4 py-3"
+                      className="px-3 sm:px-4 py-3 bg-card"
                     >
-                      {/* Desktop grid layout */}
-                      <div className="hidden sm:grid grid-cols-12 items-start text-sm text-slate-800">
+                      {/* Desktop Layout */}
+                      <div className="hidden sm:grid grid-cols-12 items-start text-sm text-foreground">
                         <div className="col-span-6 space-y-1">
-                          <p className="font-semibold">{item.name}</p>
-                          {item.modifiers && item.modifiers.length > 0 && (
-                            <p className="text-xs text-slate-500">
-                              {item.modifiers
-                                .map((mod) =>
-                                  `${mod.label}${typeof mod.price === "number" ? ` : ${formatMoney(mod.price)}` : ""}`
-                                )
-                                .join(", ")}
+                          <p className="font-semibold text-foreground">
+                            {item.name}
+                          </p>
+
+                          {renderModifiers(item.modifiers) && (
+                            <p className="text-xs text-muted-foreground">
+                              {renderModifiers(item.modifiers)}
                             </p>
                           )}
+
                           {item.note && (
-                            <p className="text-xs text-slate-500">{item.note}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {item.note}
+                            </p>
                           )}
                         </div>
 
-                        <div className="col-span-2 text-center font-medium text-slate-700">
+                        <div className="col-span-2 text-center font-medium text-foreground">
                           {item.qty}
                         </div>
-                        <div className="col-span-2 text-center font-medium text-slate-700">
+                        <div className="col-span-2 text-center font-medium text-foreground">
                           {formatMoney(item.amount)}
                         </div>
-                        <div className="col-span-2 text-right font-semibold text-slate-900">
+                        <div className="col-span-2 text-right font-semibold text-foreground">
                           {formatMoney(item.total)}
                         </div>
                       </div>
 
-                      {/* Mobile stacked layout */}
-                      <div className="sm:hidden space-y-2 text-sm text-slate-800">
+                      {/* Mobile Layout */}
+                      <div className="sm:hidden space-y-2 text-sm text-foreground">
                         <div className="space-y-1">
-                          <p className="font-semibold">{item.name}</p>
-                          {item.modifiers && item.modifiers.length > 0 && (
-                            <p className="text-xs text-slate-500">
-                              {item.modifiers
-                                .map((mod) =>
-                                  `${mod.label}${typeof mod.price === "number" ? ` : ${formatMoney(mod.price)}` : ""}`
-                                )
-                                .join(", ")}
+                          <p className="font-semibold text-foreground">
+                            {item.name}
+                          </p>
+
+                          {renderModifiers(item.modifiers) && (
+                            <p className="text-xs text-muted-foreground">
+                              {renderModifiers(item.modifiers)}
                             </p>
                           )}
+
                           {item.note && (
-                            <p className="text-xs text-slate-500">{item.note}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {item.note}
+                            </p>
                           )}
                         </div>
-                        <div className="flex justify-between items-center pt-2 border-t border-slate-100 text-xs">
+
+                        <div className="flex justify-between items-center pt-2 border-t border-muted text-xs">
                           <div className="flex gap-4">
-                            <span className="text-slate-500">Qty: <span className="font-medium text-slate-700">{item.qty}</span></span>
-                            <span className="text-slate-500">Amount: <span className="font-medium text-slate-700">{formatMoney(item.amount)}</span></span>
+                            <span className="text-muted-foreground">
+                              Qty:{" "}
+                              <span className="font-medium text-foreground">
+                                {item.qty}
+                              </span>
+                            </span>
+                            <span className="text-muted-foreground">
+                              Amount:{" "}
+                              <span className="font-medium text-foreground">
+                                {formatMoney(item.amount)}
+                              </span>
+                            </span>
                           </div>
-                          <span className="font-semibold text-slate-900">{formatMoney(item.total)}</span>
+
+                          <span className="font-semibold text-foreground">
+                            {formatMoney(item.total)}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -169,7 +195,8 @@ export function OrderDetailModal({ orderId, order, loading, onClose }: Props) {
                 </div>
               </div>
 
-              <div className="rounded-lg border bg-white px-3 sm:px-4 py-3 text-xs sm:text-sm text-slate-800">
+              {/* Charges */}
+              <div className="rounded-lg border bg-card px-3 sm:px-4 py-3 text-xs sm:text-sm text-foreground">
                 <div className="divide-y">
                   {chargeLines.map((charge) => (
                     <div
@@ -177,14 +204,17 @@ export function OrderDetailModal({ orderId, order, loading, onClose }: Props) {
                       className="flex items-center justify-between py-1.5 sm:py-2"
                     >
                       <span
-                        className={charge.emphasized ? "font-semibold" : "font-medium"}
+                        className={
+                          charge.emphasized ? "font-semibold" : "font-medium"
+                        }
                       >
                         {charge.label}
                       </span>
+
                       <span
                         className={
                           charge.emphasized
-                            ? "text-base font-semibold text-blue-700"
+                            ? "text-base font-semibold text-primary"
                             : "text-sm font-medium"
                         }
                       >
@@ -196,7 +226,8 @@ export function OrderDetailModal({ orderId, order, loading, onClose }: Props) {
               </div>
             </div>
 
-            <DialogFooter className="flex flex-col gap-2 sm:gap-3 border-t bg-slate-50 px-4 sm:px-6 py-3 sm:py-4 shrink-0 sm:flex-row sm:items-center sm:justify-between">
+            {/* Footer */}
+            <DialogFooter className="flex flex-col gap-2 sm:gap-3 border-t bg-card px-4 sm:px-6 py-3 sm:py-4 shrink-0 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex gap-2 order-2 sm:order-1">
                 <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
                   Edit
@@ -210,12 +241,14 @@ export function OrderDetailModal({ orderId, order, loading, onClose }: Props) {
                 <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
                   Print
                 </Button>
-                <Button size="sm" className="flex-1 sm:flex-none">Pay Now</Button>
+                <Button size="sm" className="flex-1 sm:flex-none">
+                  Pay Now
+                </Button>
               </div>
             </DialogFooter>
           </>
         ) : (
-          <div className="px-6 py-12 text-center text-sm text-muted-foreground">
+          <div className="px-6 py-12 text-center text-sm text-muted-foreground bg-card">
             Order not found.
           </div>
         )}
@@ -223,3 +256,5 @@ export function OrderDetailModal({ orderId, order, loading, onClose }: Props) {
     </Dialog>
   );
 }
+
+export default OrderDetailModal;

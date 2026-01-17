@@ -47,7 +47,20 @@ const mockKDSData: KDSData = {
             ],
             overallStatus: 'pending',
         },
-
+        {
+            id: '4',
+            orderNumber: '#0042',
+            type: 'Dine-in',
+            table: 'Floor 2/ Table 3',
+            time: '44:39',
+            items: [
+                { id: 'a', name: 'Classic Burger', quantity: 2, price: 12, status: 'prepared' },
+                { id: 'b', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
+                { id: 'c', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
+                { id: 'd', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
+            ],
+            overallStatus: 'pending',
+        },
     ],
 }
 

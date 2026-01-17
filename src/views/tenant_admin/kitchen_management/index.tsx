@@ -28,13 +28,13 @@ const KitchenManagement = () => {
             prev.map((order) =>
                 order.id === orderId
                     ? {
-                          ...order,
-                          items: order.items.map((item) =>
-                              item.id === itemId
-                                  ? { ...item, status: 'prepared' }
-                                  : item
-                          ),
-                      }
+                        ...order,
+                        items: order.items.map((item) =>
+                            item.id === itemId
+                                ? { ...item, status: 'prepared' }
+                                : item
+                        ),
+                    }
                     : order
             )
         )
@@ -45,38 +45,50 @@ const KitchenManagement = () => {
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            <KDSTypeHeader
-                kdsType={kdsType}
-                onKDSTypeChange={setKdsType}
-            />
+        <div className="h-[calc(100vh-8rem)] md:h-[calc(100vh-6rem)]">
+            {/* Main Container - Full Height */}
+            <div className="h-full flex flex-col rounded-md border bg-card overflow-hidden">
 
-            {kdsType === 'live-orders' && (
-                <>
-                    {loading ? (
-                        <div className="p-6 text-sm text-muted-foreground">
-                            Loading orders…
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-                            {orders.map((order) => (
-                                <KDSCard
-                                    key={order.id}
-                                    order={order}
-                                    onApproveItem={handleApproveItem}
-                                    onCompleteOrder={handleCompleteOrder}
-                                />
-                            ))}
+                {/* Fixed Header - Non-scrollable */}
+                <div className="shrink-0">
+                    <KDSTypeHeader
+                        kdsType={kdsType}
+                        onKDSTypeChange={setKdsType}
+                    />
+                </div>
+
+                {/* Scrollable Content Area */}
+                <div className="flex-1 overflow-y-auto">
+                    {kdsType === 'live-orders' && (
+                        <>
+                            {loading ? (
+                                <div className="flex items-center justify-center h-full p-6 text-sm text-muted-foreground">
+                                    Loading orders…
+                                </div>
+                            ) : (
+                                <div className="p-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
+                                        {orders.map((order) => (
+                                            <KDSCard
+                                                key={order.id}
+                                                order={order}
+                                                onApproveItem={handleApproveItem}
+                                                onCompleteOrder={handleCompleteOrder}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {kdsType === 'kds-setup' && (
+                        <div className="flex items-center justify-center h-full p-6 text-sm text-muted-foreground">
+                            KDS Setup coming soon
                         </div>
                     )}
-                </>
-            )}
-
-            {kdsType === 'kds-setup' && (
-                <div className="p-6 text-sm text-muted-foreground">
-                    KDS Setup coming soon
                 </div>
-            )}
+            </div>
         </div>
     )
 }
