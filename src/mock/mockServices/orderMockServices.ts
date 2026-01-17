@@ -1,5 +1,5 @@
 import type { Order, AllOrderType } from '@/@types/orders'
-import { MOCK_ORDERS } from '@/mock/data/centralizedMockData'
+import { MOCK_ORDERS } from '@/mock/data/mockData'
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 

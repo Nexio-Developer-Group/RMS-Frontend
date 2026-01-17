@@ -5,7 +5,12 @@ import type { Customer } from '@/@types/customers'
 import type { Table } from '@/@types/table'
 
 // ============================================================================
-// MENU ITEMS - Single Source of Truth
+// DASHBOARD STATS
+// ============================================================================
+
+
+// ============================================================================
+// MENU ITEMS
 // ============================================================================
 export const MOCK_MENU_ITEMS: MenuItem[] = [
     {
@@ -120,12 +125,12 @@ export const MOCK_MENU_ITEMS: MenuItem[] = [
 ]
 
 // ============================================================================
-// CUSTOMERS - Single Source of Truth
+// CUSTOMERS
 // ============================================================================
 export const MOCK_CUSTOMERS: Customer[] = [
     {
         id: 'cust-1',
-        customerId: '#CUST001',
+        customerId: 'CUST001',
         name: 'Tarun Dewangan',
         phoneNumber: '+91 7389884905',
         email: 'tarun@example.com',
@@ -141,7 +146,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
     },
     {
         id: 'cust-2',
-        customerId: '#CUST002',
+        customerId: 'CUST002',
         name: 'Rohit Sharma',
         phoneNumber: '+91 9876543210',
         email: 'rohit@example.com',
@@ -157,7 +162,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
     },
     {
         id: 'cust-3',
-        customerId: '#CUST003',
+        customerId: 'CUST003',
         name: 'Rahul Sharma',
         phoneNumber: '+91 7389884905',
         email: 'rahul@example.com',
@@ -173,7 +178,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
     },
     {
         id: 'cust-walk-in',
-        customerId: '#WALK-IN',
+        customerId: 'WALK-IN',
         name: 'Walk-in Customer',
         phoneNumber: '+91 0000000000',
         totalOrders: 0,
@@ -187,7 +192,7 @@ export const MOCK_CUSTOMERS: Customer[] = [
 ]
 
 // ============================================================================
-// TABLES - Single Source of Truth
+// TABLES
 // ============================================================================
 export const MOCK_TABLES: Table[] = [
     {
@@ -238,13 +243,13 @@ export const MOCK_TABLES: Table[] = [
 ]
 
 // ============================================================================
-// ORDERS - Single Source of Truth
+// ORDERS
 // ============================================================================
 export const MOCK_ORDERS: Order[] = [
     // DINE-IN ORDERS (Recent Orders)
     {
         id: 42,
-        orderCode: '#0042',
+        orderCode: '0042',
         type: 'dine-in',
         table: 'Table 12',
         seatingArea: 'Main Floor',
@@ -296,7 +301,7 @@ export const MOCK_ORDERS: Order[] = [
     },
     {
         id: 43,
-        orderCode: '#0043',
+        orderCode: '0043',
         type: 'dine-in',
         table: 'Table 08',
         seatingArea: 'Main Floor',
@@ -353,7 +358,7 @@ export const MOCK_ORDERS: Order[] = [
     // TAKEAWAY ORDERS (Recent Orders)
     {
         id: 44,
-        orderCode: '#0044',
+        orderCode: '0044',
         type: 'takeaway',
         customer: 'Rohit Sharma',
         createdBy: 'Admin',
@@ -396,7 +401,7 @@ export const MOCK_ORDERS: Order[] = [
     },
     {
         id: 101,
-        orderCode: '#0101',
+        orderCode: '0101',
         type: 'takeaway',
         customer: 'Walk-in Customer',
         createdBy: 'Admin',
@@ -439,7 +444,7 @@ export const MOCK_ORDERS: Order[] = [
     // DELIVERY ORDERS (Live Orders)
     {
         id: 201,
-        orderCode: '#0201',
+        orderCode: '0201',
         type: 'delivery',
         customer: 'Rahul Sharma',
         createdBy: 'System',
@@ -490,7 +495,7 @@ export const MOCK_ORDERS: Order[] = [
     },
     {
         id: 202,
-        orderCode: '#0202',
+        orderCode: '0202',
         type: 'delivery',
         customer: 'Tarun Dewangan',
         createdBy: 'System',
@@ -534,7 +539,7 @@ export const MOCK_ORDERS: Order[] = [
     },
     {
         id: 203,
-        orderCode: '#0203',
+        orderCode: '0203',
         type: 'delivery',
         customer: 'Rohit Sharma',
         createdBy: 'System',

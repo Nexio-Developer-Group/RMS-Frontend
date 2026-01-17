@@ -9,13 +9,19 @@ import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
 import Loading from '@/components/shared/Loading';
 import StatCard from "./StatCard";
-import { Order, OrderChargeLine } from "@/@types/orders";
+import { Order } from "@/@types/orders";
 
 interface Props {
   orderId: number | null;
   order: Order | null;
   loading?: boolean;
   onClose: () => void;
+}
+
+interface OrderChargeLine {
+  label: string;
+  amount: number;
+  emphasized?: boolean;
 }
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {

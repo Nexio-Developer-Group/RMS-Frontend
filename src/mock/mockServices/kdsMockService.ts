@@ -1,5 +1,5 @@
 import type { KDSData, KDSOrder } from '@/@types/kds'
-import { getLiveOrders } from '@/mock/data/centralizedMockData'
+import { getLiveOrders } from '@/mock/data/mockData'
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

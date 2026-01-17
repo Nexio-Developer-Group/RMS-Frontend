@@ -1,5 +1,5 @@
 import type { MenuData, MenuItem, Modifier, Combo } from '@/@types/menu'
-import { MOCK_MENU_ITEMS } from '@/mock/data/centralizedMockData'
+import { MOCK_MENU_ITEMS } from '@/mock/data/mockData'
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

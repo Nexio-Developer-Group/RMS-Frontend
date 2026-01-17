@@ -1,5 +1,5 @@
 import type { DashboardData, OnlineOrder, RecentOrder } from '@/@types/dashboard'
-import { MOCK_ORDERS, getLiveOrders, getRecentOrders } from '@/mock/data/centralizedMockData'
+import { MOCK_ORDERS, getLiveOrders, getRecentOrders } from '@/mock/data/mockData'
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
