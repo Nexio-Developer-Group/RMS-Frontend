@@ -4,19 +4,20 @@ import SearchBar from '../../components/SearchBar'
 import { OrderList } from './components/OrderList'
 import { OrderDetailModal } from '../../components/OrderDetailModal'
 import { useOrders } from '@/hooks/useOrder'
-import type { Order } from '@/@types/orders'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/ui/select'
 import StatCard from '../../components/StatCard'
 import RefetchLoader from '@/components/custom/RefetchLoader'
-import { useTenantDashboard, useOrderActions } from '@/hooks/useTenantDashboard'
+import { useTenantDashboard } from '@/hooks/useTenantDashboard'
+import { useOrderDetail } from '@/hooks/useOrderDetail'
 
 const AllOrders = () => {
     const [allOrderType, setAllOrderType] = useState<'live-orders' | 'kds-setup'>('live-orders')
     const [search, setSearch] = useState('')
 
-    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+    const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null)
 
     const { orders, loading } = useOrders(allOrderType, search)
+    const { order: selectedOrder, loading: orderDetailLoading } = useOrderDetail(selectedOrderId)
     const { data, refetch } = useTenantDashboard()
     const [isRefetching, setIsRefetching] = useState(false)
 
@@ -130,14 +131,16 @@ const AllOrders = () => {
                             ) : (
                                 <OrderList
                                     orders={orders}
-                                    onSelectOrder={setSelectedOrder}
+                                    onSelectOrder={(order) => setSelectedOrderId(order.id)}
                                 />
                             )}
                         </div>
 
                         <OrderDetailModal
                             order={selectedOrder}
-                            onClose={() => setSelectedOrder(null)}
+                            orderId={selectedOrderId}
+                            loading={orderDetailLoading}
+                            onClose={() => setSelectedOrderId(null)}
                         />
                     </div>
                 </div>

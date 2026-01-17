@@ -58,7 +58,9 @@ const TenantAdminDashboard = () => {
     return (
         <div className='space-y-4'>
             <div className="gap-4 flex flex-col h-[70vh] md:h-[60vh]xl:h-[70vh] 2xl:h-[66vh] md:flex-row min-h-0">
+
                 <div className="flex-col w-full hidden md:flex gap-4 flex-1 h-full min-h-0">
+                    {/* Status Card */}
                     <div className="bg-card border rounded-md shrink-0">
                         <div className="flex items-center justify-between px-4 py-2 border-b ">
                             <h2 className="text-lg font-bold text-foreground">Status</h2>
@@ -115,6 +117,8 @@ const TenantAdminDashboard = () => {
                             />
                         </div>
                     </div>
+
+                    {/* Dashboard Chart */}
                     <DashboardChart className='border flex-1 min-h-0' />
                 </div>
 

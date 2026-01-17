@@ -82,10 +82,10 @@ const OrderPanel = () => {
     }
 
     return (
-        <div className="flex bg-slate-50 max-h-screen">
+        <div className="flex max-h-screen gap-3">
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col overflow-hidden min-h-0 ">
+            <div className="flex flex-1 flex-col overflow-hidden rounded-md bg-card min-h-0 ">
 
                 {/* Order Type Tabs */}
                 <OrderTypeHeader orderType={orderType} onOrderTypeChange={setOrderType} className="shrink-0" />
@@ -159,7 +159,7 @@ const OrderPanel = () => {
             </div>
 
             {/* Desktop Right Sidebar - Current Order */}
-            <div className="hidden md:block">
+            <div className="hidden md:flex w-[30%] min-h-0 rounded-md">
                 <CurrentOrderPanel
                     orderItems={currentOrder}
                     orderType={orderType}

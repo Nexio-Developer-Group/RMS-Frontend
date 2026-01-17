@@ -25,7 +25,7 @@ const CategorySidebar = ({
                             : 'bg-card hover:bg-slate-50 dark:hover:bg-gray-900 text-slate-700 dark:text-slate-400',
                     )}
                 >
-                    <span className="text-xl lg:text-2xl">{category.icon}</span>
+                    <img src={category.icon} alt={category.name} className="text-xl lg:text-2xl" />
                     <span className="font-medium text-[10px] lg:text-xs">
                         {category.name}
                     </span>

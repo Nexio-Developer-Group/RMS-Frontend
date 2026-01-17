@@ -116,7 +116,7 @@ const CurrentOrderPanel = ({
     const availableTables = tables.filter((table) => table.status === 'available')
 
     return (
-        <div className="w-full md:w-80 lg:w-96 bg-card md:border-l flex flex-col h-full">
+        <div className="w-full bg-card md:border-l flex flex-col h-full">
             {/* Header */}
             <div className="p-4 md:p-4 border-b shrink-0">
                 <div className="flex items-center justify-between mb-3">
