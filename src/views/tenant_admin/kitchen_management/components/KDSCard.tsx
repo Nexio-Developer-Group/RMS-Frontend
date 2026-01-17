@@ -3,7 +3,7 @@ import { KDSItemRow } from '../components/KDSItemRow'
 import { cn } from '@/components/shadcn/utils'
 import { Badge } from '@/components/shadcn/ui/badge'
 import { CardHeader } from '@/components/shadcn/ui/card'
-import { Expand } from 'lucide-react'
+import { Check, Expand } from 'lucide-react'
 
 type KDSCardProps = {
     order: Order
@@ -78,7 +78,10 @@ const KDSCard = ({ order, onApproveItem, onCompleteOrder }: KDSCardProps) => {
                         'text-green-600 border-green-300 hover:bg-green-200'
                     )}
                 >
-                    ✓ Make as Completed
+                    <span className="flex items-center justify-center">
+                        <Check className="w-4 h-4" />
+                        <span className="ml-1">Make as Completed</span>
+                    </span>
                 </button>
             </div>
         </div>
