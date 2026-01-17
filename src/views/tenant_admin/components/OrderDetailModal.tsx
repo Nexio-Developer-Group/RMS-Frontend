@@ -7,6 +7,7 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { Badge } from "@/components/shadcn/ui/badge";
 import { Button } from "@/components/shadcn/ui/button";
+import Loading from '@/components/shared/Loading';
 import StatCard from "./StatCard";
 import { Order, OrderChargeLine } from "@/@types/orders";
 
@@ -42,12 +43,11 @@ const OrderDetailModal: React.FC<Props> = ({ orderId, order, loading, onClose })
   const renderModifiers = (modifiers?: any[]) =>
     modifiers && modifiers.length > 0
       ? modifiers
-          .map((mod) =>
-            `${mod.label}${
-              typeof mod.price === "number" ? ` : ${formatMoney(mod.price)}` : ""
-            }`
-          )
-          .join(", ")
+        .map((mod) =>
+          `${mod.label}${typeof mod.price === "number" ? ` : ${formatMoney(mod.price)}` : ""
+          }`
+        )
+        .join(", ")
       : null;
 
   return (
@@ -58,8 +58,8 @@ const OrderDetailModal: React.FC<Props> = ({ orderId, order, loading, onClose })
         </DialogHeader>
 
         {loading && !order ? (
-          <div className="px-6 py-12 text-center text-sm text-muted-foreground bg-card">
-            Loading order details...
+          <div className="flex h-full items-center justify-center min-h-100">
+            <Loading loading={true} />
           </div>
         ) : order ? (
           <>

@@ -10,7 +10,9 @@ import OrderTypeHeader from './components/OrderTypeHeader'
 import SearchBar from '../../components/SearchBar'
 import MenuGrid from './components/MenuGrid'
 import CurrentOrderPanel from './components/CurrentOrderPanel'
-import type { OrderItem, MenuItem, OrderType, Table } from '@/@types/pos'
+import CustomizeItemModal from './components/CustomizeItemModal'
+import PaymentModal from './components/PaymentModal'
+import type { OrderItem, MenuItem, OrderType, Table, Addon } from '@/@types/pos'
 import { Badge } from '@/components/shadcn/ui/badge'
 
 const OrderPanel = () => {
@@ -20,34 +22,60 @@ const OrderPanel = () => {
     const [currentOrder, setCurrentOrder] = useState<OrderItem[]>([])
     const [selectedTable, setSelectedTable] = useState<Table | undefined>()
     const [isMobileCartOpen, setIsMobileCartOpen] = useState(false)
+    const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItem | null>(null)
+    const [isCustomizeModalOpen, setIsCustomizeModalOpen] = useState(false)
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+    const [editingOrderItem, setEditingOrderItem] = useState<OrderItem | null>(null)
 
     const { data: posData, isLoading } = usePOSData()
     const { data: menuItems = [] } = useMenuItems(selectedCategory)
 
     const handleAddToOrder = (menuItem: MenuItem) => {
-        const existingItemIndex = currentOrder.findIndex(
-            (item) => item.menuItem.id === menuItem.id,
-        )
+        // Open customize modal for item customization
+        setSelectedMenuItem(menuItem)
+        setIsCustomizeModalOpen(true)
+    }
 
-        if (existingItemIndex > -1) {
-            const updatedOrder = [...currentOrder]
-            updatedOrder[existingItemIndex].quantity += 1
-            setCurrentOrder(updatedOrder)
-        } else {
-            const newOrderItem: OrderItem = {
-                id: `${menuItem.id}-${Date.now()}`,
-                menuItem,
-                quantity: 1,
-                size: 'Small',
-                addons: [],
-            }
-            setCurrentOrder([...currentOrder, newOrderItem])
+    const handleCustomizeComplete = (
+        menuItem: MenuItem,
+        quantity: number,
+        size: string,
+        selectedAddons: Addon[]
+    ) => {
+        const newOrderItem: OrderItem = {
+            id: `${menuItem.id}-${Date.now()}`,
+            menuItem,
+            quantity,
+            size,
+            addons: selectedAddons,
         }
+        setCurrentOrder([...currentOrder, newOrderItem])
 
         // Auto-open cart on mobile when item is added
         if (window.innerWidth < 768) {
             setIsMobileCartOpen(true)
         }
+    }
+
+    const handleCustomizeUpdate = (
+        itemId: string,
+        quantity: number,
+        size: string,
+        selectedAddons: Addon[]
+    ) => {
+        setCurrentOrder(
+            currentOrder.map((item) =>
+                item.id === itemId
+                    ? { ...item, quantity, size, addons: selectedAddons }
+                    : item
+            )
+        )
+    }
+
+    const handleEditOrderItem = (orderItem: OrderItem) => {
+        setSelectedMenuItem(orderItem.menuItem)
+        setEditingOrderItem(orderItem)
+        setIsCustomizeModalOpen(true)
     }
 
     const handleUpdateOrderItem = (itemId: string, updates: Partial<OrderItem>) => {
@@ -65,6 +93,12 @@ const OrderPanel = () => {
     const handleClearOrder = () => {
         setCurrentOrder([])
         setSelectedTable(undefined)
+    }
+
+    const handleProcessPayment = (paymentMethod: 'Cash' | 'Card' | 'UPI') => {
+        console.log('Processing payment with method:', paymentMethod)
+        // Clear order after payment
+        handleClearOrder()
     }
 
     const filteredMenuItems = menuItems.filter((item) =>
@@ -152,6 +186,11 @@ const OrderPanel = () => {
                                 onUpdateItem={handleUpdateOrderItem}
                                 onRemoveItem={handleRemoveOrderItem}
                                 onClearOrder={handleClearOrder}
+                                onPayClick={() => {
+                                    setIsMobileCartOpen(false)
+                                    setIsPaymentModalOpen(true)
+                                }}
+                                onEditItem={handleEditOrderItem}
                             />
                         </SheetContent>
                     </Sheet>
@@ -168,8 +207,37 @@ const OrderPanel = () => {
                     onUpdateItem={handleUpdateOrderItem}
                     onRemoveItem={handleRemoveOrderItem}
                     onClearOrder={handleClearOrder}
+                    onPayClick={() => setIsPaymentModalOpen(true)}
+                    onEditItem={handleEditOrderItem}
                 />
             </div>
+
+            {/* Customize Item Modal */}
+            <CustomizeItemModal
+                item={selectedMenuItem}
+                open={isCustomizeModalOpen}
+                onClose={() => {
+                    setIsCustomizeModalOpen(false)
+                    setSelectedMenuItem(null)
+                    setEditingOrderItem(null)
+                }}
+                onAddToOrder={handleCustomizeComplete}
+                onUpdateOrder={handleCustomizeUpdate}
+                availableAddons={posData?.availableAddons || []}
+                existingOrderItem={editingOrderItem}
+            />
+
+            {/* Payment Modal */}
+            <PaymentModal
+                open={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
+                totalAmount={currentOrder.reduce((sum, item) => {
+                    const itemPrice = item.menuItem.price
+                    const addonsPrice = item.addons.reduce((addonSum, addon) => addonSum + addon.price, 0)
+                    return sum + (itemPrice + addonsPrice) * item.quantity
+                }, 0)}
+                onProcessPayment={handleProcessPayment}
+            />
         </div>
     )
 }

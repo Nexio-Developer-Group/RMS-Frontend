@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/ui/select'
 import RefetchLoader from '@/components/custom/RefetchLoader'
+import Loading from '@/components/shared/Loading'
 import OnlineOrderStatsHeader from './components/OnlineOrderStatsHeader'
 import OnlineOrderFilterTabs from './components/OnlineOrderFilterTabs'
 import OnlineOrderSearchBar from './components/OnlineOrderSearchBar'
@@ -92,8 +93,8 @@ const OnlineOrders = () => {
 
                 <div className="p-4">
                     {ordersLoading ? (
-                        <div className="text-center py-12">
-                            <p className="text-muted-foreground">Loading orders...</p>
+                        <div className="flex h-full items-center justify-center min-h-100">
+                            <Loading loading={true} />
                         </div>
                     ) : (
                         <OnlineOrderGrid

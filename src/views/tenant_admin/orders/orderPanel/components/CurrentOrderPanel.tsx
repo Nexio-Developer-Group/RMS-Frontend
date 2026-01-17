@@ -34,6 +34,8 @@ type CurrentOrderPanelProps = {
     onUpdateItem: (itemId: string, updates: Partial<OrderItem>) => void
     onRemoveItem: (itemId: string) => void
     onClearOrder: () => void
+    onPayClick?: () => void
+    onEditItem?: (orderItem: OrderItem) => void
 }
 
 const CurrentOrderPanel = ({
@@ -44,6 +46,8 @@ const CurrentOrderPanel = ({
     onUpdateItem,
     onRemoveItem,
     onClearOrder,
+    onPayClick,
+    onEditItem,
 }: CurrentOrderPanelProps) => {
     const { data: tables = [] } = useTables()
     const {
@@ -58,8 +62,6 @@ const CurrentOrderPanel = ({
         isPrintingOrder,
         isProcessingPayment,
     } = useOrderActions()
-
-    const [editingItemId, setEditingItemId] = useState<string | null>(null)
 
     // Calculate totals
     const subtotal = orderItems.reduce((sum, item) => {
@@ -197,7 +199,7 @@ const CurrentOrderPanel = ({
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => setEditingItemId(item.id)}
+                                    onClick={() => onEditItem?.(item)}
                                     className="text-slate-400 hover:text-slate-600 p-1"
                                 >
                                     <Pencil className="w-4 h-4" />
@@ -217,9 +219,7 @@ const CurrentOrderPanel = ({
                                             </span>
                                             <div className="flex items-center gap-2">
                                                 <button
-                                                    onClick={() =>
-                                                        setEditingItemId(item.id)
-                                                    }
+                                                    onClick={() => onEditItem?.(item)}
                                                     className="text-slate-400 hover:text-slate-600"
                                                 >
                                                     <Pencil className="w-3 h-3" />
@@ -371,15 +371,11 @@ const CurrentOrderPanel = ({
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => processPayment(currentOrder)}
-                        disabled={orderItems.length === 0 || isProcessingPayment}
+                        onClick={() => onPayClick?.()}
+                        disabled={orderItems.length === 0}
                         className="flex flex-col items-center gap-1 h-auto py-2 px-1 text-xs bg-slate-900 text-white hover:bg-slate-800 hover:text-white border-slate-900"
                     >
-                        {isProcessingPayment ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                            <CreditCard className="w-4 h-4" />
-                        )}
+                        <CreditCard className="w-4 h-4" />
                         <span className="text-[10px] md:text-xs">Pay</span>
                     </Button>
                 </div>

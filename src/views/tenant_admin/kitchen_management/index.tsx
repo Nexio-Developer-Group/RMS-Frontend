@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Loading from '@/components/shared/Loading'
 import KDSTypeHeader from './components/KDSTypeHeader'
 import KDSCard from './components/KDSCard'
 
@@ -62,8 +63,8 @@ const KitchenManagement = () => {
                     {kdsType === 'live-orders' && (
                         <>
                             {loading ? (
-                                <div className="flex items-center justify-center h-full p-6 text-sm text-muted-foreground">
-                                    Loading orders…
+                                <div className="flex h-full items-center justify-center min-h-100">
+                                    <Loading loading={true} />
                                 </div>
                             ) : (
                                 <div className="p-4">
