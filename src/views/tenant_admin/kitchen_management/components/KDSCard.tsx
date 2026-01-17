@@ -46,7 +46,7 @@ const KDSCard = ({ order, onApproveItem, onCompleteOrder }: KDSCardProps) => {
 
                 {/* RIGHT SIDE (STAYS ALIGNED EVEN WHEN LEFT WRAPS) */}
                 <div className="flex items-center self-start sm:self-center shrink-0">
-                    <Badge className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-700">
+                    <Badge variant='secondary' className="rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-600">
                         {order.time}
                     </Badge>
                 </div>
