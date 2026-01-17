@@ -4,7 +4,7 @@ export const mockOnlineOrders: OnlineOrder[] = [
     {
         id: 'ZOM-4561',
         orderCode: 'ZOM-4561',
-        platform: 'Zomato',
+        platform: 'zomato',
         customer: {
             name: 'Rahul Sharma',
             phone: '+917389884905',
@@ -12,7 +12,7 @@ export const mockOnlineOrders: OnlineOrder[] = [
             city: 'Raipur',
             zipCode: '492001',
         },
-        status: 'Completed',
+        status: 'completed',
         timeline: {
             received: '11 Dec 2025 12:33 PM',
             accepted: '11 Dec 2025 12:33 PM',
@@ -60,14 +60,14 @@ export const mockOnlineOrders: OnlineOrder[] = [
         tax: 2.18,
         serviceCharge: 2.18,
         total: 54.36,
-        payment: 'Cash',
-        paymentStatus: 'Paid',
+        payment: 'cash',
+        paymentStatus: 'paid',
         estimatedTime: '30 mins',
     },
     {
         id: 'ZOM-4562',
         orderCode: 'ZOM-4562',
-        platform: 'Zomato',
+        platform: 'zomato',
         customer: {
             name: 'Priya Verma',
             phone: '+919876543210',
@@ -75,7 +75,7 @@ export const mockOnlineOrders: OnlineOrder[] = [
             city: 'Raipur',
             zipCode: '492007',
         },
-        status: 'Pending',
+        status: 'pending',
         timeline: {
             received: '11 Dec 2025 12:33 PM',
         },
@@ -115,14 +115,14 @@ export const mockOnlineOrders: OnlineOrder[] = [
         tax: 1.76,
         serviceCharge: 0,
         total: 33.76,
-        payment: 'Online',
-        paymentStatus: 'Paid',
+        payment: 'online',
+        paymentStatus: 'paid',
         estimatedTime: '25 mins',
     },
     {
         id: 'ZOM-4563',
         orderCode: 'ZOM-4563',
-        platform: 'Zomato',
+        platform: 'zomato',
         customer: {
             name: 'Amit Kumar',
             phone: '+919988776655',
@@ -130,7 +130,7 @@ export const mockOnlineOrders: OnlineOrder[] = [
             city: 'Raipur',
             zipCode: '492001',
         },
-        status: 'Accepted',
+        status: 'preparing',
         timeline: {
             received: '11 Dec 2025 12:33 PM',
             accepted: '11 Dec 2025 12:34 PM',
@@ -171,14 +171,14 @@ export const mockOnlineOrders: OnlineOrder[] = [
         tax: 1.76,
         serviceCharge: 0,
         total: 33.76,
-        payment: 'Card',
-        paymentStatus: 'Paid',
+        payment: 'card',
+        paymentStatus: 'paid',
         estimatedTime: '35 mins',
     },
     {
         id: 'ZOM-4564',
         orderCode: 'ZOM-4564',
-        platform: 'Swiggy',
+        platform: 'swiggy',
         customer: {
             name: 'Sneha Patel',
             phone: '+918765432109',
@@ -186,7 +186,7 @@ export const mockOnlineOrders: OnlineOrder[] = [
             city: 'Raipur',
             zipCode: '492001',
         },
-        status: 'Preparing',
+        status: 'preparing',
         timeline: {
             received: '11 Dec 2025 12:33 PM',
             accepted: '11 Dec 2025 12:34 PM',
@@ -210,14 +210,14 @@ export const mockOnlineOrders: OnlineOrder[] = [
         tax: 1.76,
         serviceCharge: 0,
         total: 33.76,
-        payment: 'UPI',
-        paymentStatus: 'Paid',
+        payment: 'upi',
+        paymentStatus: 'paid',
         estimatedTime: '30 mins',
     },
     {
         id: 'ZOM-4565',
         orderCode: 'ZOM-4565',
-        platform: 'Zomato',
+        platform: 'zomato',
         customer: {
             name: 'Vikram Singh',
             phone: '+917654321098',
@@ -225,7 +225,7 @@ export const mockOnlineOrders: OnlineOrder[] = [
             city: 'Raipur',
             zipCode: '492006',
         },
-        status: 'Cancelled',
+        status: 'cancelled',
         timeline: {
             received: '11 Dec 2025 12:33 PM',
             cancelled: '11 Dec 2025 12:35 PM',
@@ -266,15 +266,15 @@ export const mockOnlineOrders: OnlineOrder[] = [
         tax: 1.76,
         serviceCharge: 0,
         total: 33.76,
-        payment: 'Cash',
-        paymentStatus: 'Refunded',
+        payment: 'cash',
+        paymentStatus: 'refunded',
         cancelReason: 'Customer requested cancellation',
     },
     // Additional mock orders
     {
         id: 'ZOM-4566',
         orderCode: 'ZOM-4566',
-        platform: 'Zomato',
+        platform: 'zomato',
         customer: {
             name: 'Anjali Mehta',
             phone: '+919876543211',
@@ -282,7 +282,7 @@ export const mockOnlineOrders: OnlineOrder[] = [
             city: 'Raipur',
             zipCode: '492001',
         },
-        status: 'Preparing',
+        status: 'preparing',
         timeline: {
             received: '11 Dec 2025 12:33 PM',
             accepted: '11 Dec 2025 12:34 PM',
@@ -306,8 +306,8 @@ export const mockOnlineOrders: OnlineOrder[] = [
         tax: 1.76,
         serviceCharge: 0,
         total: 33.76,
-        payment: 'Online',
-        paymentStatus: 'Paid',
+        payment: 'online',
+        paymentStatus: 'paid',
         estimatedTime: '28 mins',
     },
 ]
@@ -350,15 +350,15 @@ export const onlineOrderMockService = {
         await delay(400)
 
         const orders = mockOnlineOrders
-        const completed = orders.filter(o => o.status === 'Completed')
+        const completed = orders.filter(o => o.status === 'completed')
 
         return {
             allOrders: orders.length,
-            pendingOrders: orders.filter(o => o.status === 'Pending').length,
-            acceptedOrders: orders.filter(o => o.status === 'Accepted').length,
-            preparingOrders: orders.filter(o => o.status === 'Preparing').length,
+            pendingOrders: orders.filter(o => o.status === 'pending').length,
+            acceptedOrders: orders.filter(o => o.status === 'preparing').length,
+            preparingOrders: orders.filter(o => o.status === 'preparing').length,
             completedOrders: completed.length,
-            cancelledOrders: orders.filter(o => o.status === 'Cancelled').length,
+            cancelledOrders: orders.filter(o => o.status === 'cancelled').length,
             totalRevenue: completed.reduce((sum, o) => sum + o.total, 0),
             averageOrderValue: completed.length > 0
                 ? completed.reduce((sum, o) => sum + o.total, 0) / completed.length
@@ -372,7 +372,7 @@ export const onlineOrderMockService = {
         const order = mockOnlineOrders.find(o => o.id === orderId)
         if (!order) throw new Error('Order not found')
 
-        order.status = 'Accepted'
+        order.status = 'preparing'
         order.timeline.accepted = new Date().toLocaleString('en-IN', {
             day: '2-digit',
             month: 'short',
@@ -391,7 +391,7 @@ export const onlineOrderMockService = {
         const order = mockOnlineOrders.find(o => o.id === orderId)
         if (!order) throw new Error('Order not found')
 
-        order.status = 'Preparing'
+        order.status = 'preparing'
         order.timeline.preparing = new Date().toLocaleString('en-IN', {
             day: '2-digit',
             month: 'short',
@@ -410,7 +410,7 @@ export const onlineOrderMockService = {
         const order = mockOnlineOrders.find(o => o.id === orderId)
         if (!order) throw new Error('Order not found')
 
-        order.status = 'Completed'
+        order.status = 'completed'
         order.timeline.completed = new Date().toLocaleString('en-IN', {
             day: '2-digit',
             month: 'short',
@@ -429,7 +429,7 @@ export const onlineOrderMockService = {
         const order = mockOnlineOrders.find(o => o.id === orderId)
         if (!order) throw new Error('Order not found')
 
-        order.status = 'Cancelled'
+        order.status = 'cancelled'
         order.cancelReason = reason
         order.timeline.cancelled = new Date().toLocaleString('en-IN', {
             day: '2-digit',

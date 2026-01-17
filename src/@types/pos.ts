@@ -1,62 +1,71 @@
-export type OrderType = 'dine-in' | 'takeaway' | 'delivery'
+import {
+    OrderType,
+    MenuCategory,
+    BaseMenuItem,
+    BaseTable,
+    CampaignType,
+    BaseCampaign,
+} from './shared'
 
-export type MenuCategory = {
-    id: string
-    name: string
-    icon: string
-}
-
-export type MenuItem = {
-    id: string
-    name: string
-    price: number
+/**
+ * POS menu item with category reference
+ */
+export interface POSMenuItem extends BaseMenuItem {
     category: string
-    image?: string
-    description?: string
 }
 
-export type Addon = {
+/**
+ * Alias for POSMenuItem for backwards compatibility
+ */
+export type MenuItem = POSMenuItem
+
+/**
+ * POS addon/modifier
+ */
+export interface Addon {
     id: string
     name: string
     price: number
 }
 
-export type OrderItem = {
+/**
+ * Order item in POS cart
+ */
+export interface POSOrderItem {
     id: string
-    menuItem: MenuItem
+    menuItem: POSMenuItem
     quantity: number
     size?: string
     addons: Addon[]
     notes?: string
 }
 
-export type Table = {
-    id: string
-    number: string
-    capacity: number
-    status: 'available' | 'occupied' | 'reserved'
+/**
+ * POS offer/promotion
+ */
+export interface Offer extends BaseCampaign {
+    type: Extract<CampaignType, 'bogo' | 'discount' | 'free'>
 }
 
-export type Offer = {
-    id: string
-    name: string
-    description: string
-    type: 'bogo' | 'discount' | 'free'
-}
-
-export type CurrentOrder = {
-    items: OrderItem[]
+/**
+ * Current order in POS
+ */
+export interface CurrentOrder {
+    items: POSOrderItem[]
     orderType: OrderType
-    table?: Table
+    table?: BaseTable
     offers: Offer[]
     subtotal: number
     tax: number
     total: number
 }
 
-export type POSData = {
+/**
+ * POS data structure
+ */
+export interface POSData {
     categories: MenuCategory[]
-    menuItems: MenuItem[]
-    tables: Table[]
+    menuItems: POSMenuItem[]
+    tables: BaseTable[]
     availableAddons: Addon[]
 }

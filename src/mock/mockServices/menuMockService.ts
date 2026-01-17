@@ -1,72 +1,23 @@
 import type { MenuData, MenuItem, Modifier, Combo } from '@/@types/menu'
+import { MOCK_MENU_ITEMS } from '@/mock/data/mockData'
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const mockMenuData: MenuData = {
     categories: [
-        { id: '1', name: 'Starter', sortOrder: 1 },
-        { id: '2', name: 'Breakfast', sortOrder: 2 },
-        { id: '3', name: 'Main Course', sortOrder: 3 },
-        { id: '4', name: 'Desserts', sortOrder: 4 },
-        { id: '5', name: 'Beverages', sortOrder: 5 },
+        { id: 'starter', name: 'Starter', sortOrder: 1 },
+        { id: 'main', name: 'Main Course', sortOrder: 2 },
+        { id: 'burger', name: 'Burger', sortOrder: 3 },
+        { id: 'pizza', name: 'Pizza', sortOrder: 4 },
+        { id: 'bread', name: 'Breads', sortOrder: 5 },
+        { id: 'wrap', name: 'Wraps', sortOrder: 6 },
+        { id: 'sides', name: 'Sides', sortOrder: 7 },
+        { id: 'beverage', name: 'Beverages', sortOrder: 8 },
     ],
 
-    items: [
-        {
-            id: '1',
-            name: 'Margherita Pizza',
-            price: 22,
-            categoryId: '1',
-            categoryName: 'Starter',
-            available: true,
-            image: '/img/menu/pizza.jpg',
-        },
-        {
-            id: '2',
-            name: 'Margherita Pizza',
-            price: 22,
-            categoryId: '1',
-            categoryName: 'Starter',
-            available: true,
-            image: '/img/menu/pizza.jpg',
-        },
-        {
-            id: '3',
-            name: 'Margherita Pizza',
-            price: 22,
-            categoryId: '1',
-            categoryName: 'Starter',
-            available: true,
-            image: '/img/menu/pizza.jpg',
-        },
-        {
-            id: '4',
-            name: 'Margherita Pizza',
-            price: 22,
-            categoryId: '1',
-            categoryName: 'Starter',
-            available: true,
-            image: '/img/menu/pizza.jpg',
-        },
-        {
-            id: '5',
-            name: 'Margherita Pizza',
-            price: 22,
-            categoryId: '2',
-            categoryName: 'Breakfast',
-            available: true,
-            image: '/img/menu/pizza.jpg',
-        },
-        {
-            id: '6',
-            name: 'Margherita Pizza',
-            price: 22,
-            categoryId: '2',
-            categoryName: 'Breakfast',
-            available: true,
-            image: '/img/menu/pizza.jpg',
-        },
-    ],
+    get items() {
+        return MOCK_MENU_ITEMS
+    },
 
     modifiers: [
         {

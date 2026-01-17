@@ -1,6 +1,17 @@
-export type TableStatus = 'available' | 'occupied' | 'reserved' | 'inactive'
+import {
+    TableStatus,
+    Floor,
+    OrderStatus,
+    BaseOrderItem,
+    CreateInput,
+    UpdateInput,
+    Timestamps,
+} from './shared'
 
-export type Table = {
+/**
+ * Table with analytics and QR code
+ */
+export interface Table extends Timestamps {
     id: string
     number: string
     name: string
@@ -12,36 +23,37 @@ export type Table = {
     totalRevenue: number
     totalOrders: number
     qrCode?: string
-    createdAt: string
-    updatedAt: string
 }
 
-export type Floor = {
-    id: string
+/**
+ * Simplified order item for table orders
+ */
+export interface TableOrderItem {
     name: string
-    tableCount: number
-    isActive: boolean
-    createdAt: string
+    quantity: number
+    price: number
 }
 
-export type TableOrder = {
+/**
+ * Order associated with a table
+ */
+export interface TableOrder {
     id: string
     orderId: string
     tableId: string
     customerId: string
     customerName: string
-    items: Array<{
-        name: string
-        quantity: number
-        price: number
-    }>
+    items: TableOrderItem[]
     totalAmount: number
-    status: 'pending' | 'preparing' | 'completed' | 'cancelled'
+    status: OrderStatus
     createdBy: string
     createdAt: string
 }
 
-export type TableStats = {
+/**
+ * Table management statistics
+ */
+export interface TableStats {
     totalFloors: number
     totalTables: number
     availableTables: number
@@ -49,11 +61,27 @@ export type TableStats = {
     inactiveTables: number
 }
 
-export type CreateTableInput = Omit<
-    Table,
-    'id' | 'createdAt' | 'updatedAt' | 'totalRevenue' | 'totalOrders' | 'qrCode'
+/**
+ * Input for creating a new table
+ */
+export type CreateTableInput = CreateInput<
+    Omit<Table, 'totalRevenue' | 'totalOrders' | 'qrCode'>
 >
-export type UpdateTableInput = Partial<CreateTableInput> & { id: string }
 
-export type CreateFloorInput = Omit<Floor, 'id' | 'createdAt' | 'tableCount'>
-export type UpdateFloorInput = Partial<CreateFloorInput> & { id: string }
+/**
+ * Input for updating an existing table
+ */
+export type UpdateTableInput = UpdateInput<Table>
+
+/**
+ * Input for creating a new floor
+ */
+export type CreateFloorInput = CreateInput<Omit<Floor, 'tableCount'>>
+
+/**
+ * Input for updating an existing floor
+ */
+export type UpdateFloorInput = UpdateInput<Floor>
+
+// Re-export core types for convenience
+export type { TableStatus, Floor }

@@ -1,18 +1,21 @@
+
 import { Dialog, DialogContent } from '@/components/shadcn/ui/dialog'
 import { Button } from '@/components/shadcn/ui/button'
 import { X, Plus, Minus } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import type { MenuItem, Addon, OrderItem } from '@/@types/pos'
+import * as POS from '@/@types/pos'
 import { cn } from '@/components/shadcn/utils'
+import type { MenuItem, Addon } from '@/@types/pos'
+
 
 interface CustomizeItemModalProps {
-    item: MenuItem | null
-    open: boolean
-    onClose: () => void
-    onAddToOrder: (item: MenuItem, quantity: number, size: string, selectedAddons: Addon[]) => void
-    onUpdateOrder?: (itemId: string, quantity: number, size: string, selectedAddons: Addon[]) => void
-    availableAddons?: Addon[]
-    existingOrderItem?: OrderItem | null
+    item: MenuItem | null;
+    open: boolean;
+    onClose: () => void;
+    onAddToOrder: (item: POS.MenuItem, quantity: number, size: string, selectedAddons: POS.Addon[]) => void;
+    onUpdateOrder?: (itemId: string, quantity: number, size: string, selectedAddons: Addon[]) => void;
+    availableAddons?: POS.Addon[];
+    existingOrderItem?: POS.POSOrderItem | null;
 }
 
 const SIZES = ['Small', 'Medium', 'Large']

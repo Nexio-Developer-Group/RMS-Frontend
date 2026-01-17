@@ -1,73 +1,42 @@
-import type { KDSData } from '@/@types/kds';
-import { Eclipse } from 'lucide-react';
+import type { KDSData, KDSOrder } from '@/@types/kds'
+import { getLiveOrders } from '@/mock/data/mockData'
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-const mockKDSData: KDSData = {
-    orders: [
-        {
-            id: '1',
-            orderNumber: '#0042',
-            type: 'Dine-in',
-            table: 'Floor 2/ Table 3',
-            time: '44:39',
-            items: [
-                { id: 'a', name: 'Classic Burger', quantity: 2, price: 12, status: 'prepared' },
-                { id: 'b', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'c', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'd', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-            ],
-            overallStatus: 'pending',
-        },
-        {
-            id: '2',
-            orderNumber: '#0042',
-            type: 'Dine-in',
-            table: 'Floor 2/ Table 3',
-            time: '44:39',
-            items: [
-                { id: 'a', name: 'Classic Burger', quantity: 2, price: 12, status: 'pending' },
-                { id: 'b', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'c', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'd', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-            ],
-            overallStatus: 'pending',
-        },
-        {
-            id: '3',
-            orderNumber: '#0042',
-            type: 'Dine-in',
-            table: 'Floor 2/ Table 3',
-            time: '44:39',
-            items: [
-                { id: 'a', name: 'Classic Burger', quantity: 2, price: 12, status: 'pending' },
-                { id: 'b', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'c', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'd', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-            ],
-            overallStatus: 'pending',
-        },
-        {
-            id: '4',
-            orderNumber: '#0042',
-            type: 'Dine-in',
-            table: 'Floor 2/ Table 3',
-            time: '44:39',
-            items: [
-                { id: 'a', name: 'Classic Burger', quantity: 2, price: 12, status: 'prepared' },
-                { id: 'b', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'c', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-                { id: 'd', name: 'Classic Burger', quantity: 1, price: 12, status: 'pending' },
-            ],
-            overallStatus: 'pending',
-        },
-    ],
+// Convert delivery orders to KDS format
+const convertToKDSOrders = (): KDSOrder[] => {
+    return getLiveOrders().map(order => ({
+        id: order.id.toString(),
+        orderNumber: order.orderCode || `#${order.id}`,
+        type: order.type,
+        table: order.table || 'Delivery',
+        time: getElapsedTime(order.time),
+        items: order.items.map((item, idx) => ({
+            id: `${order.id}-${idx}`,
+            name: item.name,
+            quantity: item.qty,
+            price: item.amount,
+            total: item.total,
+            status: order.status
+        })),
+        overallStatus: order.status
+    }))
 }
+
+const getElapsedTime = (timeStr: string): string => {
+    return '15:30'
+}
+
+const getMockKDSData = (): KDSData => ({
+    orders: [
+        ...convertToKDSOrders()
+    ]
+})
 
 export const kdsMockService = {
     getKDSData: async (): Promise<KDSData> => {
         await delay(1000)
-        return mockKDSData
+        return getMockKDSData()
     },
 
     approveOrderItem: async (orderId: string, itemId: string): Promise<{ success: boolean; orderId: string }> => {

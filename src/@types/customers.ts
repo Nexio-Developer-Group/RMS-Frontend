@@ -1,20 +1,34 @@
-export type CustomerStatus = 'Active' | 'Inactive'
-export type CampaignStatus = 'Active' | 'Inactive' | 'Scheduled'
+import {
+    OrderStatus,
+    OrderType,
+    PaymentMethod,
+    ActiveStatus,
+    CampaignStatus,
+    BaseCampaign,
+    CampaignType,
+    RevenueStats,
+} from './shared'
 
+/**
+ * Customer order summary
+ */
 export interface CustomerOrder {
     id: string
     orderCode: string
-    type: 'Dine-in' | 'Takeaway' | 'Delivery'
+    type: OrderType
     items: number
     amount: number
     createdBy: string
-    status: 'Pending' | 'Preparing' | 'Completed' | 'Cancelled'
+    status: OrderStatus
     time: string
     table?: string
     seatingArea?: string
-    payment: 'Cash' | 'Card' | 'UPI' | 'Online'
+    payment: PaymentMethod
 }
 
+/**
+ * Customer profile with order history
+ */
 export interface Customer {
     id: string
     customerId: string
@@ -24,7 +38,7 @@ export interface Customer {
     totalOrders: number
     totalTransaction: number
     lastOrderedOn: string
-    status: CustomerStatus
+    status: ActiveStatus
     campaignStatus: CampaignStatus
     orders: CustomerOrder[]
     address?: string
@@ -32,24 +46,26 @@ export interface Customer {
     joinedDate: string
 }
 
-export interface CustomerStats {
+/**
+ * Customer analytics statistics
+ */
+export interface CustomerStats extends RevenueStats {
     totalCustomers: number
     activeCampaigns: number
     inactiveCustomers: number
-    totalRevenue: number
-    averageOrderValue: number
 }
 
-export interface Campaign {
-    id: string
-    name: string
-    description: string
-    type: 'Discount' | 'Cashback' | 'Offer' | 'Loyalty'
-    status: CampaignStatus
+/**
+ * Marketing campaign
+ */
+export interface Campaign extends BaseCampaign {
     startDate: string
     endDate: string
     discount?: number
     customersEnrolled: number
 }
 
+/**
+ * Filter tabs for customer views
+ */
 export type CustomerFilterTab = 'customer-list' | 'campaign'

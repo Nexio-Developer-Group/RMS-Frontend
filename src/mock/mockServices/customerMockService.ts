@@ -4,26 +4,26 @@ export const mockCustomerOrders: CustomerOrder[] = [
     {
         id: '0042',
         orderCode: '#0042',
-        type: 'Dine-in',
+        type: 'dine-in',
         items: 3,
         amount: 316.00,
         createdBy: 'Rahul Kumar',
-        status: 'Completed',
+        status: 'completed',
         time: '12 Feb 2025, 12:33 PM',
         table: 'Table 14',
         seatingArea: 'Main Floor',
-        payment: 'Cash',
+        payment: 'cash',
     },
     {
         id: '0041',
         orderCode: '#0041',
-        type: 'Takeaway',
+        type: 'takeaway',
         items: 5,
         amount: 450.00,
         createdBy: 'Self',
-        status: 'Completed',
+        status: 'completed',
         time: '10 Feb 2025, 02:15 PM',
-        payment: 'UPI',
+        payment: 'upi',
     },
 ]
 
@@ -37,8 +37,8 @@ export const mockCustomers: Customer[] = [
         totalOrders: 2,
         totalTransaction: 8190,
         lastOrderedOn: 'Mar 15, 2024',
-        status: 'Active',
-        campaignStatus: 'Active',
+        status: 'active',
+        campaignStatus: 'active',
         orders: mockCustomerOrders,
         address: 'Devendra Nagar, Raipur',
         city: 'Raipur',
@@ -53,8 +53,8 @@ export const mockCustomers: Customer[] = [
         totalOrders: 2,
         totalTransaction: 2800,
         lastOrderedOn: 'Mar 15, 2023',
-        status: 'Active',
-        campaignStatus: 'Active',
+        status: 'active',
+        campaignStatus: 'active',
         orders: mockCustomerOrders,
         address: 'Civil Lines, Raipur',
         city: 'Raipur',
@@ -69,8 +69,8 @@ export const mockCustomers: Customer[] = [
         totalOrders: 5,
         totalTransaction: 4500,
         lastOrderedOn: 'Mar 10, 2023',
-        status: 'Active',
-        campaignStatus: 'Inactive',
+        status: 'active',
+        campaignStatus: 'inactive',
         orders: mockCustomerOrders,
         address: 'Shankar Nagar, Raipur',
         city: 'Raipur',
@@ -85,8 +85,8 @@ export const mockCustomers: Customer[] = [
         totalOrders: 8,
         totalTransaction: 6200,
         lastOrderedOn: 'Mar 12, 2023',
-        status: 'Active',
-        campaignStatus: 'Active',
+        status: 'active',
+        campaignStatus: 'active',
         orders: mockCustomerOrders,
         address: 'Mowa, Raipur',
         city: 'Raipur',
@@ -101,8 +101,8 @@ export const mockCustomers: Customer[] = [
         totalOrders: 3,
         totalTransaction: 2100,
         lastOrderedOn: 'Feb 28, 2023',
-        status: 'Inactive',
-        campaignStatus: 'Inactive',
+        status: 'inactive',
+        campaignStatus: 'inactive',
         orders: [],
         address: 'Telibandha, Raipur',
         city: 'Raipur',
@@ -117,8 +117,8 @@ export const mockCustomers: Customer[] = [
         totalOrders: 12,
         totalTransaction: 9800,
         lastOrderedOn: 'Mar 14, 2023',
-        status: 'Active',
-        campaignStatus: 'Active',
+        status: 'active',
+        campaignStatus: 'active',
         orders: mockCustomerOrders,
         address: 'Vidhan Sabha Road, Raipur',
         city: 'Raipur',
@@ -131,8 +131,8 @@ export const mockCampaigns: Campaign[] = [
         id: '1',
         name: 'Welcome Offer',
         description: '20% off on first order',
-        type: 'Discount',
-        status: 'Active',
+        type: 'discount',
+        status: 'active',
         startDate: 'Jan 01, 2024',
         endDate: 'Dec 31, 2024',
         discount: 20,
@@ -142,8 +142,8 @@ export const mockCampaigns: Campaign[] = [
         id: '2',
         name: 'Weekend Special',
         description: 'Buy 1 Get 1 Free on weekends',
-        type: 'Offer',
-        status: 'Active',
+        type: 'offer',
+        status: 'active',
         startDate: 'Jan 15, 2024',
         endDate: 'Jun 30, 2024',
         customersEnrolled: 230,
@@ -152,8 +152,8 @@ export const mockCampaigns: Campaign[] = [
         id: '3',
         name: 'Loyalty Rewards',
         description: 'Earn points on every order',
-        type: 'Loyalty',
-        status: 'Active',
+        type: 'loyalty',
+        status: 'active',
         startDate: 'Feb 01, 2024',
         endDate: 'Dec 31, 2024',
         customersEnrolled: 450,
@@ -162,8 +162,8 @@ export const mockCampaigns: Campaign[] = [
         id: '4',
         name: 'Festival Cashback',
         description: '15% cashback on orders above ₹500',
-        type: 'Cashback',
-        status: 'Scheduled',
+        type: 'cashback',
+        status: 'scheduled',
         startDate: 'Apr 01, 2024',
         endDate: 'Apr 15, 2024',
         discount: 15,
@@ -173,8 +173,8 @@ export const mockCampaigns: Campaign[] = [
         id: '5',
         name: 'Summer Sale',
         description: 'Flat 25% off on all items',
-        type: 'Discount',
-        status: 'Inactive',
+        type: 'discount',
+        status: 'inactive',
         startDate: 'May 01, 2023',
         endDate: 'Jul 31, 2023',
         discount: 25,
@@ -216,12 +216,12 @@ export const customerMockService = {
         await delay(400)
 
         const customers = mockCustomers
-        const activeCustomers = customers.filter(c => c.status === 'Active')
+        const activeCustomers = customers.filter(c => c.status === 'active')
 
         return {
             totalCustomers: customers.length,
-            activeCampaigns: mockCampaigns.filter(c => c.status === 'Active').length,
-            inactiveCustomers: customers.filter(c => c.status === 'Inactive').length,
+            activeCampaigns: mockCampaigns.filter(c => c.status === 'active').length,
+            inactiveCustomers: customers.filter(c => c.status === 'inactive').length,
             totalRevenue: customers.reduce((sum, c) => sum + c.totalTransaction, 0),
             averageOrderValue: customers.length > 0
                 ? customers.reduce((sum, c) => sum + c.totalTransaction, 0) / customers.length
@@ -259,7 +259,7 @@ export const customerMockService = {
     },
 
     // Update customer status
-    async updateCustomerStatus(customerId: string, status: 'Active' | 'Inactive'): Promise<Customer> {
+    async updateCustomerStatus(customerId: string, status: 'active' | 'inactive'): Promise<Customer> {
         await delay(500)
         const customer = mockCustomers.find(c => c.id === customerId)
         if (!customer) throw new Error('Customer not found')
@@ -271,7 +271,7 @@ export const customerMockService = {
     // Update campaign status for customer
     async updateCampaignStatus(
         customerId: string,
-        campaignStatus: 'Active' | 'Inactive' | 'Scheduled'
+        campaignStatus: 'active' | 'inactive' | 'scheduled'
     ): Promise<Customer> {
         await delay(500)
         const customer = mockCustomers.find(c => c.id === customerId)

@@ -1,28 +1,47 @@
-export interface OrderItem {
+import {
+    OrderStatus,
+    OrderType,
+    OnlinePlatform,
+    BaseOrderItem,
+    RevenueStats,
+} from './shared'
+
+/**
+ * Simplified order item for dashboard views
+ */
+export interface DashboardOrderItem {
     name: string
     quantity: number
 }
 
+/**
+ * Online order summary for dashboard
+ */
 export interface OnlineOrder {
     orderId: string
-    platform: 'Zomato' | 'Swiggy' | 'UberEats' | 'Other'
+    platform: OnlinePlatform
     amount: number
-    items: OrderItem[]
+    items: DashboardOrderItem[]
     placedAgo: string
 }
 
+/**
+ * Recent order summary for dashboard
+ */
 export interface RecentOrder {
     orderId: string
-    orderType: 'Dine-in' | 'Takeaway' | 'Delivery'
-    tableNumber: string
+    orderType: OrderType
+    tableNumber?: string
     amount: number
-    status: 'Preparing' | 'Ready' | 'Completed' | 'Pending'
+    status: OrderStatus
     placedAgo: string
-    items: OrderItem[]
+    items: DashboardOrderItem[]
 }
 
-export interface DashboardStats {
-    totalRevenue: number
+/**
+ * Dashboard key performance indicators
+ */
+export interface DashboardStats extends RevenueStats {
     totalRevenueGrowth: number
     profitVsGoal: number
     profitVsGoalGrowth: number
@@ -31,6 +50,9 @@ export interface DashboardStats {
     itemSoldGrowth: number
 }
 
+/**
+ * Complete dashboard data
+ */
 export interface DashboardData {
     stats: DashboardStats
     onlineOrders: OnlineOrder[]

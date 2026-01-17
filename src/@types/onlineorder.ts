@@ -1,70 +1,65 @@
-export type OnlineOrderStatus = 'Pending' | 'Accepted' | 'Preparing' | 'Completed' | 'Cancelled'
-export type OnlineOrderType = 'Online' | 'Zomato' | 'Swiggy' | 'UberEats'
-export type OnlinePaymentMethod = 'Cash' | 'Card' | 'UPI' | 'Online'
-export type OnlinePaymentStatus = 'Pending' | 'Paid' | 'Failed' | 'Refunded'
+import {
+    OrderStatus,
+    OnlinePlatform,
+    PaymentMethod,
+    PaymentStatus,
+    OrderItemModifier,
+    CustomerWithAddress,
+    OrderTimeline,
+    OrderPricing,
+    RevenueStats,
+} from './shared'
 
-export interface OnlineOrderItemModifier {
-    label: string
-    price?: number
-}
-
+/**
+ * Online order item with pricing details
+ */
 export interface OnlineOrderItem {
     name: string
     qty: number
     amount: number
     total: number
-    modifiers?: OnlineOrderItemModifier[]
+    modifiers?: OrderItemModifier[]
     note?: string
 }
 
-export interface OnlineCustomer {
-    name: string
-    phone: string
-    email?: string
-    address?: string
-    city?: string
-    zipCode?: string
-}
-
-export interface OnlineOrderTimeline {
-    received: string
-    accepted?: string
-    preparing?: string
-    completed?: string
-    cancelled?: string
-}
-
-export interface OnlineOrder {
+/**
+ * Complete online order
+ */
+export interface OnlineOrder extends OrderPricing {
     id: string
     orderCode: string
-    platform: OnlineOrderType
-    customer: OnlineCustomer
-    status: OnlineOrderStatus
-    timeline: OnlineOrderTimeline
+    platform: OnlinePlatform
+    customer: CustomerWithAddress
+    status: OrderStatus
+    timeline: OrderTimeline
     items: OnlineOrderItem[]
-    value: number
-    tax: number
-    serviceCharge: number
-    deliveryCharge?: number
-    discount?: number
-    total: number
-    payment: OnlinePaymentMethod
-    paymentStatus: OnlinePaymentStatus
+    payment: PaymentMethod
+    paymentStatus: PaymentStatus
     estimatedTime?: string
     actualDeliveryTime?: string
     notes?: string
     cancelReason?: string
 }
 
-export interface OnlineOrderStats {
+/**
+ * Online order statistics
+ */
+export interface OnlineOrderStats extends RevenueStats {
     allOrders: number
     pendingOrders: number
     acceptedOrders: number
     preparingOrders: number
     completedOrders: number
     cancelledOrders: number
-    totalRevenue: number
-    averageOrderValue: number
 }
 
-export type OnlineOrderFilterStatus = 'all' | 'pending' | 'accepted' | 'preparing' | 'completed' | 'cancelled'
+/**
+ * Filter status for online orders
+ */
+export type OnlineOrderFilterStatus =
+    | 'all'
+    | 'pending'
+    | 'accepted'
+    | 'preparing'
+    | 'completed'
+    | 'cancelled'

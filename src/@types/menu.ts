@@ -1,39 +1,23 @@
+import { MenuCategory, BaseMenuItem, Modifier, ModifierOption } from './shared'
+
+/**
+ * Menu view tabs
+ */
 export type MenuTab = 'items' | 'modifiers' | 'combos'
 
-export interface MenuCategory {
-    id: string
-    name: string
-    sortOrder: number
-}
-
-export interface ModifierOption {
-    id: string
-    name: string
-    price: number
-}
-
-export interface Modifier {
-    id: string
-    name: string
-    description?: string
-    required: boolean
-    options: ModifierOption[]
-    categoryIds?: string[]
-    itemIds?: string[]
-}
-
-export interface MenuItem {
-    id: string
-    name: string
-    price: number
+/**
+ * Full menu item with all properties
+ */
+export interface MenuItem extends BaseMenuItem {
     categoryId: string
     categoryName: string
-    image?: string
-    description?: string
     available: boolean
     modifiers?: string[]
 }
 
+/**
+ * Combo meal item reference
+ */
 export interface ComboItem {
     itemId: string
     itemName: string
@@ -41,6 +25,9 @@ export interface ComboItem {
     quantity: number
 }
 
+/**
+ * Combo meal with scheduling
+ */
 export interface Combo {
     id: string
     name: string
@@ -57,6 +44,9 @@ export interface Combo {
     }
 }
 
+/**
+ * Complete menu data structure
+ */
 export interface MenuData {
     categories: MenuCategory[]
     items: MenuItem[]
@@ -64,6 +54,9 @@ export interface MenuData {
     combos: Combo[]
 }
 
+/**
+ * Form data for adding a menu item
+ */
 export interface AddItemFormData {
     name: string
     price: number
@@ -72,6 +65,9 @@ export interface AddItemFormData {
     description?: string
 }
 
+/**
+ * Form data for adding a modifier
+ */
 export interface AddModifierFormData {
     name: string
     description?: string
@@ -81,6 +77,9 @@ export interface AddModifierFormData {
     itemIds?: string[]
 }
 
+/**
+ * Form data for adding a combo
+ */
 export interface AddComboFormData {
     name: string
     price: number
@@ -94,3 +93,6 @@ export interface AddComboFormData {
         toTime?: string
     }
 }
+
+// Re-export core types used in menu
+export type { MenuCategory, Modifier, ModifierOption }

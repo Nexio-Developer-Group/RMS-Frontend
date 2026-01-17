@@ -62,7 +62,7 @@ export const useCustomerActions = () => {
     })
 
     const updateStatusMutation = useMutation({
-        mutationFn: ({ customerId, status }: { customerId: string; status: 'Active' | 'Inactive' }) =>
+        mutationFn: ({ customerId, status }: { customerId: string; status: 'active' | 'inactive' }) =>
             customerMockService.updateCustomerStatus(customerId, status),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['customers'] })
@@ -71,7 +71,7 @@ export const useCustomerActions = () => {
     })
 
     const updateCampaignMutation = useMutation({
-        mutationFn: ({ customerId, campaignStatus }: { customerId: string; campaignStatus: 'Active' | 'Inactive' | 'Scheduled' }) =>
+        mutationFn: ({ customerId, campaignStatus }: { customerId: string; campaignStatus: 'active' | 'inactive' | 'scheduled' }) =>
             customerMockService.updateCampaignStatus(customerId, campaignStatus),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['customers'] })

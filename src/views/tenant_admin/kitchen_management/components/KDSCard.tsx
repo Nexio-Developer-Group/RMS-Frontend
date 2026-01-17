@@ -1,4 +1,4 @@
-import type { Order } from '@/@types/kds'
+import { Order } from '@/@types/orders'
 import { KDSItemRow } from '../components/KDSItemRow'
 import { cn } from '@/components/shadcn/utils'
 import { Badge } from '@/components/shadcn/ui/badge'
@@ -22,7 +22,7 @@ const KDSCard = ({ order, onApproveItem, onCompleteOrder }: KDSCardProps) => {
                         <Expand className="w-4 h-4 text-teal-600" />
                     </div>
 
-                    <span className="text-lg font-semibold text-foreground truncate max-w-[140px] sm:max-w-none">
+                    <span className="text-lg font-semibold text-foreground truncate max-w-35 sm:max-w-none">
                         {order.orderNumber}
                     </span>
 
@@ -59,11 +59,11 @@ const KDSCard = ({ order, onApproveItem, onCompleteOrder }: KDSCardProps) => {
                 </p>
 
                 <div className="divide-y">
-                    {order.items.map((item) => (
+                    {order.items.map((item: Order['items'][number], index: number) => (
                         <KDSItemRow
-                            key={item.id}
+                            key={item.id || `item-${index}`}
                             item={item}
-                            onApprove={() => onApproveItem(order.id, item.id)}
+                            onApprove={() => onApproveItem(String(order.id), item.id || String(index))}
                         />
                     ))}
                 </div>
@@ -72,7 +72,7 @@ const KDSCard = ({ order, onApproveItem, onCompleteOrder }: KDSCardProps) => {
             {/* Footer */}
             <div className="bg-teal-50 px-3 sm:px-4 py-3 border-t dark:bg-blue-950/70">
                 <button
-                    onClick={() => onCompleteOrder(order.id)}
+                    onClick={() => onCompleteOrder(String(order.id))}
                     className={cn(
                         'w-full rounded-md bg-card border py-2.5 sm:py-2 text-sm font-medium',
                         'text-green-600 border-green-300 hover:bg-green-200'

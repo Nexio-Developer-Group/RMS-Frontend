@@ -1,25 +1,34 @@
+import { OrderStatus, OrderType, BaseOrderItem } from './shared'
+
+/**
+ * KDS view types
+ */
 export type KDSType = 'live-orders' | 'kds-setup'
 
-export type OrderStatus = 'pending' | 'prepared' | 'completed'
-
-export type OrderItem = {
+/**
+ * KDS order item with individual status tracking
+ */
+export interface KDSOrderItem extends BaseOrderItem {
     id: string
-    name: string
-    quantity: number
-    price: number
     status: OrderStatus
 }
 
-export type Order = {
+/**
+ * Kitchen Display System order
+ */
+export interface KDSOrder {
     id: string
     orderNumber: string
-    type: 'Dine-in' | 'Takeaway' | 'Delivery'
-    table: string
+    type: OrderType
+    table?: string
     time: string
-    items: OrderItem[]
+    items: KDSOrderItem[]
     overallStatus: OrderStatus
 }
 
-export type KDSData = {
-    orders: Order[]
+/**
+ * KDS data container
+ */
+export interface KDSData {
+    orders: KDSOrder[]
 }
