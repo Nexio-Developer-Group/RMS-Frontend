@@ -17,6 +17,7 @@ export type AllOrderType = 'live-orders' | 'kds-setup'
  * Order item with detailed pricing
  */
 export interface OrderItem {
+  id?: string
   name: string
   qty: number
   amount: number
@@ -31,6 +32,7 @@ export interface OrderItem {
 export interface Order extends OrderPricing {
   id: number
   orderCode?: string
+  orderNumber?: string
   type: OrderType
   table?: string
   seatingArea?: string

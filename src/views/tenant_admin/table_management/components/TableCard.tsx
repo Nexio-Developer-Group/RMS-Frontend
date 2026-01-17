@@ -46,7 +46,7 @@ const TableCard = ({ table, onEdit, onToggleStatus, onClick }: TableCardProps) =
                         {table.number}
                     </div>
                     <div>
-                        <p className="font-medium text-foreground text-blue-600">
+                        <p className="font-medium text-blue-600">
                             {table.name}
                         </p>
                         <p className="text-sm text-muted-foreground">{table.floorName}</p>

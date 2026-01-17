@@ -81,7 +81,7 @@ const OrderDetailModal: React.FC<Props> = ({ orderId, order, loading, onClose })
                 </Badge>
               </div>
 
-              <Badge className="rounded-full bg-orange-100 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-orange-800 bg-card">
+              <Badge className="rounded-full bg-orange-100 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-orange-800">
                 {order.status}
               </Badge>
             </div>

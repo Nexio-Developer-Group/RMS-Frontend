@@ -15,6 +15,11 @@ export interface POSMenuItem extends BaseMenuItem {
 }
 
 /**
+ * Alias for POSMenuItem for backwards compatibility
+ */
+export type MenuItem = POSMenuItem
+
+/**
  * POS addon/modifier
  */
 export interface Addon {
