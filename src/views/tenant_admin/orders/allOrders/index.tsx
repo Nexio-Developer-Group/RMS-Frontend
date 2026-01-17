@@ -3,6 +3,7 @@ import AllOrderTypeHeader from './components/AllOrderTypeHeader'
 import SearchBar from '../../components/SearchBar'
 import { OrderList } from './components/OrderList'
 import OrderDetailModal from '../../components/OrderDetailModal'
+import Loading from '@/components/shared/Loading'
 import { useOrders } from '@/hooks/useOrder'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/ui/select'
 import StatCard from '../../components/StatCard'
@@ -125,8 +126,8 @@ const AllOrders = () => {
 
                         <div className="p-4">
                             {loading ? (
-                                <div className="text-center text-muted-foreground">
-                                    Loading orders...
+                                <div className="flex h-full items-center justify-center min-h-100">
+                                    <Loading loading={true} />
                                 </div>
                             ) : (
                                 <OrderList

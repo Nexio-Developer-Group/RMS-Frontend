@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/shadcn/ui/button'
 import { Plus } from 'lucide-react'
+import Loading from '@/components/shared/Loading'
 import CustomerStatsHeader from './components/CustomerStatsHeader'
 import CustomerFilterTabs from './components/CustomerFilterTabs'
 import CustomerSearchBar from './components/CustomerSearchBar'
@@ -60,8 +61,8 @@ const Customers = () => {
                 <div className="p-4">
                     {activeTab === 'customer-list' ? (
                         customersLoading ? (
-                            <div className="text-center py-12">
-                                <p className="text-muted-foreground">Loading customers...</p>
+                            <div className="flex h-full items-center justify-center min-h-100">
+                                <Loading loading={true} />
                             </div>
                         ) : (
                             <CustomerTable
@@ -71,8 +72,8 @@ const Customers = () => {
                         )
                     ) : (
                         campaignsLoading ? (
-                            <div className="text-center py-12">
-                                <p className="text-muted-foreground">Loading campaigns...</p>
+                            <div className="flex h-full items-center justify-center min-h-100">
+                                <Loading loading={true} />
                             </div>
                         ) : (
                             <CampaignTable campaigns={campaigns} />

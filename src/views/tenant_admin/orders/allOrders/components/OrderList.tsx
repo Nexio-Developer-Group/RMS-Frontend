@@ -37,7 +37,7 @@ export function OrderList({ orders, onSelectOrder }: OrderListProps) {
         <thead className="border-b">
           <tr className="text-gray-600">
             <th className="w-12 p-3">
-              <Checkbox  />
+              <Checkbox />
             </th>
             <th className="p-3 text-left font-medium">
               <div className="flex items-center gap-1">
