@@ -21,6 +21,7 @@ mock.onPost(`/sign-in`).reply((config) => {
                     {
                         user,
                         token: 'wVYrxaeNa9OxdnULvde1Au5m5w63',
+                        permissions: user.permissions || [],
                     },
                 ])
             }, 800)
@@ -58,6 +59,7 @@ mock.onPost(`/sign-up`).reply((config) => {
                 {
                     user: newUser,
                     token: 'wVYrxaeNa9OxdnULvde1Au5m5w63',
+                    permissions: [],
                 },
             ])
         }, 800)

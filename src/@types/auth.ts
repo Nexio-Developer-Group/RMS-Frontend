@@ -12,6 +12,7 @@ export type SignInResponse = {
         avatar: string
         email: string
     }
+    permissions?: string[]
 }
 
 export type SignUpResponse = SignInResponse
@@ -43,6 +44,7 @@ export type User = {
     userName?: string | null
     email?: string | null
     authority?: string[]
+    permissions?: string[]
 }
 
 export type Token = {
@@ -51,6 +53,6 @@ export type Token = {
 }
 
 export type OauthSignInCallbackPayload = {
-    onSignIn: (tokens: Token, user?: User) => void
+    onSignIn: (tokens: Token, user?: User, permissions?: string[]) => void
     redirect: () => void
 }

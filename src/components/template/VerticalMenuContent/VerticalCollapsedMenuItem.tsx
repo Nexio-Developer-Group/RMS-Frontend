@@ -37,7 +37,12 @@ const DefaultItem = ({
     t,
 }: DefaultItemProps) => {
     return (
-        <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
+        <AuthorityCheck
+            userAuthority={userAuthority}
+            authority={nav.authority}
+            requiredPermission={nav.requiredPermission}
+            requiredPermissions={nav.requiredPermissions}
+        >
             <MenuCollapse
                 key={nav.key}
                 label={
@@ -82,7 +87,12 @@ const CollapsedItem = ({
     )
 
     return (
-        <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
+        <AuthorityCheck
+            userAuthority={userAuthority}
+            authority={nav.authority}
+            requiredPermission={nav.requiredPermission}
+            requiredPermissions={nav.requiredPermissions}
+        >
             <Dropdown
                 trigger="hover"
                 renderTitle={renderAsIcon ? menuItem : dropdownItem}

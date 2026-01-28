@@ -57,12 +57,15 @@ function AuthProvider({ children }: AuthProviderProps) {
         )
     }
 
-    const handleSignIn = (tokens: Token, user?: User) => {
+    const handleSignIn = (tokens: Token, user?: User, permissions?: string[]) => {
         setToken(tokens.accessToken)
         setSessionSignedIn(true)
 
         if (user) {
-            setUser(user)
+            setUser({
+                ...user,
+                permissions: permissions || [],
+            })
         }
     }
 
@@ -76,7 +79,11 @@ function AuthProvider({ children }: AuthProviderProps) {
         try {
             const resp = await apiSignIn(values)
             if (resp) {
-                handleSignIn({ accessToken: resp.token }, resp.user)
+                handleSignIn(
+                    { accessToken: resp.token },
+                    resp.user,
+                    resp.permissions
+                )
                 redirect()
                 return {
                     status: 'success',
@@ -100,7 +107,11 @@ function AuthProvider({ children }: AuthProviderProps) {
         try {
             const resp = await apiSignUp(values)
             if (resp) {
-                handleSignIn({ accessToken: resp.token }, resp.user)
+                handleSignIn(
+                    { accessToken: resp.token },
+                    resp.user,
+                    resp.permissions
+                )
                 redirect()
                 return {
                     status: 'success',
@@ -132,7 +143,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         callback: (payload: OauthSignInCallbackPayload) => void,
     ) => {
         callback({
-            onSignIn: handleSignIn,
+            onSignIn: (tokens, user, permissions) => handleSignIn(tokens, user, permissions),
             redirect,
         })
     }

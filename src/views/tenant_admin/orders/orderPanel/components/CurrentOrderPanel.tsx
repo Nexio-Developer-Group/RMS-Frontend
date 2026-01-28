@@ -302,6 +302,8 @@ const CurrentOrderPanel = ({
             {/* Bottom Action Buttons */}
             <div className="p-4 md:p-4 border-t border-slate-200 space-y-3 shrink-0 bg-white">
                 {/* Create KOT Button */}
+
+                <ProtectedComponent requiredPermission="place_order">
                 <Button
                     onClick={handleCreateKOT}
                     disabled={orderItems.length === 0 || isCreatingKOT}
@@ -314,6 +316,8 @@ const CurrentOrderPanel = ({
                     )}
                     Create order for KOT
                 </Button>
+</ProtectedComponent>
+
 
                 {/* Action Buttons Row */}
                 <div className="grid grid-cols-5 gap-1.5 md:gap-2">
@@ -386,5 +390,6 @@ const CurrentOrderPanel = ({
 
 // Add ShoppingCart icon import
 import { ShoppingCart } from 'lucide-react'
+import ProtectedComponent from '@/components/shared/ProtectedComponent'
 
 export default CurrentOrderPanel

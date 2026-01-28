@@ -2,9 +2,15 @@ import {
     NAV_ITEM_TYPE_ITEM,
     NAV_ITEM_TYPE_COLLAPSE,
 } from '@/constants/navigation.constant'
-import { TENANT_ADMIN } from '@/constants/roles.constant'
 import type { NavigationTree } from '@/@types/navigation'
 
+/**
+ * Tenant Admin Navigation Configuration
+ * 
+ * Navigation items are now controlled by permissions, not roles.
+ * The `requiredPermission` field determines if a navigation item is visible.
+ * If a user has the permission, the navigation item will be shown.
+ */
 const tenantAdminNavigationConfig: NavigationTree[] = [
     {
         key: 'home',
@@ -13,7 +19,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.dashboard',
         icon: 'dashboard',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [], // Empty authority, controlled by permissions
+        requiredPermission: 'use_dashboard', // Permission required to see this item
         subMenu: [],
     },
     {
@@ -23,7 +30,9 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.orders.pos',
         icon: 'orders',
         type: NAV_ITEM_TYPE_COLLAPSE,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        // Show POS menu if user has any POS-related permission
+        requiredPermissions: ['use_pos'],
         subMenu: [
             {
                 key: 'orders.panel',
@@ -32,7 +41,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
                 translateKey: 'nav.orders.panel',
                 icon: '',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [TENANT_ADMIN],
+                authority: [],
+                requiredPermission: 'use_pos',
                 subMenu: [],
             },
             {
@@ -42,19 +52,21 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
                 translateKey: 'nav.orders.all',
                 icon: '',
                 type: NAV_ITEM_TYPE_ITEM,
-                authority: [TENANT_ADMIN],
+                authority: [],
+                requiredPermission: 'use_pos', // Separate permission for all orders
                 subMenu: [],
             },
         ],
     },
-        {
+    {
         key: 'online_orders',
         path: '/online-orders',
         title: 'Online Orders',
         translateKey: 'nav.onlineOrders',
         icon: 'orders',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'view_online_order',
         subMenu: [],
     },
     {
@@ -64,7 +76,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.menu',
         icon: 'menu',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'use_menu_management',
         subMenu: [],
     },
     {
@@ -74,7 +87,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.tableManagement',
         icon: 'tableManagement',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'use_sitting_management',
         subMenu: [],
     },
     {
@@ -84,7 +98,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.staffs',
         icon: 'staffs',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'use_staff_management',
         subMenu: [],
     },
     {
@@ -94,7 +109,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.kitchenManagement',
         icon: 'kitchenManagement',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'use_kitchen_management',
         subMenu: [],
     },
     {
@@ -104,7 +120,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.expenseTracker',
         icon: 'expenseTracker',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'use_expense_tracker',
         subMenu: [],
     },
     {
@@ -114,7 +131,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.customers',
         icon: 'customers',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'use_customer_management',
         subMenu: [],
     },
     {
@@ -124,7 +142,8 @@ const tenantAdminNavigationConfig: NavigationTree[] = [
         translateKey: 'nav.report',
         icon: 'report',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [TENANT_ADMIN],
+        authority: [],
+        requiredPermission: 'use_reports',
         subMenu: [],
     },
 ]

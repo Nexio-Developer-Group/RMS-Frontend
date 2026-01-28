@@ -40,7 +40,7 @@ interface DefaultItemProps {
     showTitle?: boolean
 }
 
-interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps {}
+interface VerticalMenuItemProps extends CollapsedItemProps, DefaultItemProps { }
 
 const CollapsedItem = ({
     nav,
@@ -53,7 +53,12 @@ const CollapsedItem = ({
     currentKey,
 }: CollapsedItemProps) => {
     return (
-        <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
+        <AuthorityCheck
+            userAuthority={userAuthority}
+            authority={nav.authority}
+            requiredPermission={nav.requiredPermission}
+            requiredPermissions={nav.requiredPermissions}
+        >
             {renderAsIcon ? (
                 <Tooltip
                     title={t(nav.translateKey, nav.title)}
@@ -99,7 +104,12 @@ const DefaultItem = (props: DefaultItemProps) => {
     } = props
 
     return (
-        <AuthorityCheck userAuthority={userAuthority} authority={nav.authority}>
+        <AuthorityCheck
+            userAuthority={userAuthority}
+            authority={nav.authority}
+            requiredPermission={nav.requiredPermission}
+            requiredPermissions={nav.requiredPermissions}
+        >
             <MenuItem key={nav.key} eventKey={nav.key} dotIndent={false}>
                 <Link
                     to={nav.path}
