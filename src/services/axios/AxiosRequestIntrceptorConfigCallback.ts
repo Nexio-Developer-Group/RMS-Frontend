@@ -28,6 +28,12 @@ const AxiosRequestIntrceptorConfigCallback = (
         }
     }
 
+    // Add x-api-key header from environment variable
+    const apiKey = import.meta.env.VITE_API_KEY
+    if (apiKey) {
+        config.headers['x-api-key'] = apiKey
+    }
+
     return config
 }
 

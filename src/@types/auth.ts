@@ -7,12 +7,12 @@ export type SignInResponse = {
     token: string
     user: {
         userId: string
-        userName: string
-        authority: string[]
-        avatar: string
+        name: string
         email: string
+        avatar: string | null
+        authority: string[]
     }
-    permissions?: string[]
+    permissions: string[]
 }
 
 export type SignUpResponse = SignInResponse
@@ -41,7 +41,7 @@ export type AuthResult = Promise<{
 export type User = {
     userId?: string | null
     avatar?: string | null
-    userName?: string | null
+    name?: string | null
     email?: string | null
     authority?: string[]
     permissions?: string[]
@@ -49,7 +49,7 @@ export type User = {
 
 export type Token = {
     accessToken: string
-    refereshToken?: string
+    refreshToken?: string
 }
 
 export type OauthSignInCallbackPayload = {
