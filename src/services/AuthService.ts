@@ -9,13 +9,26 @@ import type {
     SignUpResponse,
 } from '@/@types/auth'
 
-export async function apiSignIn(data: SignInCredential) {
-    return ApiService.fetchDataWithAxios<SignInResponse>({
-        url: endpointConfig.signIn,
-        method: 'post',
-        data,
-    })
+export async function apiLogin(data: SignInCredential) {
+    try {
+        const response = ApiService.fetchDataWithAxios<SignInResponse>({
+            url: '/auth/login',
+            method: 'post',
+            data,
+        })
+        return response
+    } catch (error) {
+        throw error
+    }
 }
+
+// export async function apiSignIn(data: SignInCredential) {
+//     return ApiService.fetchDataWithAxios<SignInResponse>({
+//         url: endpointConfig.signIn,
+//         method: 'post',
+//         data,
+//     })
+// }
 
 export async function apiSignUp(data: SignUpCredential) {
     return ApiService.fetchDataWithAxios<SignUpResponse>({

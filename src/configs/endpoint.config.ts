@@ -1,4 +1,4 @@
-export const apiPrefix = '/api'
+export const apiPrefix = 'https://rms.nexiotech.cloud/api'
 
 const endpointConfig = {
     signIn: '/sign-in',
