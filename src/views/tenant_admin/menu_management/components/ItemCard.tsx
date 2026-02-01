@@ -10,50 +10,59 @@ type ItemCardProps = {
 
 const ItemCard = ({ item, onEdit, onToggleAvailability }: ItemCardProps) => {
     return (
-        <div className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow">
-            {/* Image Section */}
-            <div className="aspect-square bg-linear-to-br from-teal-100 to-teal-200 p-4 flex items-center justify-center">
-                {item.image ? (
+        <div className="bg-card rounded-xl border overflow-hidden hover:shadow-md transition-shadow w-full max-w-md">
+
+            {/* Header Background */}
+            <div className="relative h-35 bg-teal-100 flex items-center justify-center overflow-hidden">
+                {item.image && (
                     <img
                         src={item.image}
                         alt={item.name}
-                        className="object-contain w-full h-full"
+                        className="h-35 w-full object-contain drop-shadow-md z-10"
                     />
-                ) : (
-                    <span className="text-5xl">🍕</span>
                 )}
             </div>
 
-            {/* Content Section */}
-            <div className="p-4 space-y-3">
-                <div>
-                    <h3 className="font-semibold text-foreground text-base line-clamp-1">
-                        {item.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">{item.categoryName}</p>
+            {/* Content */}
+            <div className="p-4 pt-4 space-y-3">
+
+                {/* Title + Price */}
+                <div className="flex items-start justify-between">
+                    <div>
+                        <h3 className="font-semibold text-lg text-blue-700 leading-tight">
+                            {item.name}
+                        </h3>
+                        <p className="text-sm text-teal-600">{item.categoryName}</p>
+                    </div>
+
+                    <span className="text-lg font-bold text-orange-600">
+                        ${item.price}
+                    </span>
                 </div>
 
+                <hr className="border-border" />
+
+                {/* Availability Row */}
                 <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-orange-600">${item.price}</span>
                     <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">
-                            {item.available ? 'Available' : 'Unavailable'}
-                        </span>
                         <Switch
                             checked={item.available}
                             onCheckedChange={() => onToggleAvailability(item.id)}
+                            className="data-[state=checked]:bg-slate-900 dark:data-[state=checked]:bg-slate-100"
                         />
+                        <span className="text-sm text-foreground">
+                            {item.available ? 'Available' : 'Unavailable'}
+                        </span>
                     </div>
-                </div>
 
-                {/* Edit Button */}
-                <button
-                    onClick={() => onEdit(item)}
-                    className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                    <Pencil size={16} />
-                    <span>Edit</span>
-                </button>
+                    {/* Edit Icon Button */}
+                    <button
+                        onClick={() => onEdit(item)}
+                        className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-600 transition"
+                    >
+                        <Pencil size={16} />
+                    </button>
+                </div>
             </div>
         </div>
     )
