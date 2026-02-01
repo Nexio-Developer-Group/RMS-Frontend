@@ -1,4 +1,3 @@
-export { default as MenuHeader } from './MenuHeader'
 export { default as ItemCard } from './ItemCard'
 export { default as ModifierCard } from './ModifierCard'
 export { default as ComboCard } from './ComboCard'

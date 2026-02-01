@@ -74,8 +74,13 @@ export const useToken = () => {
         storage.setItem(TOKEN_NAME_IN_STORAGE, token)
     }
 
+    const getToken = () => {
+        const result = storage.getItem(TOKEN_NAME_IN_STORAGE)
+        return result instanceof Promise ? null : result
+    }
+
     return {
         setToken,
-        token: storage.getItem(TOKEN_NAME_IN_STORAGE),
+        token: getToken(),
     }
 }

@@ -1,18 +1,26 @@
 import { useState } from 'react'
-import { Search, MoreVertical } from 'lucide-react'
+import { ListFilter, MoreVertical, Plus } from 'lucide-react'
 import { useMenuData, useMenuItemActions, useModifierActions, useComboActions } from '@/hooks/useMenu'
 import Loading from '@/components/shared/Loading'
-import MenuHeader from './components/MenuHeader'
+import TabsHeader from '../components/TabHeader'
 import ItemCard from './components/ItemCard'
 import ModifierCard from './components/ModifierCard'
 import ComboCard from './components/ComboCard'
 import AddItemDialog from './components/AddItemDialog'
 import AddModifierDialog from './components/AddModifierDialog'
 import AddComboDialog from './components/AddComboDialog'
+import SearchBar from '@/views/tenant_admin/components/SearchBar'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/shadcn/ui/select'
 import type { MenuTab, MenuItem, Modifier, Combo } from '@/@types/menu'
 
 const MenuManagement = () => {
-    const [activeTab, setActiveTab] = useState<MenuTab>('items')
+    const [menuTab, setMenuTab] = useState<MenuTab>('items')
     const [searchQuery, setSearchQuery] = useState('')
     const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards')
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
@@ -24,6 +32,12 @@ const MenuManagement = () => {
     const itemActions = useMenuItemActions()
     const modifierActions = useModifierActions()
     const comboActions = useComboActions()
+
+    const MENU_TABS = [
+        { label: 'Items', value: 'items' },
+        { label: 'Modifiers', value: 'modifiers' },
+        { label: 'Combos', value: 'combos' },
+    ] satisfies { label: string; value: MenuTab }[]
 
     // Filter data based on search
     const filteredItems = menuData?.items.filter((item) =>
@@ -109,48 +123,54 @@ const MenuManagement = () => {
     }
 
     return (
-        <div className="flex flex-col h-full bg-background">
+        <div className="flex flex-col h-full bg-background rounded-lg overflow-hidden">
             {/* Header with Tabs */}
-            <MenuHeader
-                activeTab={activeTab}
-                onTabChange={setActiveTab}
-                onAddClick={handleAddClick}
-            />
+            <div className="flex items-center justify-between px-4 py-2 border-b bg-card">
+                <TabsHeader<MenuTab>
+                    value={menuTab}
+                    onChange={setMenuTab}
+                    tabs={MENU_TABS}
+                />
+                <button
+                    onClick={handleAddClick}
+                    className="flex items-center px-4 py-2 bg-slate-900 dark:bg-slate-100 text-primary-foreground rounded-lg hover:bg-slate-800 transition-colors font-medium"
+                >
+                    <Plus className="mr-2" /> Add {MENU_TABS.find(tab => tab.value === menuTab)?.label}
+                </button>
+            </div>
 
             {/* Search and View Options */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 md:p-6 bg-card border-b">
-                <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
-                    <input
-                        type="text"
-                        placeholder="Search Anything"
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 px-3 py-3 bg-card border-b">
+                <div className="flex items-center gap-2 flex-1 max-w-md h-10 ">
+                    <SearchBar
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        onChange={setSearchQuery}
+                        placeholder="Search Anything"
                     />
+                    <button className="h-10 px-3 border rounded-lg hover:bg-muted transition-colors flex items-center justify-center">
+                        <ListFilter className="w-4 h-4" />
+                    </button>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <button className="p-2 border rounded-lg hover:bg-muted transition-colors">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-foreground">
-                            <path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-                    </button>
-                    <button
-                        onClick={() => setViewMode(viewMode === 'cards' ? 'list' : 'cards')}
-                        className="px-4 py-2 border rounded-lg hover:bg-muted transition-colors text-foreground font-medium text-sm"
+                    <Select
+                        value={viewMode}
+                        onValueChange={(value) => setViewMode(value as 'cards' | 'list')}
                     >
-                        Cards
-                    </button>
-                    <button className="p-2 border rounded-lg hover:bg-muted transition-colors">
-                        <MoreVertical size={20} className="text-foreground" />
-                    </button>
+                        <SelectTrigger className="w-32">
+                            <SelectValue placeholder="View Mode" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="cards">Cards</SelectItem>
+                            <SelectItem value="list">List</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto bg-background p-4 md:p-6">
-                {activeTab === 'items' && (
+            <div className="flex-1 overflow-y-auto bg-card p-4 md:p-6">
+                {menuTab === 'items' && (
                     <div className="space-y-8">
                         {Object.entries(itemsByCategory).map(([categoryName, items]) => (
                             <div key={categoryName}>
@@ -182,7 +202,7 @@ const MenuManagement = () => {
                     </div>
                 )}
 
-                {activeTab === 'modifiers' && (
+                {menuTab === 'modifiers' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {filteredModifiers.map((modifier) => (
                             <ModifierCard
@@ -200,7 +220,7 @@ const MenuManagement = () => {
                     </div>
                 )}
 
-                {activeTab === 'combos' && (
+                {menuTab === 'combos' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {filteredCombos.map((combo) => (
                             <ComboCard
@@ -220,7 +240,7 @@ const MenuManagement = () => {
             </div>
 
             {/* Dialogs */}
-            {activeTab === 'items' && (
+            {menuTab === 'items' && (
                 <AddItemDialog
                     isOpen={isAddDialogOpen}
                     onClose={handleCloseDialog}
@@ -230,7 +250,7 @@ const MenuManagement = () => {
                 />
             )}
 
-            {activeTab === 'modifiers' && (
+            {menuTab === 'modifiers' && (
                 <AddModifierDialog
                     isOpen={isAddDialogOpen}
                     onClose={handleCloseDialog}
@@ -239,7 +259,7 @@ const MenuManagement = () => {
                 />
             )}
 
-            {activeTab === 'combos' && (
+            {menuTab === 'combos' && (
                 <AddComboDialog
                     isOpen={isAddDialogOpen}
                     onClose={handleCloseDialog}
