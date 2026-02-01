@@ -125,7 +125,7 @@ const MenuManagement = () => {
     return (
         <div className="flex flex-col h-full bg-background rounded-lg overflow-hidden">
             {/* Header with Tabs */}
-            <div className="flex items-center justify-between px-4 py-2 border-b bg-card">
+            <div className="flex items-center justify-between px-4 py-3 border-b bg-card">
                 <TabsHeader<MenuTab>
                     value={menuTab}
                     onChange={setMenuTab}
@@ -140,33 +140,35 @@ const MenuManagement = () => {
             </div>
 
             {/* Search and View Options */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 px-3 py-3 bg-card border-b">
-                <div className="flex items-center gap-2 flex-1 max-w-md h-10 ">
-                    <SearchBar
-                        value={searchQuery}
-                        onChange={setSearchQuery}
-                        placeholder="Search Anything"
-                    />
-                    <button className="h-10 px-3 border rounded-lg hover:bg-muted transition-colors flex items-center justify-center">
-                        <ListFilter className="w-4 h-4" />
-                    </button>
-                </div>
+            {menuTab === 'items' && (
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 px-3 py-3 bg-card border-b">
+                    <div className="flex items-center gap-2 flex-1 max-w-md h-10 ">
+                        <SearchBar
+                            value={searchQuery}
+                            onChange={setSearchQuery}
+                            placeholder="Search Anything"
+                        />
+                        <button className="h-10 px-3 border rounded-lg hover:bg-muted transition-colors flex items-center justify-center">
+                            <ListFilter className="w-4 h-4" />
+                        </button>
+                    </div>
 
-                <div className="flex items-center gap-2">
-                    <Select
-                        value={viewMode}
-                        onValueChange={(value) => setViewMode(value as 'cards' | 'list')}
-                    >
-                        <SelectTrigger className="w-32">
-                            <SelectValue placeholder="View Mode" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="cards">Cards</SelectItem>
-                            <SelectItem value="list">List</SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <div className="flex items-center gap-2">
+                        <Select
+                            value={viewMode}
+                            onValueChange={(value) => setViewMode(value as 'cards' | 'list')}
+                        >
+                            <SelectTrigger className="w-32">
+                                <SelectValue placeholder="View Mode" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="cards">Cards</SelectItem>
+                                <SelectItem value="list">List</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Content Area */}
             <div className="flex-1 overflow-y-auto bg-card p-4 md:p-6">
@@ -182,7 +184,7 @@ const MenuManagement = () => {
                                         </span>
                                     </h2>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                                     {items.map((item) => (
                                         <ItemCard
                                             key={item.id}
@@ -203,7 +205,7 @@ const MenuManagement = () => {
                 )}
 
                 {menuTab === 'modifiers' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                         {filteredModifiers.map((modifier) => (
                             <ModifierCard
                                 key={modifier.id}
@@ -221,13 +223,13 @@ const MenuManagement = () => {
                 )}
 
                 {menuTab === 'combos' && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-col-3 2xl:grid-cols-4 gap-4">
                         {filteredCombos.map((combo) => (
                             <ComboCard
                                 key={combo.id}
                                 combo={combo}
                                 onEdit={handleEditCombo}
-                                onToggleAvailability={comboActions.toggleComboAvailability}
+                                onToggleAvailability={(id) => comboActions.toggleComboAvailability(String(id))}
                             />
                         ))}
                         {filteredCombos.length === 0 && (

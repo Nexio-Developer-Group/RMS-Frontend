@@ -10,7 +10,7 @@ type ItemCardProps = {
 
 const ItemCard = ({ item, onEdit, onToggleAvailability }: ItemCardProps) => {
     return (
-        <div className="bg-card rounded-xl border overflow-hidden hover:shadow-md transition-shadow w-full max-w-md">
+        <div className="bg-card rounded-lg border overflow-hidden hover:shadow-md transition-shadow w-full max-w-md">
 
             {/* Header Background */}
             <div className="relative h-35 bg-teal-100 flex items-center justify-center overflow-hidden">
