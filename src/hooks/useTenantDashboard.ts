@@ -6,7 +6,6 @@ export const useTenantDashboard = () => {
     return useQuery<DashboardData>({
         queryKey: ['tenantAdminDashboard'],
         queryFn: dashboardMockService.getDashboardData,
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 

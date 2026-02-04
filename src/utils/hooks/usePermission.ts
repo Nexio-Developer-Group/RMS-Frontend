@@ -2,6 +2,9 @@ import { useMemo } from 'react'
 import { useSessionUser } from '@/store/authStore'
 import { hasPermission, hasAnyPermission, hasAllPermissions } from '@/utils/permissionUtils'
 
+// Stable empty array reference to avoid infinite loops
+const EMPTY_PERMISSIONS: string[] = []
+
 /**
  * Custom hook for checking user permissions
  * 
@@ -21,7 +24,8 @@ import { hasPermission, hasAnyPermission, hasAllPermissions } from '@/utils/perm
  * }
  */
 function usePermission() {
-    const userPermissions = useSessionUser((state) => state.user.permissions ?? [])
+    const permissions = useSessionUser((state) => state.user?.permissions)
+    const userPermissions = permissions ?? EMPTY_PERMISSIONS
 
     const permissionChecks = useMemo(() => {
         return {

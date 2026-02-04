@@ -7,7 +7,6 @@ export const useOnlineOrders = (status: OnlineOrderFilterStatus = 'all', search 
     return useQuery<OnlineOrder[]>({
         queryKey: ['onlineOrders', status, search],
         queryFn: () => onlineOrderMockService.getOnlineOrders(status, search),
-        staleTime: 1000 * 60 * 2, // 2 minutes
     })
 }
 
@@ -17,7 +16,6 @@ export const useOnlineOrderDetail = (orderId: string | null) => {
         queryKey: ['onlineOrder', orderId],
         queryFn: () => orderId ? onlineOrderMockService.getOnlineOrderById(orderId) : null,
         enabled: !!orderId,
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 
@@ -26,7 +24,6 @@ export const useOnlineOrderStats = () => {
     return useQuery<OnlineOrderStats>({
         queryKey: ['onlineOrderStats'],
         queryFn: onlineOrderMockService.getOnlineOrderStats,
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 

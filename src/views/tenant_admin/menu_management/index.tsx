@@ -17,6 +17,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/shadcn/ui/select'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/shadcn/ui/dropdown-menu'
 import type { MenuTab, MenuItem, Modifier, Combo } from '@/@types/menu'
 
 const MenuManagement = () => {
@@ -183,6 +189,15 @@ const MenuManagement = () => {
                                             {items.length} Items
                                         </span>
                                     </h2>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger className="w-10 h-10 p-0 border rounded-lg hover:bg-muted transition-colors flex items-center justify-center">
+                                            <MoreVertical className="w-4 h-4" />
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                                     {items.map((item) => (

@@ -1,28 +1,37 @@
-import { Edit2 } from 'lucide-react'
-import { Table } from '@/@types/table'
+import { Edit2, Trash2 } from 'lucide-react'
+import { TableModel } from '@/services/tenant_admin/table_management/types'
 import { Switch } from '@/components/shadcn/ui/switch'
+import { Badge } from '@/components/shadcn/ui/badge'
+import { Button } from '@/components/shadcn/ui/button'
+import React from 'react'
 
 type TableCardProps = {
-    table: Table
-    onEdit: (table: Table) => void
+    table: TableModel
+    onEdit: (table: TableModel) => void
+    onDelete: (id: string) => void
     onToggleStatus: (id: string) => void
-    onClick: (table: Table) => void
+    onClick: (table: TableModel) => void
 }
 
-const TableCard = ({ table, onEdit, onToggleStatus, onClick }: TableCardProps) => {
-    const getStatusColor = () => {
-        switch (table.status) {
-            case 'available':
-                return 'bg-green-100 text-green-700'
-            case 'occupied':
-                return 'bg-red-100 text-red-700'
-            case 'reserved':
-                return 'bg-yellow-100 text-yellow-700'
-            case 'inactive':
-                return 'bg-gray-100 text-gray-700'
-            default:
-                return 'bg-gray-100 text-gray-700'
-        }
+const statusLabel = (status: TableModel['status']) => {
+    switch (status) {
+        case 'available':
+            return { text: 'Available', classes: 'bg-green-100 text-green-700' }
+        case 'occupied':
+            return { text: 'Occupied', classes: 'bg-red-100 text-red-700' }
+        case 'reserved':
+            return { text: 'Reserved', classes: 'bg-yellow-100 text-yellow-700' }
+        case 'inactive':
+        default:
+            return { text: 'Inactive', classes: 'bg-muted text-muted-foreground' }
+    }
+}
+
+const TableCard = ({ table, onEdit, onDelete, onToggleStatus, onClick }: TableCardProps) => {
+    const status = statusLabel(table.status)
+
+    const handleCardClick = () => {
+        onClick(table)
     }
 
     const handleEditClick = (e: React.MouseEvent) => {
@@ -30,50 +39,89 @@ const TableCard = ({ table, onEdit, onToggleStatus, onClick }: TableCardProps) =
         onEdit(table)
     }
 
-    const handleToggleClick = (e: React.MouseEvent) => {
+    const handleToggleChange = (checked: boolean) => {
+        // call parent with id — parent will perform fetch-before-mutate as needed
+        onToggleStatus(table.id)
+    }
+
+    const handleDeleteClick = (e: React.MouseEvent) => {
         e.stopPropagation()
+        onDelete(table.id)
     }
 
     return (
         <div
-            className="bg-card rounded-lg border p-4 hover:shadow-md transition-shadow cursor-pointer"
-            onClick={() => onClick(table)}
+            role="button"
+            tabIndex={0}
+            onClick={handleCardClick}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleCardClick()
+            }}
+            className="w-full rounded-lg border overflow-hidden shadow-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
         >
-            {/* Header */}
-            <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-foreground font-semibold">
+            {/* Top header (light background) */}
+            <div className="flex items-center justify-between bg-slate-50 px-4 py-3">
+                <div className="flex items-center gap-4">
+                    {/* small square number */}
+                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 font-semibold text-sm">
                         {table.number}
                     </div>
-                    <div>
-                        <p className="font-medium text-blue-600">
-                            {table.name}
-                        </p>
-                        <p className="text-sm text-muted-foreground">{table.floorName}</p>
+
+                    <div className="min-w-0">
+                        <p className="text-xl font-semibold text-blue-600 truncate">{table.name}</p>
+                        {/* optional small floor name subtitle — uncomment if needed */}
+                        {/* <p className="text-xs text-muted-foreground truncate">{table.floorName}</p> */}
                     </div>
                 </div>
-                <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor()}`}
-                >
-                    {table.status}
-                </span>
+
+                {/* Pill status */}
+                <div>
+                    <Badge
+                        variant="secondary"
+                        className={`px-3 py-1 rounded-full text-xs capitalize font-medium ${status.classes}`}
+                    >
+                        {status.text}
+                    </Badge>
+                </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center justify-between pt-3 border-t">
-                <div className="flex items-center gap-2" onClick={handleToggleClick}>
-                    <Switch
-                        checked={table.enabled}
-                        onCheckedChange={() => onToggleStatus(table.id)}
-                    />
-                    <span className="text-sm text-muted-foreground">Enabled</span>
-                </div>
-                <button
-                    onClick={handleEditClick}
-                    className="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
+            {/* Bottom action bar (dark) */}
+            <div className="flex items-center justify-between px-4 py-3 bg-card">
+                <div
+                    className="flex items-center gap-3"
+                    onClick={(e) => {
+                        // prevent outer onClick when interacting with controls
+                        e.stopPropagation()
+                    }}
                 >
-                    <Edit2 size={16} />
-                </button>
+                    <Switch
+                        id={`table-enabled-${table.id}`}
+                        checked={table.enabled}
+                        onCheckedChange={handleToggleChange}
+                    />
+                    <span className="text-sm text-foreground select-none">Enabled</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={handleEditClick}
+                        aria-label={`Edit ${table.name}`}
+                        className="h-8 w-8 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700"
+                    >
+                        <Edit2 size={16} />
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={handleDeleteClick}
+                        aria-label={`Delete ${table.name}`}
+                        className="h-8 w-8 rounded-md bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700"
+                    >
+                        <Trash2 size={16} />
+                    </Button>
+                </div>
             </div>
         </div>
     )

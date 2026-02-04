@@ -1,29 +1,36 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { menuMockService } from '@/mock/mockServices/menuMockService'
-import type { MenuData, MenuItem, Modifier, Combo } from '@/@types/menu'
+import type { MenuData, MenuItem, Modifier, Combo } from '@/services/tenant_admin/menu_management/types'
 
-// Get all menu data
+/**
+ * Hook to fetch the complete menu data
+ * @returns Menu data including categories, items, modifiers, and combos
+ */
 export const useMenuData = () => {
     return useQuery<MenuData>({
         queryKey: ['menuData'],
         queryFn: menuMockService.getMenuData,
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 
-// Get items by category
+/**
+ * Hook to fetch menu items filtered by category
+ * @param categoryId ID of the category to filter by
+ */
 export const useMenuItemsByCategory = (categoryId: string) => {
     return useQuery<MenuItem[]>({
         queryKey: ['menuItems', categoryId],
         queryFn: () => menuMockService.getItemsByCategory(categoryId),
-        staleTime: 1000 * 60 * 5,
     })
 }
 
-// Menu item actions
+/**
+ * Hook for performing actions on menu items
+ */
 export const useMenuItemActions = () => {
     const queryClient = useQueryClient()
 
+    // Mutation to add a new item
     const addItemMutation = useMutation({
         mutationFn: menuMockService.addItem,
         onSuccess: () => {
@@ -32,6 +39,7 @@ export const useMenuItemActions = () => {
         },
     })
 
+    // Mutation to update an existing item
     const updateItemMutation = useMutation({
         mutationFn: ({ id, updates }: { id: string; updates: Partial<MenuItem> }) =>
             menuMockService.updateItem(id, updates),
@@ -41,6 +49,7 @@ export const useMenuItemActions = () => {
         },
     })
 
+    // Mutation to delete an item
     const deleteItemMutation = useMutation({
         mutationFn: menuMockService.deleteItem,
         onSuccess: () => {
@@ -49,6 +58,7 @@ export const useMenuItemActions = () => {
         },
     })
 
+    // Mutation to toggle item availability
     const toggleItemAvailabilityMutation = useMutation({
         mutationFn: menuMockService.toggleItemAvailability,
         onSuccess: () => {
@@ -69,10 +79,13 @@ export const useMenuItemActions = () => {
     }
 }
 
-// Modifier actions
+/**
+ * Hook for performing actions on modifiers
+ */
 export const useModifierActions = () => {
     const queryClient = useQueryClient()
 
+    // Mutation to add a new modifier
     const addModifierMutation = useMutation({
         mutationFn: menuMockService.addModifier,
         onSuccess: () => {
@@ -80,6 +93,7 @@ export const useModifierActions = () => {
         },
     })
 
+    // Mutation to update an existing modifier
     const updateModifierMutation = useMutation({
         mutationFn: ({ id, updates }: { id: string; updates: Partial<Modifier> }) =>
             menuMockService.updateModifier(id, updates),
@@ -88,6 +102,7 @@ export const useModifierActions = () => {
         },
     })
 
+    // Mutation to delete a modifier
     const deleteModifierMutation = useMutation({
         mutationFn: menuMockService.deleteModifier,
         onSuccess: () => {
@@ -105,10 +120,13 @@ export const useModifierActions = () => {
     }
 }
 
-// Combo actions
+/**
+ * Hook for performing actions on combos
+ */
 export const useComboActions = () => {
     const queryClient = useQueryClient()
 
+    // Mutation to add a new combo
     const addComboMutation = useMutation({
         mutationFn: menuMockService.addCombo,
         onSuccess: () => {
@@ -116,6 +134,7 @@ export const useComboActions = () => {
         },
     })
 
+    // Mutation to update an existing combo
     const updateComboMutation = useMutation({
         mutationFn: ({ id, updates }: { id: string; updates: Partial<Combo> }) =>
             menuMockService.updateCombo(id, updates),
@@ -124,6 +143,7 @@ export const useComboActions = () => {
         },
     })
 
+    // Mutation to delete a combo
     const deleteComboMutation = useMutation({
         mutationFn: menuMockService.deleteCombo,
         onSuccess: () => {
@@ -131,6 +151,7 @@ export const useComboActions = () => {
         },
     })
 
+    // Mutation to toggle combo availability
     const toggleComboAvailabilityMutation = useMutation({
         mutationFn: menuMockService.toggleComboAvailability,
         onSuccess: () => {

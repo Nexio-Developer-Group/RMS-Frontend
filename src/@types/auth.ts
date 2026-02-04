@@ -4,13 +4,29 @@ export type SignInCredential = {
 }
 
 export type SignInResponse = {
-    token: string
+    access_token: string
     user: {
-        userId: string
+        id: string
         name: string
         email: string
-        avatar: string | null
-        authority: string[]
+        role: string
+        tenant_id: string
+        tenant?: {
+            tenant_id: string
+            parent_id: string | null
+            type: string
+            name: string
+            code: string
+            address: string
+            phone: string
+            email: string
+            logo: string | null
+            tagline: string | null
+            status: string
+            timezone: string
+            locales: string
+            module_list: string
+        }
     }
     permissions: string[]
 }

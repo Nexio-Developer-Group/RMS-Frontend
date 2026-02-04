@@ -2,7 +2,6 @@ import {
     TableStatus,
     Floor,
     OrderStatus,
-    BaseOrderItem,
     CreateInput,
     UpdateInput,
     Timestamps,

@@ -1,5 +1,5 @@
-export { default as StatsHeader } from './StatsHeader'
 export { default as TableCard } from './TableCard'
 export { default as FloorSection } from './FloorSection'
 export { default as AddTableDialog } from './AddTableDialog'
 export { default as TableDetailsDialog } from './TableDetailsDialog'
+export { default as AddFloorDialog } from './AddFloorDialog'

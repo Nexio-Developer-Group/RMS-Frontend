@@ -7,7 +7,6 @@ export const useCustomers = (search = '') => {
     return useQuery<Customer[]>({
         queryKey: ['customers', search],
         queryFn: () => customerMockService.getCustomers(search),
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 
@@ -17,7 +16,6 @@ export const useCustomerDetail = (customerId: string | null) => {
         queryKey: ['customer', customerId],
         queryFn: () => customerId ? customerMockService.getCustomerById(customerId) : null,
         enabled: !!customerId,
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 
@@ -26,7 +24,6 @@ export const useCustomerStats = () => {
     return useQuery<CustomerStats>({
         queryKey: ['customerStats'],
         queryFn: customerMockService.getCustomerStats,
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 
@@ -35,7 +32,6 @@ export const useCampaigns = (search = '') => {
     return useQuery<Campaign[]>({
         queryKey: ['campaigns', search],
         queryFn: () => customerMockService.getCampaigns(search),
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 
@@ -45,7 +41,6 @@ export const useCustomerOrders = (customerId: string | null) => {
         queryKey: ['customerOrders', customerId],
         queryFn: () => customerId ? customerMockService.getCustomerOrders(customerId) : [],
         enabled: !!customerId,
-        staleTime: 1000 * 60 * 2, // 2 minutes
     })
 }
 

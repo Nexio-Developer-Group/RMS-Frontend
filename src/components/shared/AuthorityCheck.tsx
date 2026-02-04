@@ -3,6 +3,9 @@ import { hasPermission, hasAnyPermission } from '@/utils/permissionUtils'
 import { useSessionUser } from '@/store/authStore'
 import type { CommonProps } from '@/@types/common'
 
+// Stable empty array reference to avoid infinite loops
+const EMPTY_PERMISSIONS: string[] = []
+
 interface AuthorityCheckProps extends CommonProps {
     userAuthority: string[]
     authority: string[]
@@ -14,7 +17,8 @@ const AuthorityCheck = (props: AuthorityCheckProps) => {
     const { userAuthority = [], authority = [], requiredPermission, requiredPermissions, children } = props
 
     // Get user permissions from store
-    const userPermissions = useSessionUser((state) => state.user.permissions ?? [])
+    const permissions = useSessionUser((state) => state.user?.permissions)
+    const userPermissions = permissions ?? EMPTY_PERMISSIONS
 
     // Check authority (legacy system)
     const roleMatched = useAuthority(userAuthority, authority)

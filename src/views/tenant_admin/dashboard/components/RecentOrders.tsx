@@ -18,7 +18,7 @@ export type OrderItem = {
 export type RecentOrders1Props = {
     orderId: string
     orderType: string
-    tableNumber: string
+    tableNumber?: string
     amount: number
     currency?: string
     items: OrderItem[]
@@ -59,12 +59,17 @@ const RecentOrders: React.FC<RecentOrders1Props> = memo(
                             </span>
 
                             <div className="inline-flex items-center overflow-hidden rounded-lg border border-slate-200">
-                                <div className="px-3 py-0.5 text-sm font-semibold text-foreground border-r border-slate-200">
+                                <div className={cn(
+                                    "px-3 py-0.5 text-sm font-semibold text-foreground",
+                                    tableNumber && "border-r border-slate-200"
+                                )}>
                                     {orderType}
                                 </div>
-                                <div className="px-3 py-0.5 text-sm font-semibold text-blue-600">
-                                    {tableNumber}
-                                </div>
+                                {tableNumber && (
+                                    <div className="px-3 py-0.5 text-sm font-semibold text-blue-600">
+                                        {tableNumber}
+                                    </div>
+                                )}
                             </div>
 
                         </div>

@@ -80,8 +80,14 @@ function AuthProvider({ children }: AuthProviderProps) {
             const resp = await apiLogin(values)
             if (resp) {
                 handleSignIn(
-                    { accessToken: resp.token },
-                    resp.user,
+                    { accessToken: resp.access_token },
+                    {
+                        userId: resp.user.id,
+                        name: resp.user.name,
+                        email: resp.user.email,
+                        authority: [resp.user.role],
+                        avatar: null,
+                    },
                     resp.permissions
                 )
                 redirect()
@@ -108,7 +114,7 @@ function AuthProvider({ children }: AuthProviderProps) {
             const resp = await apiSignUp(values)
             if (resp) {
                 handleSignIn(
-                    { accessToken: resp.token },
+                    { accessToken: resp.access_token },
                     resp.user,
                     resp.permissions
                 )
