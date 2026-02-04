@@ -1,8 +1,11 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useMemo } from 'react'
 import { Navigate } from 'react-router-dom'
 import useAuthority from '@/utils/hooks/useAuthority'
 import { hasPermission, hasAnyPermission } from '@/utils/permissionUtils'
 import { useSessionUser } from '@/store/authStore'
+
+// Stable empty array reference to avoid infinite loops
+const EMPTY_PERMISSIONS: string[] = []
 
 type AuthorityGuardProps = PropsWithChildren<{
     userAuthority?: string[]
@@ -26,8 +29,10 @@ const AuthorityGuard = (props: AuthorityGuardProps) => {
         children,
     } = props
 
-    // Get user permissions from store
-    const userPermissions = useSessionUser((state) => state.user.permissions ?? [])
+    // Get user permissions from store - selector returns the actual array reference
+    const permissions = useSessionUser((state) => state.user?.permissions)
+    // Use a stable empty array reference if permissions is undefined/null
+    const userPermissions = permissions ?? EMPTY_PERMISSIONS
 
     // Check authority (legacy system)
     const roleMatched = useAuthority(userAuthority, authority)

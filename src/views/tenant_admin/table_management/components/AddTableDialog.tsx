@@ -1,13 +1,33 @@
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
-import type { Table, Floor, CreateTableInput } from '@/@types/table'
+import { Plus } from 'lucide-react'
+import { TableStatus } from '@/services/tenant_admin/types'
+import type { TableModel, FloorModel, CreateTableInput } from '@/services/tenant_admin/table_management/types'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from '@/components/shadcn/ui/dialog'
+import { Button } from '@/components/shadcn/ui/button'
+import { Input } from '@/components/shadcn/ui/input'
+import { Label } from '@/components/shadcn/ui/label'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/shadcn/ui/select'
+import AddFloorDialog from './AddFloorDialog'
 
 type AddTableDialogProps = {
     isOpen: boolean
     onClose: () => void
     onSubmit: (input: CreateTableInput) => Promise<void>
-    floors: Floor[]
-    editTable?: Table | null
+    floors: FloorModel[]
+    editTable?: TableModel | null
+    onDelete?: (id: string) => Promise<void>
 }
 
 const AddTableDialog = ({
@@ -16,12 +36,14 @@ const AddTableDialog = ({
     onSubmit,
     floors,
     editTable,
+    onDelete,
 }: AddTableDialogProps) => {
     const [number, setNumber] = useState('')
     const [capacity, setCapacity] = useState('4')
     const [floorId, setFloorId] = useState('')
-    const [status, setStatus] = useState<Table['status']>('available')
+    const [status, setStatus] = useState<TableStatus>('available')
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showAddFloorDialog, setShowAddFloorDialog] = useState(false)
 
     useEffect(() => {
         if (editTable) {
@@ -43,12 +65,10 @@ const AddTableDialog = ({
 
         setIsSubmitting(true)
         try {
-            const floor = floors.find((f) => f.id === floorId)
             await onSubmit({
                 number,
-                name: `Table ${number}`,
+                name: `${number}`,
                 floorId,
-                floorName: floor?.name || '',
                 capacity: parseInt(capacity),
                 status,
                 enabled: true,
@@ -61,118 +81,151 @@ const AddTableDialog = ({
         }
     }
 
-    if (!isOpen) return null
+    const handleDelete = async () => {
+        if (!editTable || !onDelete) return
+        setIsSubmitting(true)
+        try {
+            await onDelete(editTable.id)
+            onClose()
+        } catch (error) {
+            console.error('Error deleting table:', error)
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    const handleFloorCreated = (newFloorId: string) => {
+        setFloorId(newFloorId)
+    }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-card rounded-lg w-full max-w-md">
-                {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b">
-                    <h2 className="text-lg font-semibold text-foreground">
-                        {editTable ? 'Edit Table' : 'Add Table'}
-                    </h2>
-                    <button
-                        onClick={onClose}
-                        className="text-muted-foreground hover:text-foreground"
-                    >
-                        <X size={20} />
-                    </button>
-                </div>
+        <>
+            <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+                <DialogContent className="sm:max-w-lg bg-card">
+                    <DialogHeader>
+                        <DialogTitle>
+                            {editTable ? 'Edit Table' : 'Add Table'}
+                        </DialogTitle>
+                    </DialogHeader>
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="p-4 space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* Table Number */}
-                        <div>
-                            <label className="block text-sm font-medium text-foreground mb-1">
-                                Table Number or Name *
-                            </label>
-                            <input
-                                type="text"
-                                value={number}
-                                onChange={(e) => setNumber(e.target.value)}
-                                placeholder="Table_12"
-                                className="w-full px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                                required
-                            />
+                    <form onSubmit={handleSubmit} className="space-y-6 pt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="flex flex-col gap-4">
+                                <Label htmlFor="table-number" className="text-sm font-semibold">Table Number or Name *</Label>
+                                <Input
+                                    id="table-number"
+                                    value={number}
+                                    onChange={(e) => setNumber(e.target.value)}
+                                    placeholder="Table_12"
+                                    required
+                                />
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                                <Label htmlFor="capacity" className="text-sm font-semibold">Capacity (Seats)</Label>
+                                <Input
+                                    id="capacity"
+                                    type="number"
+                                    min="1"
+                                    value={capacity}
+                                    onChange={(e) => setCapacity(e.target.value)}
+                                    placeholder="4"
+                                    required
+                                />
+                            </div>
                         </div>
 
-                        {/* Capacity */}
-                        <div>
-                            <label className="block text-sm font-medium text-foreground mb-1">
-                                Capacity (Seats)
-                            </label>
-                            <input
-                                type="number"
-                                min="1"
-                                value={capacity}
-                                onChange={(e) => setCapacity(e.target.value)}
-                                placeholder="4"
-                                className="w-full px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                                required
-                            />
-                        </div>
-                    </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="flex flex-col gap-4">
+                                <Label className="text-sm font-semibold">Floor *</Label>
+                                <Select
+                                    value={floorId}
+                                    onValueChange={setFloorId}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a floor" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {floors.map((floor) => (
+                                            <SelectItem key={floor.id} value={floor.id}>
+                                                {floor.name}
+                                            </SelectItem>
+                                        ))}
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            className="w-full justify-start border-t mt-1 rounded-none px-2 h-9"
+                                            onClick={() => setShowAddFloorDialog(true)}
+                                        >
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Add New Floor
+                                        </Button>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        {/* Floor */}
-                        <div>
-                            <label className="block text-sm font-medium text-foreground mb-1">
-                                Floor
-                            </label>
-                            <select
-                                value={floorId}
-                                onChange={(e) => setFloorId(e.target.value)}
-                                className="w-full px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                                required
-                            >
-                                {floors.map((floor) => (
-                                    <option key={floor.id} value={floor.id}>
-                                        {floor.name}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="flex flex-col gap-4">
+                                <Label className="text-sm font-semibold">Status</Label>
+                                <Select
+                                    value={status}
+                                    onValueChange={(value) => setStatus(value as TableStatus)}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="available">Available</SelectItem>
+                                        <SelectItem value="occupied">Occupied</SelectItem>
+                                        <SelectItem value="reserved">Reserved</SelectItem>
+                                        <SelectItem value="inactive">Inactive</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
 
-                        {/* Status */}
-                        <div>
-                            <label className="block text-sm font-medium text-foreground mb-1">
-                                Status
-                            </label>
-                            <select
-                                value={status}
-                                onChange={(e) => setStatus(e.target.value as Table['status'])}
-                                className="w-full px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                            >
-                                <option value="available">Available</option>
-                                <option value="occupied">Occupied</option>
-                                <option value="reserved">Reserved</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
+                        <DialogFooter className="flex sm:justify-between items-center gap-2">
+                            {editTable && onDelete && (
+                                <div className="flex-1 flex justify-start">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                        onClick={handleDelete}
+                                        disabled={isSubmitting}
+                                    >
+                                        Delete Table
+                                    </Button>
+                                </div>
+                            )}
+                            <div className="flex items-center gap-2 ml-auto">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={onClose}
+                                    disabled={isSubmitting}
+                                    className="flex-1 sm:flex-none"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="flex-1 sm:flex-none"
+                                >
+                                    {isSubmitting ? 'Saving...' : 'Save'}
+                                </Button>
+                            </div>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
 
-                    {/* Actions */}
-                    <div className="flex gap-3 pt-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="flex-1 py-2 px-4 border rounded-lg text-foreground hover:bg-muted transition-colors"
-                            disabled={isSubmitting}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="flex-1 py-2 px-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? 'Saving...' : 'Save'}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+            <AddFloorDialog
+                isOpen={showAddFloorDialog}
+                onClose={() => setShowAddFloorDialog(false)}
+                onFloorCreated={handleFloorCreated}
+            />
+        </>
     )
 }
 

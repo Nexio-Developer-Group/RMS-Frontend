@@ -31,6 +31,9 @@ const getPersistStorage = () => {
     return cookiesStorage
 }
 
+// Stable empty array reference to prevent infinite loops
+const EMPTY_ARRAY: string[] = []
+
 const initialState: AuthState = {
     session: {
         signedIn: false,
@@ -39,8 +42,8 @@ const initialState: AuthState = {
         avatar: '',
         name: '',
         email: '',
-        authority: [],
-        permissions: [],
+        authority: EMPTY_ARRAY,
+        permissions: EMPTY_ARRAY,
     },
 }
 

@@ -1,39 +1,48 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { posMockService } from '@/mock/mockServices/posMockService'
-import type { POSData, CurrentOrder } from '@/@types/pos'
-import type { BaseTable } from '@/@types/shared'
+import type { POSData, MenuItem } from '@/services/tenant_admin/pos/types'
+import type { BaseTable } from '@/services/tenant_admin/types'
 
-// Get all POS data
+/**
+ * Hook to fetch all POS-related data
+ * Includes categories, items, tables, and addons
+ */
 export const usePOSData = () => {
     return useQuery<POSData>({
         queryKey: ['posData'],
         queryFn: posMockService.getPOSData,
-        staleTime: 1000 * 60 * 10, // 10 minutes
     })
 }
 
-// Get menu items by category
+/**
+ * Hook to fetch menu items filtered by category
+ * @param category Category name to filter by
+ */
 export const useMenuItems = (category: string) => {
-    return useQuery({
+    return useQuery<MenuItem[]>({
         queryKey: ['menuItems', category],
         queryFn: () => posMockService.getMenuItemsByCategory(category),
-        staleTime: 1000 * 60 * 5, // 5 minutes
     })
 }
 
-// Get available tables
+/**
+ * Hook to fetch available tables for POS
+ */
 export const useTables = () => {
     return useQuery<BaseTable[]>({
         queryKey: ['tables'],
         queryFn: posMockService.getTables,
-        staleTime: 1000 * 60 * 2, // 2 minutes
     })
 }
 
-// Order actions
+/**
+ * Hook for POS order actions
+ * Handles KOT creation, holding orders, saving orders, printing, and payments
+ */
 export const useOrderActions = () => {
     const queryClient = useQueryClient()
 
+    // Mutation to create a Kitchen Order Ticket (KOT)
     const createKOTMutation = useMutation({
         mutationFn: posMockService.createKOT,
         onSuccess: (data) => {
@@ -42,6 +51,7 @@ export const useOrderActions = () => {
         },
     })
 
+    // Mutation to hold an order for later
     const holdOrderMutation = useMutation({
         mutationFn: posMockService.holdOrder,
         onSuccess: (data) => {
@@ -50,6 +60,7 @@ export const useOrderActions = () => {
         },
     })
 
+    // Mutation to save an order (finalize for billing)
     const saveOrderMutation = useMutation({
         mutationFn: posMockService.saveOrder,
         onSuccess: (data) => {
@@ -58,6 +69,7 @@ export const useOrderActions = () => {
         },
     })
 
+    // Mutation to print an order receipt
     const printOrderMutation = useMutation({
         mutationFn: posMockService.printOrder,
         onSuccess: () => {
@@ -65,6 +77,7 @@ export const useOrderActions = () => {
         },
     })
 
+    // Mutation to process payment for an order
     const processPaymentMutation = useMutation({
         mutationFn: posMockService.processPayment,
         onSuccess: (data) => {

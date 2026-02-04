@@ -8,7 +8,7 @@ export type AppConfig = {
 }
 
 const appConfig: AppConfig = {
-    apiPrefix: import.meta.env.X_API_PREFIX || 'https://rms.nexiotech.cloud/api',
+    apiPrefix: import.meta.env.VITE_API_PREFIX || 'https://rms.nexiotech.cloud/api',
     authenticatedEntryPath: '/home',
     unAuthenticatedEntryPath: '/',
     locale: 'en',

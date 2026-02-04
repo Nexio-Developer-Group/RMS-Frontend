@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Plus } from 'lucide-react'
 import {
     useTables,
@@ -7,119 +7,168 @@ import {
     useCreateTable,
     useUpdateTable,
     useToggleTableStatus,
-    useTableOrders,
+    useDeleteFloor,
+    useDeleteTable,
 } from '@/hooks/useTable'
-import {
-    StatsHeader,
-    FloorSection,
-    AddTableDialog,
-    TableDetailsDialog,
-} from './components'
+import { FloorSection, AddTableDialog, TableDetailsDialog, AddFloorDialog } from './components'
 import Loading from '@/components/shared/Loading'
-import type { Table } from '@/@types/table'
+import StatCard from '../components/StatCard'
+import type { TableModel, FloorModel, CreateTableInput } from '@/services/tenant_admin/table_management/types'
+import { Button } from '@/components/shadcn/ui/button'
 
 const TableManagement = () => {
     const [showAddDialog, setShowAddDialog] = useState(false)
+    const [showFloorDialog, setShowFloorDialog] = useState(false)
     const [showDetailsDialog, setShowDetailsDialog] = useState(false)
-    const [selectedTable, setSelectedTable] = useState<Table | null>(null)
+    const [selectedTable, setSelectedTable] = useState<TableModel | null>(null)
+    const [selectedFloor, setSelectedFloor] = useState<FloorModel | null>(null)
 
-    const { data: tables = [], isLoading: loadingTables } = useTables()
-    const { data: floors = [], isLoading: loadingFloors } = useFloors()
+    const {
+        data: tables = [],
+        isLoading: loadingTables,
+        isError: tablesError,
+    } = useTables()
+
+    const {
+        data: floors = [],
+        isLoading: loadingFloors,
+        isError: floorsError,
+    } = useFloors()
+
     const { data: stats } = useTableStats()
-    const { data: orders = [] } = useTableOrders(selectedTable?.id || '')
 
-    const createTableMutation = useCreateTable()
-    const updateTableMutation = useUpdateTable()
-    const toggleStatusMutation = useToggleTableStatus()
+    // Placeholder until orders API is ready
+    const orders: any[] = []
 
-    const handleAddTable = async (input: any) => {
-        if (selectedTable) {
-            await updateTableMutation.mutateAsync({ ...input, id: selectedTable.id })
-        } else {
-            await createTableMutation.mutateAsync(input)
+    const createTable = useCreateTable()
+    const updateTable = useUpdateTable()
+    const toggleStatus = useToggleTableStatus()
+    const deleteFloor = useDeleteFloor()
+    const deleteTable = useDeleteTable()
+
+    const handleAddTable = async (input: CreateTableInput) => {
+        try {
+            if (selectedTable) {
+                await updateTable.mutateAsync({ ...input, id: selectedTable.id })
+            } else {
+                await createTable.mutateAsync(input)
+            }
+            handleCloseDialog()
+        } catch (error) {
+            console.error('Error saving table:', error)
         }
     }
 
-    const handleEditTable = (table: Table) => {
-        setSelectedTable(table)
-        setShowAddDialog(true)
+    const handleDeleteFloor = async (id: string) => {
+        if (!window.confirm('Are you sure you want to delete this floor?')) return
+        try {
+            await deleteFloor.mutateAsync(id)
+        } catch (error) {
+            console.error('Error deleting floor:', error)
+        }
     }
 
-    const handleTableClick = (table: Table) => {
-        setSelectedTable(table)
-        setShowDetailsDialog(true)
+    const handleDeleteTable = async (id: string) => {
+        if (!window.confirm('Are you sure you want to delete this table?')) return
+        try {
+            await deleteTable.mutateAsync(id)
+        } catch (error) {
+            console.error('Error deleting table:', error)
+        }
     }
 
     const handleToggleStatus = async (id: string) => {
-        await toggleStatusMutation.mutateAsync(id)
+        try {
+            await toggleStatus.mutateAsync(id)
+        } catch (error) {
+            console.error('Error toggling table status:', error)
+        }
     }
 
-    const handleCloseDialog = () => {
-        setShowAddDialog(false)
-        setSelectedTable(null)
+    const tablesByFloor = useMemo(() => {
+        if (!floors.length) return []
+        return floors.map((floor) => ({
+            floor,
+            tables: tables.filter((t) => t.floorId === floor.id),
+        }))
+    }, [floors, tables])
+
+    const tableStats = stats ?? {
+        totalFloors: 0,
+        totalTables: 0,
+        availableTables: 0,
+        occupiedTables: 0,
+        inactiveTables: 0,
     }
 
-    const handleCloseDetailsDialog = () => {
-        setShowDetailsDialog(false)
-        setSelectedTable(null)
-    }
+    /* ---------------- LOADING / ERROR STATES ---------------- */
 
     if (loadingTables || loadingFloors) {
         return (
             <div className="flex h-full items-center justify-center min-h-100">
-                <Loading loading={true} />
+                <Loading loading />
             </div>
         )
     }
 
-    const tablesByFloor = floors.map((floor) => ({
-        floor,
-        tables: tables.filter((table) => table.floorId === floor.id),
-    }))
+    if (tablesError || floorsError) {
+        return (
+            <div className="flex h-full items-center justify-center text-destructive">
+                Failed to load table data. Please refresh.
+            </div>
+        )
+    }
+
+    /* ---------------- UI ---------------- */
 
     return (
-        <div className="flex flex-col h-full bg-background">
-            {/* Stats */}
-            {stats && <StatsHeader stats={stats} />}
-
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b bg-card">
-                <h1 className="text-xl font-bold text-foreground">Tables Overview</h1>
-                <button
-                    onClick={() => setShowAddDialog(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                >
-                    <Plus size={20} />
-                    Add Table
-                </button>
+        <div className="space-y-4">
+            {/* Stats Section */}
+            <div className="shrink-0 rounded-md border bg-card">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+                    <StatCard title="Total Tables" value={tableStats.totalTables} className="border-r" />
+                    <StatCard title="Available Tables" value={tableStats.availableTables} className="border-r" />
+                    <StatCard title="Occupied Tables" value={tableStats.occupiedTables} className="border-r" />
+                    <StatCard title="Inactive/Disabled" value={tableStats.inactiveTables} />
+                </div>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto">
-                {tablesByFloor.map(({ floor, tables: floorTables }) => (
-                    <FloorSection
-                        key={floor.id}
-                        floor={floor}
-                        tables={floorTables}
-                        onEditTable={handleEditTable}
-                        onToggleTableStatus={handleToggleStatus}
-                        onTableClick={handleTableClick}
-                    />
-                ))}
+            {/* Header + Content Section */}
+            <div className="rounded-md border bg-card">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b">
+                    <h1 className="text-xl font-bold text-foreground">Floors</h1>
+                    <Button onClick={() => setShowAddDialog(true)} className="flex items-center gap-2">
+                        <Plus size={20} />
+                        Add Table
+                    </Button>
+                </div>
 
-                {tablesByFloor.length === 0 && (
-                    <div className="flex items-center justify-center h-64">
-                        <div className="text-center">
-                            <p className="text-muted-foreground mb-4">No tables found</p>
-                            <button
-                                onClick={() => setShowAddDialog(true)}
-                                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
-                            >
-                                Add Your First Table
-                            </button>
-                        </div>
-                    </div>
-                )}
+                {/* Content */}
+                <div className="p-4">
+                    {tablesByFloor.map(({ floor, tables: floorTables }) => (
+                        <FloorSection
+                            key={floor.id}
+                            floor={floor}
+                            tables={floorTables}
+                            onEditTable={(t) => {
+                                setSelectedTable(t)
+                                setShowAddDialog(true)
+                            }}
+                            onToggleTableStatus={handleToggleStatus}
+                            onTableClick={(t) => {
+                                setSelectedTable(t)
+                                setShowDetailsDialog(true)
+                            }}
+                            onEditFloor={(f) => {
+                                setSelectedFloor(f)
+                                setShowFloorDialog(true)
+                            }}
+                            onDeleteFloor={handleDeleteFloor}
+                            onDeleteTable={handleDeleteTable}
+                        />
+                    ))}
+                </div>
             </div>
 
             {/* Dialogs */}
@@ -127,6 +176,7 @@ const TableManagement = () => {
                 isOpen={showAddDialog}
                 onClose={handleCloseDialog}
                 onSubmit={handleAddTable}
+                onDelete={handleDeleteTable}
                 floors={floors}
                 editTable={selectedTable}
             />
@@ -140,8 +190,31 @@ const TableManagement = () => {
                     onToggleStatus={handleToggleStatus}
                 />
             )}
+
+            <AddFloorDialog
+                isOpen={showFloorDialog}
+                onClose={handleCloseFloorDialog}
+                editFloor={selectedFloor}
+                onDelete={handleDeleteFloor}
+            />
         </div>
     )
+
+    function handleCloseDialog() {
+        setShowAddDialog(false)
+        setSelectedTable(null)
+    }
+
+    function handleCloseFloorDialog() {
+        setShowFloorDialog(false)
+        setSelectedFloor(null)
+    }
+
+    function handleCloseDetailsDialog() {
+        setShowDetailsDialog(false)
+        setSelectedTable(null)
+    }
 }
 
 export default TableManagement
+
