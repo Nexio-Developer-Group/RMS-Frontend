@@ -1,6 +1,16 @@
+import { useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import * as menuService from '@/services/tenant_admin/menu_management'
+import * as menuApi from '@/services/tenant_admin/menu_management'
 import {
+    Menu,
+    Category,
+    ApiMenuItem,
+    ApiCombo,
+    EntityType,
+    MenuItem,
+    Modifier,
+    Combo,
+    MenuCategory,
     CreateMenuRequest,
     UpdateMenuRequest,
     CreateCategoryRequest,
@@ -9,492 +19,357 @@ import {
     UpdateItemRequest,
     CreateComboRequest,
     UpdateComboRequest,
-    EntityType,
-    Category,
-    ApiMenuItem,
-    ApiCombo,
-    MenuItem,
-    Combo,
-    MenuCategory,
-    Modifier,
-    MenuTab
 } from '@/services/tenant_admin/menu_management/types'
 
-// Query Keys
-export const menuQueryKeys = {
+/* ================= QUERY KEYS ================= */
+
+const menuKeys = {
     all: ['menus'] as const,
-    list: (floorId?: string | number) => [...menuQueryKeys.all, 'list', { floorId }] as const,
-    detail: (id: string) => [...menuQueryKeys.all, 'detail', id] as const,
+    list: (floorId?: string | number) => [...menuKeys.all, 'list', { floorId }] as const,
 }
 
-export const categoryQueryKeys = {
+const categoryKeys = {
     all: ['categories'] as const,
-    list: (menuId: string | number, type?: EntityType) => [...categoryQueryKeys.all, 'list', { menuId, type }] as const,
-    withItems: (menuId: string | number, type: EntityType) => [...categoryQueryKeys.all, 'with-items', { menuId, type }] as const,
-    detail: (id: string, menuId: string | number) => [...categoryQueryKeys.all, 'detail', { id, menuId }] as const,
+    withItems: (menuId: string | number, type: EntityType) =>
+        [...categoryKeys.all, 'with-items', { menuId, type }] as const,
 }
 
-export const itemQueryKeys = {
-    all: ['items'] as const,
-    list: (menuId: string | number, categoryId: string | number, type: EntityType) => [...itemQueryKeys.all, 'list', { menuId, categoryId, type }] as const,
-    detail: (id: string, menuId: string | number, categoryId: string | number) => [...itemQueryKeys.all, 'detail', { id, menuId, categoryId }] as const,
-}
-
-export const comboQueryKeys = {
+const comboKeys = {
     all: ['combos'] as const,
-    list: (menuId: string | number) => [...comboQueryKeys.all, 'list', { menuId }] as const,
-    detail: (id: string, menuId: string | number) => [...comboQueryKeys.all, 'detail', { id, menuId }] as const,
+    list: (menuId: string | number) => [...comboKeys.all, 'list', { menuId }] as const,
 }
 
-//============================== Mappers ===================================//
+/* ================= MAPPERS ================= */
 
-const mapApiItemToUi = (item: ApiMenuItem, categoryName: string = ''): MenuItem => ({
-    id: item.item_id,
-    name: item.name,
-    price: typeof item.price === 'string' ? parseFloat(item.price) : item.price,
-    description: item.description,
-    categoryId: item.category_id,
-    categoryName: categoryName || item.category?.name || '',
-    available: item.is_available,
+const mapItem = (i: ApiMenuItem, catName = ''): MenuItem => ({
+    id: i.item_id,
+    name: i.name ?? '',
+    price: Number(i.price ?? 0),
+    description: i.description ?? '',
+    categoryId: i.category_id,
+    categoryName: catName || i.category?.name || '',
+    available: Boolean(i.is_available),
     image: undefined,
-    menuId: item.menu_id,
-} as any as MenuItem);
+    menuId: i.menu_id,
+})
 
-const mapApiModifierToUi = (item: ApiMenuItem, categoryName: string = ''): Modifier => ({
-    id: item.item_id,
-    name: item.name,
-    description: item.description,
-    required: item.is_required,
-    categoryId: item.category_id,
-    categoryName: categoryName || item.category?.name || '',
-    menuId: item.menu_id,
+const mapModifier = (i: ApiMenuItem, catName = ''): Modifier => ({
+    id: i.item_id,
+    name: i.name ?? '',
+    description: i.description ?? '',
+    required: Boolean(i.is_required),
+    categoryId: i.category_id,
+    categoryName: catName || i.category?.name || '',
+    menuId: i.menu_id,
     options: [],
-    parentIds: item.parent_ids,
-} as any as Modifier);
+    parentIds: i.parent_ids,
+})
 
-const mapApiComboToUi = (combo: ApiCombo): Combo => ({
-    id: combo.combo_id,
-    name: combo.name,
-    price: typeof combo.price === 'string' ? parseFloat(combo.price) : combo.price,
-    description: combo.description,
-    available: combo.is_active,
-    items: combo.items?.map(item => ({
-        itemId: item.item_id,
-        itemName: item.name,
-        quantity: 1,
-    })) || [],
-    menuId: combo.menu_id,
-} as any as Combo);
+const mapCombo = (c: ApiCombo): Combo => ({
+    id: c.combo_id,
+    name: c.name ?? '',
+    price: Number(c.price ?? 0),
+    description: c.description ?? '',
+    available: Boolean(c.is_active),
+    items: c.items?.map(i => ({ itemId: i.item_id, itemName: i.name ?? '', quantity: 1 })) || [],
+    menuId: c.menu_id,
+})
 
-const mapApiCategoryToUi = (category: Category): MenuCategory => ({
-    id: category.category_id,
-    name: category.name,
-});
+const mapCategory = (c: Category): MenuCategory => ({
+    id: c.category_id,
+    name: c.name,
+    sortOrder: c.sortOrder,
+})
 
-//============================== Menu Hooks ===================================//
+/* ================= MAIN DOMAIN HOOK ================= */
+
+export const useMenuDomain = (menuId: string | number, floorId?: string | number) => {
+    const qc = useQueryClient()
+
+    /* ---------- DATA QUERIES ---------- */
+
+    const menusQuery = useQuery({
+        queryKey: menuKeys.list(floorId),
+        queryFn: () => menuApi.apiGetMenus(floorId),
+    })
+
+    const itemCatsQuery = useQuery({
+        queryKey: categoryKeys.withItems(menuId, 'ITEM'),
+        queryFn: () => menuApi.apiGetCategoriesWithItems(menuId, 'ITEM'),
+        enabled: !!menuId,
+    })
+
+    const modifierCatsQuery = useQuery({
+        queryKey: categoryKeys.withItems(menuId, 'MODIFIER'),
+        queryFn: () => menuApi.apiGetCategoriesWithItems(menuId, 'MODIFIER'),
+        enabled: !!menuId,
+    })
+
+    const combosQuery = useQuery({
+        queryKey: comboKeys.list(menuId),
+        queryFn: () => menuApi.apiGetCombos(menuId),
+        enabled: !!menuId,
+    })
+
+    /* ---------- DERIVED UI DATA ---------- */
+
+    const items = useMemo(
+        () => itemCatsQuery.data?.flatMap(c => (c.items || []).map(i => mapItem(i, c.name))) || [],
+        [itemCatsQuery.data]
+    )
+
+    const modifiers = useMemo(
+        () => modifierCatsQuery.data?.flatMap(c => (c.items || []).map(i => mapModifier(i, c.name))) || [],
+        [modifierCatsQuery.data]
+    )
+
+    const combos = useMemo(
+        () => combosQuery.data?.map(mapCombo) || [],
+        [combosQuery.data]
+    )
+
+    /* ---------- MUTATIONS ---------- */
+
+    const invalidateMenus = () => qc.invalidateQueries({ queryKey: menuKeys.all })
+    const invalidateCategories = (categoryType?: EntityType) =>
+        qc.invalidateQueries({ queryKey: categoryKeys.all })
+    const invalidateCombos = () =>
+        qc.invalidateQueries({ queryKey: comboKeys.all })
+
+    const createMenu = useMutation({
+        mutationFn: (d: CreateMenuRequest) => menuApi.apiCreateMenu(d),
+        onSuccess: () => invalidateMenus(),
+    }).mutateAsync
+
+    const updateMenu = useMutation({
+        mutationFn: ({ id, data }: { id: string; data: UpdateMenuRequest }) =>
+            menuApi.apiUpdateMenu(id, data),
+        onSuccess: () => invalidateMenus(),
+    }).mutateAsync
+
+    const deleteMenu = useMutation({
+        mutationFn: (id: string) => menuApi.apiDeleteMenu(id),
+        onSuccess: () => invalidateMenus(),
+    }).mutateAsync
+
+    const createCategory = useMutation({
+        mutationFn: (d: CreateCategoryRequest) => menuApi.apiCreateCategory(d),
+        onSuccess: (_, vars) => invalidateCategories(vars.category_type),
+    }).mutateAsync
+
+    const updateCategory = useMutation({
+        mutationFn: ({ id, data }: { id: string; data: UpdateCategoryRequest }) =>
+            menuApi.apiUpdateCategory(id, data),
+        onSuccess: (_, vars) => invalidateCategories(vars.data.category_type!),
+    }).mutateAsync
+
+    const deleteCategory = useMutation({
+        mutationFn: ({ id }: { id: string; category_type: EntityType }) =>
+            menuApi.apiDeleteCategory(id, menuId),
+
+        onSuccess: (_res, variables) => invalidateCategories(variables.category_type),
+    })
+
+    const upsertItem = useMutation({
+        mutationFn: ({ id, data }: { id?: string; data: CreateItemRequest | UpdateItemRequest }) =>
+            id ? menuApi.apiUpdateItem(id, data as UpdateItemRequest) : menuApi.apiCreateItem(data as CreateItemRequest),
+        onSuccess: (_, vars) => invalidateCategories((vars.data as any).type),
+    }).mutateAsync
+
+    const deleteItem = useMutation({
+        mutationFn: ({ id, item_type, categoryId }: { id: string; item_type: EntityType; categoryId: string }) =>
+            menuApi.apiDeleteItem(id, menuId, categoryId),
+        onSuccess: (_, vars) => invalidateCategories(vars.item_type),
+    }).mutateAsync
+
+    const upsertCombo = useMutation({
+        mutationFn: ({ id, data }: { id?: string; data: CreateComboRequest | UpdateComboRequest }) =>
+            id ? menuApi.apiUpdateCombo(id, data as UpdateComboRequest) : menuApi.apiCreateCombo(data as CreateComboRequest),
+        onSuccess: () => invalidateCombos(),
+    }).mutateAsync
+
+    const deleteCombo = useMutation({
+        mutationFn: (id: string) => menuApi.apiDeleteCombo(id, menuId),
+        onSuccess: () => invalidateCombos(),
+    }).mutateAsync
+
+    /* ---------- RETURN ---------- */
+
+    return {
+        menus: menusQuery.data ?? [],
+        categories: itemCatsQuery.data?.map(mapCategory) ?? [],
+        modifierCategories: modifierCatsQuery.data?.map(mapCategory) ?? [],
+        items,
+        modifiers,
+        combos,
+        isLoading:
+            menusQuery.isLoading ||
+            itemCatsQuery.isLoading ||
+            modifierCatsQuery.isLoading ||
+            combosQuery.isLoading,
+
+        actions: {
+            createMenu,
+            updateMenu,
+            deleteMenu,
+            createCategory,
+            updateCategory,
+            deleteCategory: (vars: { categoryId: string; category_type?: EntityType }) =>
+                deleteCategory.mutateAsync({
+                    id: vars.categoryId,
+                    category_type: vars.category_type || 'ITEM'
+                }),
+            upsertItem,
+            deleteItem,
+            toggleItemAvailability: async (id: string) => {
+                const item = items.find(i => i.id === id);
+                if (!item) return;
+                return upsertItem({
+                    id,
+                    data: { type: 'ITEM', is_available: !item.available } as any
+                });
+            },
+            upsertCombo,
+            deleteCombo,
+            toggleComboAvailability: async (id: string) => {
+                const combo = combos.find(c => c.id === id);
+                if (!combo) return;
+                return upsertCombo({
+                    id,
+                    data: { is_active: !combo.available } as any
+                });
+            }
+        },
+    }
+}
+
+/* ================= COMPATIBILITY HOOKS ================= */
 
 export const useMenus = (floorId?: string | number) => {
     return useQuery({
-        queryKey: menuQueryKeys.list(floorId),
-        queryFn: () => menuService.apiGetMenus(floorId),
+        queryKey: menuKeys.list(floorId),
+        queryFn: () => menuApi.apiGetMenus(floorId),
     })
 }
 
-export const useMenuMutations = () => {
-    const queryClient = useQueryClient()
-
-    const createMutation = useMutation({
-        mutationFn: (data: CreateMenuRequest) =>
-            menuService.apiCreateMenu({
-                ...data,
-                floor_id: Number(data.floor_id)
-            }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: menuQueryKeys.all })
-        }
-    })
-
-    const updateMutation = useMutation({
-        mutationFn: ({ menuId, data }: { menuId: string, data: UpdateMenuRequest }) =>
-            menuService.apiUpdateMenu(menuId, {
-                ...data,
-                floor_id: data.floor_id ? Number(data.floor_id) : undefined
-            } as UpdateMenuRequest),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: menuQueryKeys.all })
-        }
-    })
-
-    const deleteMutation = useMutation({
-        mutationFn: ({ menuId, floorId }: { menuId: string, floorId?: string | number }) =>
-            menuService.apiDeleteMenu(menuId, floorId ? Number(floorId) : undefined),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: menuQueryKeys.all })
-        }
-    })
-
-    return {
-        createMenu: createMutation.mutateAsync,
-        updateMenu: updateMutation.mutateAsync,
-        deleteMenu: deleteMutation.mutateAsync,
-        isCreating: createMutation.isPending,
-        isUpdating: updateMutation.isPending,
-        isDeleting: deleteMutation.isPending,
-    }
-}
-
-//============================== Category Hooks ===================================//
-
-export const useCategoriesWithItems = (menuId: string | number, type: EntityType) => {
-    return useQuery({
-        queryKey: categoryQueryKeys.withItems(menuId, type),
-        queryFn: () => menuService.apiGetCategoriesWithItems(menuId, type),
-        enabled: !!menuId,
-    })
-}
-
-export const useCategoryMutations = () => {
-    const queryClient = useQueryClient()
-
-    const createMutation = useMutation({
-        mutationFn: (data: CreateCategoryRequest) =>
-            menuService.apiCreateCategory({
-                ...data,
-                menu_id: Number(data.menu_id)
-            }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: categoryQueryKeys.all })
-        }
-    })
-
-    const updateMutation = useMutation({
-        mutationFn: ({ categoryId, data }: { categoryId: string, data: UpdateCategoryRequest }) =>
-            menuService.apiUpdateCategory(categoryId, {
-                ...data,
-                menu_id: data.menu_id ? Number(data.menu_id) : undefined
-            } as UpdateCategoryRequest),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: categoryQueryKeys.all })
-        }
-    })
-
-    const deleteMutation = useMutation({
-        mutationFn: ({ categoryId, menuId }: { categoryId: string, menuId: string | number }) =>
-            menuService.apiDeleteCategory(categoryId, Number(menuId)),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: categoryQueryKeys.all })
-        }
-    })
-
-    return {
-        createCategory: createMutation.mutateAsync,
-        updateCategory: updateMutation.mutateAsync,
-        deleteCategory: deleteMutation.mutateAsync,
-        isCreating: createMutation.isPending,
-        isUpdating: updateMutation.isPending,
-        isDeleting: deleteMutation.isPending,
-    }
-}
-
-//============================== Item Hooks ===================================//
-
-export const useItemMutations = (defaultMenuId: string | number = 1) => {
-    const queryClient = useQueryClient()
-
-    const createMutation = useMutation({
-        mutationFn: (data: Partial<CreateItemRequest>) => {
-            const request: CreateItemRequest = {
-                ...data,
-                menu_id: Number(data.menu_id || defaultMenuId),
-                category_id: Number(data.category_id || 1),
-                name: data.name || "",
-                price: Number(data.price || 0),
-                description: data.description || "",
-                parent_ids: data.type === 'ITEM' ? null : (data.parent_ids || []),
-                type: data.type || "ITEM",
-                is_required: data.is_required || false,
-                under_offer: data.under_offer || false,
-                is_active: data.is_active ?? true,
-                is_available: data.is_available ?? true,
-            } as CreateItemRequest;
-            return menuService.apiCreateItem(request);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: itemQueryKeys.all })
-            queryClient.invalidateQueries({ queryKey: categoryQueryKeys.all })
-        }
-    })
-
-    const updateMutation = useMutation({
-        mutationFn: ({ itemId, data }: { itemId: string, data: Partial<UpdateItemRequest> }) => {
-            const request: UpdateItemRequest = {
-                ...data,
-                item_id: itemId,
-                menu_id: data.menu_id ? Number(data.menu_id) : Number(defaultMenuId),
-                category_id: data.category_id ? Number(data.category_id) : undefined,
-                price: data.price !== undefined ? Number(data.price) : undefined,
-                parent_ids: data.type === 'ITEM' ? null : data.parent_ids
-            } as UpdateItemRequest;
-            return menuService.apiUpdateItem(itemId, request);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: itemQueryKeys.all })
-            queryClient.invalidateQueries({ queryKey: categoryQueryKeys.all })
-        }
-    })
-
-    const deleteMutation = useMutation({
-        mutationFn: ({ itemId, menuId, categoryId }: { itemId: string, menuId: string | number, categoryId: string | number }) =>
-            menuService.apiDeleteItem(itemId, Number(menuId), Number(categoryId)),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: itemQueryKeys.all })
-            queryClient.invalidateQueries({ queryKey: categoryQueryKeys.all })
-        }
-    })
-
-    return {
-        createItem: createMutation.mutateAsync,
-        updateItem: updateMutation.mutateAsync,
-        deleteItem: deleteMutation.mutateAsync,
-        isCreating: createMutation.isPending,
-        isUpdating: updateMutation.isPending,
-        isDeleting: deleteMutation.isPending,
-    }
-}
-
-//============================== Combo Hooks ===================================//
-
-export const useCombos = (menuId: string | number) => {
-    return useQuery({
-        queryKey: comboQueryKeys.list(menuId),
-        queryFn: () => menuService.apiGetCombos(menuId),
-        enabled: !!menuId,
-    })
-}
-
-export const useComboMutations = (defaultMenuId: string | number = 1) => {
-    const queryClient = useQueryClient()
-
-    const createMutation = useMutation({
-        mutationFn: (data: Partial<CreateComboRequest>) => {
-            const itemIds = (data.list_of_item_ids || []).map((id: string | number) => Number(id)).filter((id: number) => !isNaN(id));
-
-            if (itemIds.length === 0) {
-                throw new Error("list_of_item_ids should not be empty");
-            }
-
-            const request: CreateComboRequest = {
-                ...data,
-                menu_id: Number(data.menu_id || defaultMenuId),
-                name: data.name || "",
-                price: Number(data.price || 0),
-                description: data.description || "",
-                is_active: data.is_active ?? true,
-                start_date: data.start_date || new Date().toISOString(),
-                end_date: data.end_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                list_of_item_ids: itemIds,
-            } as CreateComboRequest;
-            return menuService.apiCreateCombo(request);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: comboQueryKeys.all })
-        }
-    })
-
-    const updateMutation = useMutation({
-        mutationFn: ({ comboId, data }: { comboId: string, data: Partial<UpdateComboRequest> }) => {
-            const request: UpdateComboRequest = {
-                ...data,
-                combo_id: comboId,
-                menu_id: data.menu_id ? Number(data.menu_id) : Number(defaultMenuId),
-                price: data.price !== undefined ? Number(data.price) : undefined,
-                list_of_item_ids: data.list_of_item_ids ? data.list_of_item_ids.map(id => Number(id)).filter(id => !isNaN(id)) : undefined
-            } as UpdateComboRequest;
-
-            if (request.list_of_item_ids && request.list_of_item_ids.length === 0) {
-                throw new Error("list_of_item_ids should not be empty");
-            }
-            return menuService.apiUpdateCombo(comboId, request);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: comboQueryKeys.all })
-        }
-    })
-
-    const deleteMutation = useMutation({
-        mutationFn: ({ comboId, menuId }: { comboId: string, menuId: string | number }) =>
-            menuService.apiDeleteCombo(comboId, Number(menuId)),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: comboQueryKeys.all })
-        }
-    })
-
-    return {
-        createCombo: createMutation.mutateAsync,
-        updateCombo: updateMutation.mutateAsync,
-        deleteCombo: deleteMutation.mutateAsync,
-        isCreating: createMutation.isPending,
-        isUpdating: updateMutation.isPending,
-        isDeleting: deleteMutation.isPending,
-    }
-}
-
-//============================== Aggregated Hooks (for UI compatibility) ===================================//
-
-export const useMenuData = (menuId: string | number = "1") => {
-    const itemCategoriesQuery = useCategoriesWithItems(menuId, 'ITEM');
-    const modifierCategoriesQuery = useCategoriesWithItems(menuId, 'MODIFIER');
-    const combosQuery = useCombos(menuId);
-
-    const isLoading = itemCategoriesQuery.isLoading || modifierCategoriesQuery.isLoading || combosQuery.isLoading;
-    const isError = itemCategoriesQuery.isError || modifierCategoriesQuery.isError || combosQuery.isError;
-
-    const allItems = itemCategoriesQuery.data?.flatMap(cat =>
-        (cat.items || []).map(item => mapApiItemToUi(item, cat.name))
-    ) || [];
-
-    const allModifiers = modifierCategoriesQuery.data?.flatMap(cat =>
-        (cat.items || []).map(mod => mapApiModifierToUi(mod, cat.name))
-    ) || [];
-
-    const allCombos = combosQuery.data?.map(combo => mapApiComboToUi(combo)) || [];
-
+export const useMenuData = (menuId: string | number, floorId?: string | number) => {
+    const domain = useMenuDomain(menuId, floorId);
     return {
         data: {
-            categories: itemCategoriesQuery.data?.map(mapApiCategoryToUi) || [],
-            modifierCategories: modifierCategoriesQuery.data?.map(mapApiCategoryToUi) || [],
-            items: allItems,
-            modifiers: allModifiers,
-            combos: allCombos,
+            items: domain.items,
+            modifiers: domain.modifiers,
+            combos: domain.combos,
+            categories: domain.categories,
+            modifierCategories: domain.modifierCategories
         },
-        isLoading,
-        isError,
-        refetch: () => {
-            itemCategoriesQuery.refetch();
-            modifierCategoriesQuery.refetch();
-            combosQuery.refetch();
-        }
+        isLoading: domain.isLoading
     };
-}
+};
 
-export const useMenuItemActions = () => {
-    const { createItem, updateItem, deleteItem } = useItemMutations();
-
+export const useMenuItemActions = (menuId: string | number = "1", floorId?: string | number) => {
+    const { actions } = useMenuDomain(menuId, floorId);
     return {
-        addItem: async (data: any) => {
-            return createItem({
+        addItem: (data: any) => actions.upsertItem({
+            data: {
+                menu_id: Number(menuId),
+                category_id: Number(data.categoryId),
                 name: data.name,
-                price: data.price,
-                category_id: data.categoryId,
-                description: data.description || '',
-                type: 'ITEM',
-                is_available: data.available,
-                is_active: data.available,
-                parent_ids: null
-            });
-        },
-        updateItem: async ({ id, updates }: { id: string, updates: any }) => {
-            return updateItem({
-                itemId: id,
+                price: Number(data.price),
+                description: data.description,
+                is_available: data.available ?? true,
+                is_active: true,
+                type: 'ITEM'
+            } as any
+        }),
+        updateItem: ({ id, updates }: { id: string; updates: any }) =>
+            actions.upsertItem({
+                id,
                 data: {
+                    item_id: id,
+                    category_id: updates.categoryId ? Number(updates.categoryId) : undefined,
                     name: updates.name,
-                    price: updates.price,
-                    category_id: updates.categoryId,
+                    price: updates.price ? Number(updates.price) : undefined,
                     description: updates.description,
                     is_available: updates.available,
-                    is_active: updates.available,
                     type: 'ITEM'
-                }
-            });
-        },
-        deleteItem: async (id: string, menuId: string | number, categoryId: string | number) => {
-            return deleteItem({ itemId: id, menuId, categoryId });
-        },
-        toggleItemAvailability: async (id: string) => {
-            console.log('Toggle availability for item:', id);
-        }
-    }
-}
+                } as any
+            }),
+        deleteItem: (id: string, _menuId: string, categoryId: string) =>
+            actions.deleteItem({ id, item_type: 'ITEM', categoryId }),
+        toggleItemAvailability: actions.toggleItemAvailability,
+    };
+};
 
-export const useModifierActions = () => {
-    const { createItem, updateItem, deleteItem } = useItemMutations();
-
+export const useModifierActions = (menuId: string | number = "1", floorId?: string | number) => {
+    const { actions } = useMenuDomain(menuId, floorId);
     return {
-        addModifier: async (data: any) => {
-            return createItem({
+        addModifier: (data: any) => actions.upsertItem({
+            data: {
+                menu_id: Number(menuId),
+                category_id: Number(data.categoryId),
                 name: data.name,
-                price: 0,
-                category_id: data.categoryId || 1,
                 description: data.description,
-                type: 'MODIFIER',
                 is_required: data.required,
-                parent_ids: data.itemIds || []
-            });
-        },
-        updateModifier: async ({ id, updates }: { id: string, updates: any }) => {
-            return updateItem({
-                itemId: id,
+                is_available: true,
+                is_active: true,
+                type: 'MODIFIER',
+                parent_ids: data.parentIds
+            } as any
+        }),
+        updateModifier: ({ id, updates }: { id: string; updates: any }) =>
+            actions.upsertItem({
+                id,
                 data: {
+                    item_id: id,
                     name: updates.name,
-                    price: 0,
-                    category_id: updates.categoryId || 1,
                     description: updates.description,
                     is_required: updates.required,
-                    parent_ids: updates.itemIds || [],
+                    parent_ids: updates.parentIds,
                     type: 'MODIFIER'
-                }
-            });
-        },
-        deleteModifier: async (id: string, menuId: string | number, categoryId: string | number) => {
-            return deleteItem({ itemId: id, menuId, categoryId });
-        }
-    }
-}
+                } as any
+            }),
+        deleteModifier: (id: string, _menuId: string, categoryId: string) =>
+            actions.deleteItem({ id, item_type: 'MODIFIER', categoryId }),
+    };
+};
 
-export const useComboActions = () => {
-    const { createCombo, updateCombo, deleteCombo } = useComboMutations();
-
+export const useComboActions = (menuId: string | number = "1", floorId?: string | number) => {
+    const { actions } = useMenuDomain(menuId, floorId);
     return {
-        addCombo: async (data: any) => {
-            return createCombo({
+        addCombo: (data: any) => actions.upsertCombo({
+            data: {
+                menu_id: Number(menuId),
                 name: data.name,
-                price: data.price,
+                price: Number(data.price),
                 description: data.description,
-                list_of_item_ids: data.items.map((it: any) => Number(typeof it === 'string' ? it : it.itemId)),
-                is_active: true
-            });
-        },
-        updateCombo: async ({ id, updates }: { id: string; updates: any }) => {
-            return updateCombo({
-                comboId: id,
+                is_active: true,
+                start_date: new Date().toISOString(),
+                end_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+                list_of_item_ids: data.items?.map((i: any) => Number(i.itemId)) || []
+            } as any
+        }),
+        updateCombo: ({ id, updates }: { id: string; updates: any }) =>
+            actions.upsertCombo({
+                id,
                 data: {
+                    combo_id: id,
                     name: updates.name,
-                    price: updates.price,
+                    price: updates.price ? Number(updates.price) : undefined,
                     description: updates.description,
-                    list_of_item_ids: updates.items.map((it: any) => Number(typeof it === 'string' ? it : it.itemId)),
-                    is_active: true
-                }
-            });
-        },
-        deleteCombo: async (id: string, menuId: string | number) => {
-            return deleteCombo({ comboId: id, menuId });
-        },
-        toggleComboAvailability: async (id: string) => {
-            console.log('Toggle availability for combo:', id);
-        }
-    }
-}
+                    list_of_item_ids: updates.items?.map((i: any) => Number(i.itemId))
+                } as any
+            }),
+        deleteCombo: (id: string) => actions.deleteCombo(id),
+        toggleComboAvailability: actions.toggleComboAvailability,
+    };
+};
 
-export const useCategoryActions = () => {
-    const { createCategory, updateCategory, deleteCategory } = useCategoryMutations();
-
+export const useCategoryActions = (menuId: string | number = "1", floorId?: string | number) => {
+    const { actions } = useMenuDomain(menuId, floorId);
     return {
-        addCategory: createCategory,
-        updateCategory: async ({ id, updates }: { id: string, updates: any }) => {
-            return updateCategory({ categoryId: id, data: updates });
-        },
-        deleteCategory: async ({ categoryId, menuId }: { categoryId: string, menuId: string | number }) => {
-            return deleteCategory({ categoryId, menuId });
-        }
-    }
-}
+        createCategory: actions.createCategory,
+        updateCategory: actions.updateCategory,
+        deleteCategory: (vars: { categoryId: string; menuId?: string }) =>
+            actions.deleteCategory({ categoryId: vars.categoryId, category_type: 'ITEM' }),
+    };
+};

@@ -8,6 +8,7 @@ type AddModifierDialogProps = {
     isOpen: boolean
     onClose: () => void
     onSubmit: (modifier: Omit<Modifier, 'id'>) => Promise<void>
+    menuId: string
     editModifier?: Modifier | null
 }
 
@@ -15,6 +16,7 @@ const AddModifierDialog = ({
     isOpen,
     onClose,
     onSubmit,
+    menuId,
     editModifier,
 }: AddModifierDialogProps) => {
     const [name, setName] = useState('')
@@ -82,6 +84,7 @@ const AddModifierDialog = ({
                 name,
                 description: description || undefined,
                 required,
+                menuId: menuId,
                 options: options.map((opt, index) => ({
                     id: `opt - ${Date.now()} -${index} `,
                     ...opt,

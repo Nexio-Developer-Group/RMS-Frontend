@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
-import type { MenuItem, MenuCategory } from '@/@types/menu'
+import type { MenuItem, MenuCategory } from '@/services/tenant_admin/menu_management/types'
 
 type AddItemDialogProps = {
     isOpen: boolean
     onClose: () => void
     onSubmit: (item: Omit<MenuItem, 'id'>) => Promise<void>
     categories: MenuCategory[]
+    menuId: string
     editItem?: MenuItem | null
 }
 
@@ -15,6 +16,7 @@ const AddItemDialog = ({
     onClose,
     onSubmit,
     categories,
+    menuId,
     editItem,
 }: AddItemDialogProps) => {
     const [name, setName] = useState('')
@@ -50,6 +52,7 @@ const AddItemDialog = ({
                 categoryId,
                 categoryName,
                 available: editItem?.available ?? true,
+                menuId: menuId,
                 image: image || undefined,
             })
             onClose()

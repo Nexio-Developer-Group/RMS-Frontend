@@ -19,7 +19,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/shadcn/ui/select'
-import AddFloorDialog from './AddFloorDialog'
 
 type AddTableDialogProps = {
     isOpen: boolean
@@ -43,7 +42,6 @@ const AddTableDialog = ({
     const [floorId, setFloorId] = useState('')
     const [status, setStatus] = useState<TableStatus>('available')
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [showAddFloorDialog, setShowAddFloorDialog] = useState(false)
 
     useEffect(() => {
         if (editTable) {
@@ -94,138 +92,118 @@ const AddTableDialog = ({
         }
     }
 
-    const handleFloorCreated = (newFloorId: string) => {
-        setFloorId(newFloorId)
-    }
 
     return (
-        <>
-            <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-                <DialogContent className="sm:max-w-lg bg-card">
-                    <DialogHeader>
-                        <DialogTitle>
-                            {editTable ? 'Edit Table' : 'Add Table'}
-                        </DialogTitle>
-                    </DialogHeader>
+        <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+            <DialogContent className="sm:max-w-lg bg-card">
+                <DialogHeader>
+                    <DialogTitle>
+                        {editTable ? 'Edit Table' : 'Add Table'}
+                    </DialogTitle>
+                </DialogHeader>
 
-                    <form onSubmit={handleSubmit} className="space-y-6 pt-2">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div className="flex flex-col gap-4">
-                                <Label htmlFor="table-number" className="text-sm font-semibold">Table Number or Name *</Label>
-                                <Input
-                                    id="table-number"
-                                    value={number}
-                                    onChange={(e) => setNumber(e.target.value)}
-                                    placeholder="Table_12"
-                                    required
-                                />
-                            </div>
-
-                            <div className="flex flex-col gap-4">
-                                <Label htmlFor="capacity" className="text-sm font-semibold">Capacity (Seats)</Label>
-                                <Input
-                                    id="capacity"
-                                    type="number"
-                                    min="1"
-                                    value={capacity}
-                                    onChange={(e) => setCapacity(e.target.value)}
-                                    placeholder="4"
-                                    required
-                                />
-                            </div>
+                <form onSubmit={handleSubmit} className="space-y-6 pt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="flex flex-col gap-4">
+                            <Label htmlFor="table-number" className="text-sm font-semibold">Table Number or Name *</Label>
+                            <Input
+                                id="table-number"
+                                value={number}
+                                onChange={(e) => setNumber(e.target.value)}
+                                placeholder="Table_12"
+                                required
+                            />
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div className="flex flex-col gap-4">
-                                <Label className="text-sm font-semibold">Floor *</Label>
-                                <Select
-                                    value={floorId}
-                                    onValueChange={setFloorId}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a floor" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {floors.map((floor) => (
-                                            <SelectItem key={floor.id} value={floor.id}>
-                                                {floor.name}
-                                            </SelectItem>
-                                        ))}
-                                        <Button
-                                            type="button"
-                                            variant="ghost"
-                                            className="w-full justify-start border-t mt-1 rounded-none px-2 h-9"
-                                            onClick={() => setShowAddFloorDialog(true)}
-                                        >
-                                            <Plus className="mr-2 h-4 w-4" />
-                                            Add New Floor
-                                        </Button>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                        <div className="flex flex-col gap-4">
+                            <Label htmlFor="capacity" className="text-sm font-semibold">Capacity (Seats)</Label>
+                            <Input
+                                id="capacity"
+                                type="number"
+                                min="1"
+                                value={capacity}
+                                onChange={(e) => setCapacity(e.target.value)}
+                                placeholder="4"
+                                required
+                            />
+                        </div>
+                    </div>
 
-                            <div className="flex flex-col gap-4">
-                                <Label className="text-sm font-semibold">Status</Label>
-                                <Select
-                                    value={status}
-                                    onValueChange={(value) => setStatus(value as TableStatus)}
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="available">Available</SelectItem>
-                                        <SelectItem value="occupied">Occupied</SelectItem>
-                                        <SelectItem value="reserved">Reserved</SelectItem>
-                                        <SelectItem value="inactive">Inactive</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="flex flex-col gap-4">
+                            <Label className="text-sm font-semibold">Floor *</Label>
+                            <Select
+                                value={floorId}
+                                onValueChange={setFloorId}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a floor" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {floors.map((floor) => (
+                                        <SelectItem key={floor.id} value={floor.id}>
+                                            {floor.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
 
-                        <DialogFooter className="flex sm:justify-between items-center gap-2">
-                            {editTable && onDelete && (
-                                <div className="flex-1 flex justify-start">
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                                        onClick={handleDelete}
-                                        disabled={isSubmitting}
-                                    >
-                                        Delete Table
-                                    </Button>
-                                </div>
-                            )}
-                            <div className="flex items-center gap-2 ml-auto">
+                        <div className="flex flex-col gap-4">
+                            <Label className="text-sm font-semibold">Status</Label>
+                            <Select
+                                value={status}
+                                onValueChange={(value) => setStatus(value as TableStatus)}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="available">Available</SelectItem>
+                                    <SelectItem value="occupied">Occupied</SelectItem>
+                                    <SelectItem value="reserved">Reserved</SelectItem>
+                                    <SelectItem value="inactive">Inactive</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    <DialogFooter className="flex sm:justify-between items-center gap-2">
+                        {editTable && onDelete && (
+                            <div className="flex-1 flex justify-start">
                                 <Button
                                     type="button"
-                                    variant="outline"
-                                    onClick={onClose}
+                                    variant="ghost"
+                                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                                    onClick={handleDelete}
                                     disabled={isSubmitting}
-                                    className="flex-1 sm:flex-none"
                                 >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="flex-1 sm:flex-none"
-                                >
-                                    {isSubmitting ? 'Saving...' : 'Save'}
+                                    Delete Table
                                 </Button>
                             </div>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
-
-            <AddFloorDialog
-                isOpen={showAddFloorDialog}
-                onClose={() => setShowAddFloorDialog(false)}
-                onFloorCreated={handleFloorCreated}
-            />
-        </>
+                        )}
+                        <div className="flex items-center gap-2 ml-auto">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={onClose}
+                                disabled={isSubmitting}
+                                className="flex-1 sm:flex-none"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="flex-1 sm:flex-none"
+                            >
+                                {isSubmitting ? 'Saving...' : 'Save'}
+                            </Button>
+                        </div>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     )
 }
 
