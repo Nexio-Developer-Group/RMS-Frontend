@@ -1,128 +1,6 @@
 
 import type { Order } from '@/@types/orders'
-import type { MenuItem } from '@/@types/menu'
 import type { Customer } from '@/@types/customers'
-import type { Table } from '@/@types/table'
-
-// ============================================================================
-// DASHBOARD STATS
-// ============================================================================
-
-
-// ============================================================================
-// MENU ITEMS
-// ============================================================================
-export const MOCK_MENU_ITEMS: MenuItem[] = [
-    {
-        id: '1',
-        name: 'Classic Burger',
-        price: 30,
-        categoryId: 'burger',
-        categoryName: 'Burger',
-        available: true,
-        image: '/img/menu/burger.jpg',
-    },
-    {
-        id: '2',
-        name: 'Margherita Pizza',
-        price: 22,
-        categoryId: 'pizza',
-        categoryName: 'Pizza',
-        available: true,
-        image: '/img/menu/pizza.jpg',
-    },
-    {
-        id: '3',
-        name: 'Butter Chicken',
-        price: 45,
-        categoryId: 'main',
-        categoryName: 'Main Course',
-        available: true,
-        image: '/img/menu/main.jpg',
-    },
-    {
-        id: '4',
-        name: 'Naan Bread',
-        price: 8,
-        categoryId: 'bread',
-        categoryName: 'Breads',
-        available: true,
-    },
-    {
-        id: '5',
-        name: 'Biryani',
-        price: 50,
-        categoryId: 'main',
-        categoryName: 'Main Course',
-        available: true,
-        image: '/img/menu/biryani.jpg',
-    },
-    {
-        id: '6',
-        name: 'Paneer Tikka',
-        price: 35,
-        categoryId: 'starter',
-        categoryName: 'Starter',
-        available: true,
-    },
-    {
-        id: '7',
-        name: 'Garlic Naan',
-        price: 10,
-        categoryId: 'bread',
-        categoryName: 'Breads',
-        available: true,
-    },
-    {
-        id: '8',
-        name: 'Veg Burger',
-        price: 25,
-        categoryId: 'burger',
-        categoryName: 'Burger',
-        available: true,
-        image: '/img/menu/burger.jpg',
-    },
-    {
-        id: '9',
-        name: 'French Fries',
-        price: 15,
-        categoryId: 'sides',
-        categoryName: 'Sides',
-        available: true,
-    },
-    {
-        id: '10',
-        name: 'Paneer Masala',
-        price: 40,
-        categoryId: 'main',
-        categoryName: 'Main Course',
-        available: true,
-    },
-    {
-        id: '11',
-        name: 'Roti',
-        price: 5,
-        categoryId: 'bread',
-        categoryName: 'Breads',
-        available: true,
-    },
-    {
-        id: '12',
-        name: 'Chicken Wrap',
-        price: 35,
-        categoryId: 'wrap',
-        categoryName: 'Wraps',
-        available: true,
-    },
-    {
-        id: '13',
-        name: 'Coke',
-        price: 10,
-        categoryId: 'beverage',
-        categoryName: 'Beverages',
-        available: true,
-    },
-]
 
 // ============================================================================
 // CUSTOMERS
@@ -191,56 +69,6 @@ export const MOCK_CUSTOMERS: Customer[] = [
     },
 ]
 
-// ============================================================================
-// TABLES
-// ============================================================================
-export const MOCK_TABLES: Table[] = [
-    {
-        id: 'table-1',
-        number: '12',
-        name: 'Table 12',
-        floorId: 'floor-1',
-        floorName: 'Main Floor',
-        capacity: 4,
-        status: 'occupied',
-        enabled: true,
-        totalRevenue: 15000,
-        totalOrders: 45,
-        qrCode: 'https://forkfly.app/menu?table=12',
-        createdAt: '2025-01-01T00:00:00Z',
-        updatedAt: '2026-01-18T00:00:00Z',
-    },
-    {
-        id: 'table-2',
-        number: '08',
-        name: 'Table 08',
-        floorId: 'floor-1',
-        floorName: 'Main Floor',
-        capacity: 4,
-        status: 'occupied',
-        enabled: true,
-        totalRevenue: 12000,
-        totalOrders: 38,
-        qrCode: 'https://forkfly.app/menu?table=08',
-        createdAt: '2025-01-01T00:00:00Z',
-        updatedAt: '2026-01-18T00:00:00Z',
-    },
-    {
-        id: 'table-3',
-        number: '14',
-        name: 'Table 14',
-        floorId: 'floor-1',
-        floorName: 'Main Floor',
-        capacity: 4,
-        status: 'occupied',
-        enabled: true,
-        totalRevenue: 18000,
-        totalOrders: 52,
-        qrCode: 'https://forkfly.app/menu?table=14',
-        createdAt: '2025-01-01T00:00:00Z',
-        updatedAt: '2026-01-18T00:00:00Z',
-    },
-]
 
 // ============================================================================
 // ORDERS
@@ -590,11 +418,6 @@ export const getDineInOrders = () =>
 export const getOrderById = (id: number) =>
     MOCK_ORDERS.find(order => order.id === id)
 
-export const getMenuItemById = (id: string) =>
-    MOCK_MENU_ITEMS.find(item => item.id === id)
 
 export const getCustomerById = (id: string) =>
     MOCK_CUSTOMERS.find(customer => customer.id === id)
-
-export const getTableById = (id: string) =>
-    MOCK_TABLES.find(table => table.id === id)

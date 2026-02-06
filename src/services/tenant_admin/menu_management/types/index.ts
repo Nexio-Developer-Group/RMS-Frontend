@@ -43,6 +43,7 @@ export interface Category extends BaseEntity {
   name: string;
   description: string;
   is_active: boolean;
+  sortOrder?: number;
   menu?: Menu; // Included in GET all and GET by ID
   items?: MenuItemAPI[]; // Included in 'get All Categories with items'
 }
@@ -176,6 +177,7 @@ export interface ComboItem {
   itemId: string;
   itemName: string;
   quantity: number;
+  size?: string;
 }
 
 export interface Combo {
@@ -187,11 +189,18 @@ export interface Combo {
   available: boolean;
   items: ComboItem[];
   menuId: string;
+  schedule?: {
+    specificMonth?: string;
+    specificDay?: string;
+    fromTime?: string;
+    toTime?: string;
+  };
 }
 
 export interface MenuCategory {
   id: string;
   name: string;
+  sortOrder?: number;
 }
 
 export interface Modifier extends SharedModifier {

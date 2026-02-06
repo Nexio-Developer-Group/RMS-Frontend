@@ -15,6 +15,12 @@ import Loading from '@/components/shared/Loading'
 import StatCard from '../components/StatCard'
 import type { TableModel, FloorModel, CreateTableInput } from '@/services/tenant_admin/table_management/types'
 import { Button } from '@/components/shadcn/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/shadcn/ui/dropdown-menu'
 
 const TableManagement = () => {
     const [showAddDialog, setShowAddDialog] = useState(false)
@@ -138,10 +144,22 @@ const TableManagement = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b">
                     <h1 className="text-xl font-bold text-foreground">Floors</h1>
-                    <Button onClick={() => setShowAddDialog(true)} className="flex items-center gap-2">
-                        <Plus size={20} />
-                        Add Table
-                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className="flex items-center gap-2">
+                                <Plus size={20} />
+                                Add
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => setShowAddDialog(true)}>
+                                Add Table
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setShowFloorDialog(true)}>
+                                Add Floor
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
 
                 {/* Content */}

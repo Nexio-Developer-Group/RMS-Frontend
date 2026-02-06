@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { X, ChevronDown, ChevronUp } from 'lucide-react'
 import { Checkbox } from '@/components/shadcn/ui/checkbox'
-import type { Combo, MenuItem } from '@/@types/menu'
+import type { Combo, MenuItem } from '@/services/tenant_admin/menu_management/types'
 
 type AddComboDialogProps = {
     isOpen: boolean
     onClose: () => void
     onSubmit: (combo: Omit<Combo, 'id'>) => Promise<void>
     menuItems: MenuItem[]
+    menuId: string
     editCombo?: Combo | null
 }
 
@@ -16,6 +17,7 @@ const AddComboDialog = ({
     onClose,
     onSubmit,
     menuItems,
+    menuId,
     editCombo,
 }: AddComboDialogProps) => {
     const [name, setName] = useState('')
@@ -79,6 +81,7 @@ const AddComboDialog = ({
                 description: 'Margherita Pizza',
                 items: comboItems,
                 available: editCombo?.available ?? true,
+                menuId: menuId,
                 schedule: useTimeSchedule
                     ? {
                         specificMonth: specificMonth !== 'All' ? specificMonth : undefined,

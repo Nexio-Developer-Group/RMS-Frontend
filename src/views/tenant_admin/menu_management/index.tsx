@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ListFilter, MoreVertical, Plus } from 'lucide-react'
-import { useMenuData, useMenuItemActions, useModifierActions, useComboActions, useCategoryActions } from '@/hooks/useMenu'
+import { useParams } from 'react-router-dom'
+import { useMenuData, useMenuItemActions, useModifierActions, useComboActions, useCategoryActions, useMenus } from '@/hooks/useMenu'
 import Loading from '@/components/shared/Loading'
 import TabsHeader from '../components/TabHeader'
 import ItemCard from './components/ItemCard'
@@ -23,7 +24,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/shadcn/ui/dropdown-menu'
-import type { MenuTab, MenuItem, Modifier, Combo } from '@/services/tenant_admin/menu_management/types'
+import type { MenuTab, MenuItem, Modifier, Combo, Menu } from '@/services/tenant_admin/menu_management/types'
 
 const MenuManagement = () => {
     const [menuTab, setMenuTab] = useState<MenuTab>('items')
@@ -34,12 +35,17 @@ const MenuManagement = () => {
     const [editingModifier, setEditingModifier] = useState<Modifier | null>(null)
     const [editingCombo, setEditingCombo] = useState<Combo | null>(null)
 
-    const [menuId] = useState("1") // Default menu ID
-    const { data: menuData, isLoading } = useMenuData(menuId)
-    const itemActions = useMenuItemActions()
-    const modifierActions = useModifierActions()
-    const comboActions = useComboActions()
-    const categoryActions = useCategoryActions()
+    // const { floorId } = useParams<{ floorId: string }>()
+    // const { data: menus } = useMenus(floorId || '')
+    // const menuId = menus?.find((menu: Menu) => menu.is_active)?.menu_id || ''
+    const menuId = "1"
+    const floorId = "1"
+
+    const { data: menuData, isLoading } = useMenuData(menuId, floorId)
+    const itemActions = useMenuItemActions(menuId, floorId)
+    const modifierActions = useModifierActions(menuId, floorId)
+    const comboActions = useComboActions(menuId, floorId)
+    const categoryActions = useCategoryActions(menuId, floorId)
 
     const MENU_TABS = [
         { label: 'Items', value: 'items' },
@@ -48,20 +54,20 @@ const MenuManagement = () => {
     ] satisfies { label: string; value: MenuTab }[]
 
     // Filter data based on search
-    const filteredItems = menuData?.items.filter((item) =>
+    const filteredItems = menuData?.items.filter((item: MenuItem) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
     ) || []
 
-    const filteredModifiers = menuData?.modifiers.filter((modifier) =>
+    const filteredModifiers = menuData?.modifiers.filter((modifier: Modifier) =>
         modifier.name.toLowerCase().includes(searchQuery.toLowerCase())
     ) || []
 
-    const filteredCombos = menuData?.combos.filter((combo) =>
+    const filteredCombos = menuData?.combos.filter((combo: Combo) =>
         combo.name.toLowerCase().includes(searchQuery.toLowerCase())
     ) || []
 
     // Group items by category for display
-    const itemsByCategory = filteredItems.reduce((acc, item) => {
+    const itemsByCategory = filteredItems.reduce((acc: Record<string, MenuItem[]>, item: MenuItem) => {
         if (!acc[item.categoryName]) {
             acc[item.categoryName] = []
         }
@@ -194,7 +200,7 @@ const MenuManagement = () => {
             <div className="flex-1 overflow-y-auto bg-card p-4 md:p-6">
                 {menuTab === 'items' && (
                     <div className="space-y-8">
-                        {Object.entries(itemsByCategory).map(([categoryName, items]) => (
+                        {Object.entries(itemsByCategory).map(([categoryName, items]: [string, MenuItem[]]) => (
                             <div key={categoryName}>
                                 <div className="flex items-center justify-between mb-4">
                                     <h2 className="text-xl font-semibold text-foreground">
@@ -216,7 +222,7 @@ const MenuManagement = () => {
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 className="text-red-600"
-                                                onClick={() => handleDeleteCategory(items[0]?.categoryId)}
+                                                onClick={() => handleDeleteCategory(items[0]?.categoryId || '')}
                                             >
                                                 Delete
                                             </DropdownMenuItem>
@@ -224,7 +230,7 @@ const MenuManagement = () => {
                                     </DropdownMenu>
                                 </div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                                    {items.map((item) => (
+                                    {items.map((item: MenuItem) => (
                                         <ItemCard
                                             key={item.id}
                                             item={item}
@@ -245,7 +251,7 @@ const MenuManagement = () => {
 
                 {menuTab === 'modifiers' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                        {filteredModifiers.map((modifier) => (
+                        {filteredModifiers.map((modifier: Modifier) => (
                             <ModifierCard
                                 key={modifier.id}
                                 modifier={modifier}
@@ -263,7 +269,7 @@ const MenuManagement = () => {
 
                 {menuTab === 'combos' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-col-3 2xl:grid-cols-4 gap-4">
-                        {filteredCombos.map((combo) => (
+                        {filteredCombos.map((combo: Combo) => (
                             <ComboCard
                                 key={combo.id}
                                 combo={combo}
@@ -287,6 +293,7 @@ const MenuManagement = () => {
                     onClose={handleCloseDialog}
                     onSubmit={handleItemSubmit}
                     categories={menuData?.categories || []}
+                    menuId={menuId}
                     editItem={editingItem}
                 />
             )}
@@ -296,6 +303,7 @@ const MenuManagement = () => {
                     isOpen={isAddDialogOpen}
                     onClose={handleCloseDialog}
                     onSubmit={handleModifierSubmit}
+                    menuId={menuId}
                     editModifier={editingModifier}
                 />
             )}
@@ -306,6 +314,7 @@ const MenuManagement = () => {
                     onClose={handleCloseDialog}
                     onSubmit={handleComboSubmit}
                     menuItems={menuData?.items || []}
+                    menuId={menuId}
                     editCombo={editingCombo}
                 />
             )}
