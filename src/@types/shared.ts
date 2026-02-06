@@ -199,6 +199,9 @@ export interface Modifier {
     id: string
     name: string
     description?: string
+    categoryName?: string
+    menuId?: string
+    categoryId?: string
     required: boolean
     options: ModifierOption[]
 }

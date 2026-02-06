@@ -1,5 +1,5 @@
 import { Pencil, Trash2 } from 'lucide-react'
-import type { Modifier } from '@/@types/menu'
+import type { Modifier, ModifierOption } from '@/services/tenant_admin/menu_management/types'
 
 type ModifierCardProps = {
     modifier: Modifier
@@ -20,7 +20,7 @@ const ModifierCard = ({ modifier, onEdit, onDelete }: ModifierCardProps) => {
                         <h3 className="text-lg font-semibold text-blue-600 leading-tight">
                             {modifier.name}
                         </h3>
-                        <p className="text-sm text-teal-600 mt-1">Size</p>
+                        <p className="text-sm text-teal-600 mt-1">{modifier.categoryName || 'Modifier'}</p>
                     </div>
 
                     <span className="text-xs font-semibold px-3 py-1 rounded-full dark:text-foreground border border-gray-300 dark:border-border">
@@ -31,7 +31,7 @@ const ModifierCard = ({ modifier, onEdit, onDelete }: ModifierCardProps) => {
 
             {/* Options List */}
             <div className='border-b'>
-                {modifier.options.slice(0, maxVisibleOptions).map((option) => (
+                {modifier.options.slice(0, maxVisibleOptions).map((option: ModifierOption) => (
                     <div
                         key={option.id}
                         className="flex items-center justify-between px-5 py-2 text-base"

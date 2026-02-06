@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ListFilter, MoreVertical, Plus } from 'lucide-react'
-import { useMenuData, useMenuItemActions, useModifierActions, useComboActions } from '@/hooks/useMenu'
+import { useMenuData, useMenuItemActions, useModifierActions, useComboActions, useCategoryActions } from '@/hooks/useMenu'
 import Loading from '@/components/shared/Loading'
 import TabsHeader from '../components/TabHeader'
 import ItemCard from './components/ItemCard'
@@ -23,7 +23,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/shadcn/ui/dropdown-menu'
-import type { MenuTab, MenuItem, Modifier, Combo } from '@/@types/menu'
+import type { MenuTab, MenuItem, Modifier, Combo } from '@/services/tenant_admin/menu_management/types'
 
 const MenuManagement = () => {
     const [menuTab, setMenuTab] = useState<MenuTab>('items')
@@ -34,10 +34,12 @@ const MenuManagement = () => {
     const [editingModifier, setEditingModifier] = useState<Modifier | null>(null)
     const [editingCombo, setEditingCombo] = useState<Combo | null>(null)
 
-    const { data: menuData, isLoading } = useMenuData()
+    const [menuId] = useState("1") // Default menu ID
+    const { data: menuData, isLoading } = useMenuData(menuId)
     const itemActions = useMenuItemActions()
     const modifierActions = useModifierActions()
     const comboActions = useComboActions()
+    const categoryActions = useCategoryActions()
 
     const MENU_TABS = [
         { label: 'Items', value: 'items' },
@@ -120,6 +122,18 @@ const MenuManagement = () => {
         setEditingCombo(null)
     }
 
+    const handleDeleteCategory = async (categoryId: string) => {
+        if (window.confirm('Are you sure you want to delete this category? All items in it will also be affected.')) {
+            await categoryActions.deleteCategory({ categoryId, menuId })
+        }
+    }
+
+    const handleDeleteModifier = async (id: string, modifier: Modifier) => {
+        if (window.confirm('Are you sure you want to delete this modifier?')) {
+            await modifierActions.deleteModifier(id, modifier.menuId || '', modifier.categoryId || '')
+        }
+    }
+
     if (isLoading) {
         return (
             <div className="flex h-full items-center justify-center min-h-100">
@@ -194,8 +208,18 @@ const MenuManagement = () => {
                                             <MoreVertical className="w-4 h-4" />
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => {
+                                                // Handle edit category if needed
+                                                console.log('Edit category', items[0]?.categoryId)
+                                            }}>
+                                                Edit
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="text-red-600"
+                                                onClick={() => handleDeleteCategory(items[0]?.categoryId)}
+                                            >
+                                                Delete
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
@@ -226,7 +250,7 @@ const MenuManagement = () => {
                                 key={modifier.id}
                                 modifier={modifier}
                                 onEdit={handleEditModifier}
-                                onDelete={modifierActions.deleteModifier}
+                                onDelete={(id) => handleDeleteModifier(id, modifier)}
                             />
                         ))}
                         {filteredModifiers.length === 0 && (
