@@ -1,6 +1,6 @@
 import { Pencil } from 'lucide-react'
 import { Switch } from '@/components/shadcn/ui/switch'
-import type { Combo } from '@/@types/menu'
+import type { Combo } from '@/services/tenant_admin/menu_management/types'
 
 interface ComboCardProps {
     combo: Combo
@@ -47,9 +47,9 @@ const ComboCard = ({ combo, onEdit, onToggleAvailability }: ComboCardProps) => {
                             </span>
                         </div>
 
-                        {/* Row 2: Size */}
+                        {/* Row 2: Quantity */}
                         <p className="text-sm text-teal-600 mt-1">
-                            {item.size}
+                            Qty: {item.quantity}
                         </p>
                     </div>
                 ))}

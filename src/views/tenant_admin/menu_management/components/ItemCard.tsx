@@ -1,6 +1,6 @@
 import { Pencil } from 'lucide-react'
 import { Switch } from '@/components/shadcn/ui/switch'
-import type { MenuItem } from '@/@types/menu'
+import type { MenuItem } from '@/services/tenant_admin/menu_management/types'
 
 type ItemCardProps = {
     item: MenuItem

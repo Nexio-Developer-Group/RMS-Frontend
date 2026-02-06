@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { X, Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
 import { Switch } from '@/components/shadcn/ui/switch'
-import type { Modifier, ModifierOption } from '@/@types/menu'
+import type { Modifier, MenuItem, MenuCategory } from '@/services/tenant_admin/menu_management/types'
+import type { ModifierOption } from '@/services/tenant_admin/types'
 
 type AddModifierDialogProps = {
     isOpen: boolean
@@ -82,7 +83,7 @@ const AddModifierDialog = ({
                 description: description || undefined,
                 required,
                 options: options.map((opt, index) => ({
-                    id: `opt-${Date.now()}-${index}`,
+                    id: `opt - ${Date.now()} -${index} `,
                     ...opt,
                 })),
             })
