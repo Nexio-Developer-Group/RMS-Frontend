@@ -1,4 +1,3 @@
-import { Card } from '@/components/shadcn/ui/card'
 import {
     Select,
     SelectContent,
@@ -6,12 +5,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/shadcn/ui/select'
-import { RotateCcw } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import DashboardChart from './components/DashboardChart'
 import LiveOnlineOrder from './components/LiveOnlineOrders'
 import RecentOrder from './components/RecentOrders'
 import StatCard from '../components/StatCard'
 import { useTenantDashboard, useOrderActions } from '@/hooks/useTenantDashboard'
+import { apiGetOrderStats } from '@/services/tenant_admin/orders'
 import Loading from '@/components/shared/Loading'
 import { useState } from 'react'
 import RefetchLoader from '@/components/custom/RefetchLoader'
@@ -21,6 +21,13 @@ const TenantAdminDashboard = () => {
     const { acceptOrder, rejectOrder } = useOrderActions()
     const [isRefetching, setIsRefetching] = useState(false)
     const [isOnlineOrdersRefetching, setIsOnlineOrdersRefetching] = useState(false)
+
+    // Real order stats from API
+    const { data: orderStats } = useQuery({
+        queryKey: ['order-stats'],
+        queryFn: apiGetOrderStats,
+        staleTime: 60_000,
+    })
 
     const handleRefetch = () => {
         setIsRefetching(true)
@@ -55,6 +62,11 @@ const TenantAdminDashboard = () => {
 
     const { stats, onlineOrders, recentOrders } = data
 
+    // Use real revenue today if available, fall back to mock totalRevenue
+    const revenueToday = orderStats?.revenue?.today ?? stats.totalRevenue
+    const pendingCount = orderStats?.by_status?.pending ?? 0
+    const servedCount = orderStats?.by_status?.served ?? 0
+
     return (
         <div className='space-y-4'>
             <div className="gap-4 flex flex-col h-[70vh] md:h-[60vh]xl:h-[70vh] 2xl:h-[66vh] md:flex-row min-h-0">
@@ -84,7 +96,7 @@ const TenantAdminDashboard = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                             <StatCard
                                 title="Total Revenue"
-                                value={stats.totalRevenue.toLocaleString()}
+                                value={revenueToday.toLocaleString()}
                                 className='border-r'
                                 trend={{
                                     value: stats.totalRevenueGrowth,
@@ -102,14 +114,14 @@ const TenantAdminDashboard = () => {
                                 subtitle="vs goal"
                             />
                             <StatCard
-                                title="Money Lost"
+                                title="Pending Orders"
                                 className='border-r'
-                                value={`₹${(stats.moneyLost / 100000).toFixed(1)}L`}
-                                subtitle="Stock issues & low traffic"
+                                value={pendingCount.toString()}
+                                subtitle="Awaiting kitchen"
                             />
                             <StatCard
-                                title="Item Sold"
-                                value={stats.itemSold.toLocaleString()}
+                                title="Served Today"
+                                value={servedCount.toString()}
                                 trend={{
                                     value: stats.itemSoldGrowth,
                                     isPositive: stats.itemSoldGrowth > 0,
