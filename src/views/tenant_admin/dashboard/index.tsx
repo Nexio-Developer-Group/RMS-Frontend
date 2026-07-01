@@ -1,3 +1,4 @@
+import { Card } from '@/components/shadcn/ui/card'
 import {
     Select,
     SelectContent,

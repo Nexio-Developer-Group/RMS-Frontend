@@ -265,7 +265,7 @@ function OrderDetailSheet({ orderId, open, onClose }: OrderDetailSheetProps) {
                                         Confirm Order
                                     </Button>
                                 )}
-                                {order.status === 'confirmed' && (
+                                {(order.status === 'confirmed') && (
                                     <Button
                                         size="sm"
                                         onClick={() => statusMutation.mutate('preparing')}
@@ -372,7 +372,7 @@ const OrdersManagement = () => {
                 activeTab === 'all'
                     ? undefined
                     : activeTab === 'paid'
-                    ? undefined
+                    ? undefined // fetch all and show paid+cancelled
                     : { status: activeTab as OrderStatus },
             ),
         refetchInterval: 30000,

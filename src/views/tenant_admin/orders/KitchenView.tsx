@@ -1,4 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiGetOrders, apiUpdateOrderItemStatus } from '@/services/tenant_admin/orders'
 import type { Order, OrderItem, OrderItemStatus } from '@/services/tenant_admin/orders'
 import { useOrderSocket } from '@/hooks/useOrderSocket'
@@ -74,6 +75,7 @@ function OrderCard({ order }: OrderCardProps) {
         : 'Start'
 
     const handleStart = () => {
+        // Advance all pending items to 'preparing'
         order.items
             .filter((i) => i.status === 'pending')
             .forEach((item) => {
@@ -157,6 +159,7 @@ function OrderCard({ order }: OrderCardProps) {
 const KITCHEN_STATUSES = new Set(['pending', 'confirmed', 'preparing'])
 
 const KitchenView = () => {
+    // Subscribe to real-time updates
     useOrderSocket()
 
     const { data: allOrders = [], isLoading } = useQuery({
@@ -165,13 +168,15 @@ const KitchenView = () => {
         refetchInterval: 20000,
     })
 
-    const kitchenOrders = (allOrders as Order[])
-        .filter((o) => KITCHEN_STATUSES.has(o.status))
-        .sort((a, b) => {
-            const priority: Record<string, number> = { preparing: 0, confirmed: 1, pending: 2 }
-            const pa = priority[a.status] ?? 3
-            const pb = priority[b.status] ?? 3
+    // Filter to only active kitchen orders, sort: preparing first, then confirmed, then pending
+    const kitchenOrders = allOrders
+        .filter((o: Order) => KITCHEN_STATUSES.has(o.status))
+        .sort((a: Order, b: Order) => {
+            const priority = { preparing: 0, confirmed: 1, pending: 2 }
+            const pa = priority[a.status as keyof typeof priority] ?? 3
+            const pb = priority[b.status as keyof typeof priority] ?? 3
             if (pa !== pb) return pa - pb
+            // Within same priority, newest first
             return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         })
 
@@ -209,6 +214,7 @@ const KitchenView = () => {
                 </div>
             </div>
 
+            {/* Cards grid */}
             {kitchenOrders.length === 0 ? (
                 <div className="rounded-md border bg-card py-16 text-center">
                     <p className="text-muted-foreground text-lg">No active orders in kitchen</p>
@@ -216,7 +222,7 @@ const KitchenView = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {kitchenOrders.map((order) => (
+                    {kitchenOrders.map((order: Order) => (
                         <OrderCard key={order.id} order={order} />
                     ))}
                 </div>
