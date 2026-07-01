@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ListFilter, MoreVertical, Plus } from 'lucide-react'
+ import { ListFilter, MoreVertical, Plus } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { useMenuData, useMenuItemActions, useModifierActions, useComboActions, useCategoryActions, useMenus } from '@/hooks/useMenu'
 import Loading from '@/components/shared/Loading'
@@ -34,12 +34,13 @@ const MenuManagement = () => {
     const [editingItem, setEditingItem] = useState<MenuItem | null>(null)
     const [editingModifier, setEditingModifier] = useState<Modifier | null>(null)
     const [editingCombo, setEditingCombo] = useState<Combo | null>(null)
+    const [actionError, setActionError] = useState<string | null>(null)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    // const { floorId } = useParams<{ floorId: string }>()
-    // const { data: menus } = useMenus(floorId || '')
-    // const menuId = menus?.find((menu: Menu) => menu.is_active)?.menu_id || ''
-    const menuId = "1"
-    const floorId = "1"
+    const { floorId: routeFloorId } = useParams<{ floorId: string }>()
+    const { data: menus } = useMenus(routeFloorId || '')
+    const menuId = menus?.find((menu: Menu) => menu.is_active)?.menu_id || ''
+    const floorId = routeFloorId || ''
 
     const { data: menuData, isLoading } = useMenuData(menuId, floorId)
     const itemActions = useMenuItemActions(menuId, floorId)
@@ -79,45 +80,82 @@ const MenuManagement = () => {
         setEditingItem(null)
         setEditingModifier(null)
         setEditingCombo(null)
+        setActionError(null)
         setIsAddDialogOpen(true)
     }
 
     const handleEditItem = (item: MenuItem) => {
         setEditingItem(item)
+        setActionError(null)
         setIsAddDialogOpen(true)
     }
 
     const handleEditModifier = (modifier: Modifier) => {
         setEditingModifier(modifier)
+        setActionError(null)
         setIsAddDialogOpen(true)
     }
 
     const handleEditCombo = (combo: Combo) => {
         setEditingCombo(combo)
+        setActionError(null)
         setIsAddDialogOpen(true)
     }
 
     const handleItemSubmit = async (item: Omit<MenuItem, 'id'>) => {
-        if (editingItem) {
-            await itemActions.updateItem({ id: editingItem.id, updates: item })
-        } else {
-            await itemActions.addItem(item)
+        setIsSubmitting(true)
+        setActionError(null)
+        try {
+            if (editingItem) {
+                await itemActions.updateItem({ id: editingItem.id, updates: item })
+            } else {
+                await itemActions.addItem(item)
+            }
+            handleCloseDialog()
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to save item. Please try again.'
+            setActionError(message)
+            console.error('Error saving item:', err)
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
     const handleModifierSubmit = async (modifier: Omit<Modifier, 'id'>) => {
-        if (editingModifier) {
-            await modifierActions.updateModifier({ id: editingModifier.id, updates: modifier })
-        } else {
-            await modifierActions.addModifier(modifier)
+        setIsSubmitting(true)
+        setActionError(null)
+        try {
+            if (editingModifier) {
+                await modifierActions.updateModifier({ id: editingModifier.id, updates: modifier })
+            } else {
+                await modifierActions.addModifier(modifier)
+            }
+            handleCloseDialog()
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to save modifier. Please try again.'
+            setActionError(message)
+            console.error('Error saving modifier:', err)
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
     const handleComboSubmit = async (combo: Omit<Combo, 'id'>) => {
-        if (editingCombo) {
-            await comboActions.updateCombo({ id: editingCombo.id, updates: combo })
-        } else {
-            await comboActions.addCombo(combo)
+        setIsSubmitting(true)
+        setActionError(null)
+        try {
+            if (editingCombo) {
+                await comboActions.updateCombo({ id: editingCombo.id, updates: combo })
+            } else {
+                await comboActions.addCombo(combo)
+            }
+            handleCloseDialog()
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Failed to save combo. Please try again.'
+            setActionError(message)
+            console.error('Error saving combo:', err)
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
@@ -126,17 +164,30 @@ const MenuManagement = () => {
         setEditingItem(null)
         setEditingModifier(null)
         setEditingCombo(null)
+        setActionError(null)
     }
 
     const handleDeleteCategory = async (categoryId: string) => {
         if (window.confirm('Are you sure you want to delete this category? All items in it will also be affected.')) {
-            await categoryActions.deleteCategory({ categoryId, menuId })
+            try {
+                await categoryActions.deleteCategory({ categoryId, menuId })
+            } catch (err) {
+                const message = err instanceof Error ? err.message : 'Failed to delete category. Please try again.'
+                setActionError(message)
+                console.error('Error deleting category:', err)
+            }
         }
     }
 
     const handleDeleteModifier = async (id: string, modifier: Modifier) => {
         if (window.confirm('Are you sure you want to delete this modifier?')) {
-            await modifierActions.deleteModifier(id, modifier.menuId || '', modifier.categoryId || '')
+            try {
+                await modifierActions.deleteModifier(id, modifier.menuId || '', modifier.categoryId || '')
+            } catch (err) {
+                const message = err instanceof Error ? err.message : 'Failed to delete modifier. Please try again.'
+                setActionError(message)
+                console.error('Error deleting modifier:', err)
+            }
         }
     }
 
@@ -159,11 +210,25 @@ const MenuManagement = () => {
                 />
                 <button
                     onClick={handleAddClick}
-                    className="flex items-center px-4 py-2 bg-slate-900 dark:bg-slate-100 text-primary-foreground rounded-lg hover:bg-slate-800 transition-colors font-medium"
+                    disabled={isSubmitting}
+                    className="flex items-center px-4 py-2 bg-slate-900 dark:bg-slate-100 text-primary-foreground rounded-lg hover:bg-slate-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    <Plus className="mr-2" /> Add {MENU_TABS.find(tab => tab.value === menuTab)?.label}
+                    <Plus className="mr-2" /> {isSubmitting ? 'Saving...' : `Add ${MENU_TABS.find(tab => tab.value === menuTab)?.label}`}
                 </button>
             </div>
+
+            {/* Error Banner */}
+            {actionError && (
+                <div className="mx-4 mt-3 px-4 py-3 bg-destructive/10 border border-destructive/30 text-destructive rounded-lg text-sm">
+                    {actionError}
+                    <button
+                        onClick={() => setActionError(null)}
+                        className="ml-2 underline hover:no-underline"
+                    >
+                        Dismiss
+                    </button>
+                </div>
+            )}
 
             {/* Search and View Options */}
             {menuTab === 'items' && (

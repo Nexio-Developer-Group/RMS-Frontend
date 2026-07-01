@@ -28,6 +28,7 @@ const TableManagement = () => {
     const [showDetailsDialog, setShowDetailsDialog] = useState(false)
     const [selectedTable, setSelectedTable] = useState<TableModel | null>(null)
     const [selectedFloor, setSelectedFloor] = useState<FloorModel | null>(null)
+    const [actionError, setActionError] = useState<string | null>(null)
 
     const {
         data: tables = [],
@@ -53,6 +54,7 @@ const TableManagement = () => {
     const deleteTable = useDeleteTable()
 
     const handleAddTable = async (input: CreateTableInput) => {
+        setActionError(null)
         try {
             if (selectedTable) {
                 await updateTable.mutateAsync({ ...input, id: selectedTable.id })
@@ -61,32 +63,43 @@ const TableManagement = () => {
             }
             handleCloseDialog()
         } catch (error) {
+            const message = error instanceof Error ? error.message : 'Failed to save table. Please try again.'
+            setActionError(message)
             console.error('Error saving table:', error)
         }
     }
 
     const handleDeleteFloor = async (id: string) => {
         if (!window.confirm('Are you sure you want to delete this floor?')) return
+        setActionError(null)
         try {
             await deleteFloor.mutateAsync(id)
         } catch (error) {
+            const message = error instanceof Error ? error.message : 'Failed to delete floor. Please try again.'
+            setActionError(message)
             console.error('Error deleting floor:', error)
         }
     }
 
     const handleDeleteTable = async (id: string) => {
         if (!window.confirm('Are you sure you want to delete this table?')) return
+        setActionError(null)
         try {
             await deleteTable.mutateAsync(id)
         } catch (error) {
+            const message = error instanceof Error ? error.message : 'Failed to delete table. Please try again.'
+            setActionError(message)
             console.error('Error deleting table:', error)
         }
     }
 
     const handleToggleStatus = async (id: string) => {
+        setActionError(null)
         try {
             await toggleStatus.mutateAsync(id)
         } catch (error) {
+            const message = error instanceof Error ? error.message : 'Failed to toggle table status. Please try again.'
+            setActionError(message)
             console.error('Error toggling table status:', error)
         }
     }
@@ -106,6 +119,13 @@ const TableManagement = () => {
         occupiedTables: 0,
         inactiveTables: 0,
     }
+
+    const isMutating =
+        createTable.isPending ||
+        updateTable.isPending ||
+        deleteFloor.isPending ||
+        deleteTable.isPending ||
+        toggleStatus.isPending
 
     /* ---------------- LOADING / ERROR STATES ---------------- */
 
@@ -146,9 +166,9 @@ const TableManagement = () => {
                     <h1 className="text-xl font-bold text-foreground">Floors</h1>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button className="flex items-center gap-2">
+                            <Button className="flex items-center gap-2" disabled={isMutating}>
                                 <Plus size={20} />
-                                Add
+                                {isMutating ? 'Saving...' : 'Add'}
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -161,6 +181,19 @@ const TableManagement = () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+
+                {/* Error Banner */}
+                {actionError && (
+                    <div className="mx-4 mt-3 px-4 py-3 bg-destructive/10 border border-destructive/30 text-destructive rounded-lg text-sm">
+                        {actionError}
+                        <button
+                            onClick={() => setActionError(null)}
+                            className="ml-2 underline hover:no-underline"
+                        >
+                            Dismiss
+                        </button>
+                    </div>
+                )}
 
                 {/* Content */}
                 <div className="p-4">
@@ -235,4 +268,3 @@ const TableManagement = () => {
 }
 
 export default TableManagement
-

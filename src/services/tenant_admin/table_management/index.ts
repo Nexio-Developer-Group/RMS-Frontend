@@ -3,9 +3,11 @@ import { CreateFloorTableDto, FloorTableNodeDto, UpdateFloorTableDto } from "./t
 
 export async function apiGetFloors() {
     try {
+        // type=floor filters to floor-level nodes only
         const response = await ApiService.fetchDataWithAxios<FloorTableNodeDto[]>({
             url: '/floors',
-            method: 'get'
+            method: 'get',
+            params: { type: 'floor' },
         });
         return response;
     } catch (error) {
@@ -14,11 +16,13 @@ export async function apiGetFloors() {
     }
 }
 
-export async function apiGetTables() {
+export async function apiGetTables(floorId?: string | number) {
     try {
+        // type=table filters to table-level nodes; optional floor_id narrows to a specific floor
         const response = await ApiService.fetchDataWithAxios<FloorTableNodeDto[]>({
             url: '/floors/tables',
-            method: 'get'
+            method: 'get',
+            params: floorId ? { type: 'table', floor_id: floorId } : { type: 'table' },
         });
         return response;
     } catch (error) {
@@ -58,7 +62,8 @@ export async function apiGetTableById(id: string, type?: 'floor' | 'table') {
     try {
         const response = await ApiService.fetchDataWithAxios<FloorTableNodeDto>({
             url: `/floors/${id}`,
-            method: 'get'
+            method: 'get',
+            params: type ? { type } : undefined,
         });
         return response;
     } catch (error) {
