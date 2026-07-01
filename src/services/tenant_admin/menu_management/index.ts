@@ -20,10 +20,13 @@ import {
 
 export async function apiCreateMenu(data: CreateMenuRequest) {
     try {
-        const response = await ApiService.fetchDataWithAxios<Menu, CreateMenuRequest>({
+        // floor_id is required as a query param per the API spec
+        const { floor_id, ...body } = data;
+        const response = await ApiService.fetchDataWithAxios<Menu, Omit<CreateMenuRequest, 'floor_id'>>({ 
             url: '/menus',
             method: 'post',
-            data
+            data: body,
+            params: { floor_id },
         });
         return response;
     } catch (error) {
@@ -92,10 +95,13 @@ export async function apiDeleteMenu(menuId: string, floorId?: number | string) {
 
 export async function apiCreateCategory(data: CreateCategoryRequest) {
     try {
-        const response = await ApiService.fetchDataWithAxios<Category, CreateCategoryRequest>({
+        // menu_id and category_type are required as query params per the API spec
+        const { menu_id, category_type, ...body } = data;
+        const response = await ApiService.fetchDataWithAxios<Category, Omit<CreateCategoryRequest, 'menu_id' | 'category_type'>>({
             url: '/categories',
             method: 'post',
-            data
+            data: body,
+            params: { menu_id, category_type },
         });
         return response;
     } catch (error) {
@@ -178,10 +184,13 @@ export async function apiDeleteCategory(categoryId: string, menuId: number | str
 
 export async function apiCreateItem(data: CreateItemRequest) {
     try {
-        const response = await ApiService.fetchDataWithAxios<MenuItem, CreateItemRequest>({
+        // menu_id, category_id, and type are required as query params per the API spec
+        const { menu_id, category_id, type, ...body } = data;
+        const response = await ApiService.fetchDataWithAxios<MenuItem, Omit<CreateItemRequest, 'menu_id' | 'category_id' | 'type'>>({
             url: '/items',
             method: 'post',
-            data
+            data: body,
+            params: { menu_id, category_id, type },
         });
         return response;
     } catch (error) {
@@ -250,10 +259,13 @@ export async function apiDeleteItem(itemId: string, menuId: number | string, cat
 
 export async function apiCreateCombo(data: CreateComboRequest) {
     try {
-        const response = await ApiService.fetchDataWithAxios<Combo, CreateComboRequest>({
+        // menu_id is required as a query param per the API spec
+        const { menu_id, ...body } = data;
+        const response = await ApiService.fetchDataWithAxios<Combo, Omit<CreateComboRequest, 'menu_id'>>({
             url: '/combos',
             method: 'post',
-            data
+            data: body,
+            params: { menu_id },
         });
         return response;
     } catch (error) {
