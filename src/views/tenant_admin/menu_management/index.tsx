@@ -191,10 +191,23 @@ const MenuManagement = () => {
         }
     }
 
+    const menusLoaded = menus !== undefined
+
     if (isLoading) {
         return (
             <div className="flex h-full items-center justify-center min-h-100">
                 <Loading loading={true} />
+            </div>
+        )
+    }
+
+    if (menusLoaded && !menuId) {
+        return (
+            <div className="flex flex-col h-full items-center justify-center gap-3 text-center p-8">
+                <p className="text-muted-foreground text-lg font-medium">No active menu found</p>
+                <p className="text-sm text-muted-foreground max-w-xs">
+                    Create a menu for this floor first before adding categories and items.
+                </p>
             </div>
         )
     }
@@ -360,7 +373,7 @@ const MenuManagement = () => {
                     categories={menuData?.categories || []}
                     menuId={menuId}
                     editItem={editingItem}
-                    onCreateCategory={async (name: string) => {
+                    onCreateCategory={menuId ? async (name: string) => {
                         await categoryActions.createCategory({
                             name,
                             menu_id: Number(menuId),
@@ -368,7 +381,7 @@ const MenuManagement = () => {
                             description: '',
                             is_active: true,
                         })
-                    }}
+                    } : undefined}
                 />
             )}
 
