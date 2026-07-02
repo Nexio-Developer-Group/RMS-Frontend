@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
     apiGetFloors,
-    apiGetTables,
     apiCreateTable,
     apiUpdateTable,
     apiDeleteTable,
@@ -70,12 +69,9 @@ export const useFloors = () => {
 }
 
 export const useTables = () => {
-    const tablesQuery = useQuery({
-        queryKey: keys.tables(),
-        queryFn: apiGetTables,
-        staleTime: 0,
-    })
-
+    // Derive tables from floors' children array.
+    // The /floors?type=floor response includes ALL children (active + inactive),
+    // while /floors/tables only returns active tables — so we use floors here.
     const floorsQuery = useQuery({
         queryKey: keys.floors(),
         queryFn: apiGetFloors,
@@ -83,21 +79,17 @@ export const useTables = () => {
     })
 
     const tables = useMemo(() => {
-        if (!tablesQuery.data || !floorsQuery.data) return []
-
-        const floorMap = new Map<string, string>()
-        floorsQuery.data.forEach(f => floorMap.set(f.floor_id, f.name))
-
-        return tablesQuery.data.map(t =>
-            mapNodeToTable(t, floorMap.get(String(t.parent_id)) || 'Unknown Floor')
+        if (!floorsQuery.data) return []
+        return floorsQuery.data.flatMap(floor =>
+            (floor.children ?? []).map(t => mapNodeToTable(t, floor.name))
         )
-    }, [tablesQuery.data, floorsQuery.data])
+    }, [floorsQuery.data])
 
     return {
         data: tables,
-        isLoading: tablesQuery.isLoading || floorsQuery.isLoading,
-        isError: tablesQuery.isError || floorsQuery.isError,
-        error: tablesQuery.error || floorsQuery.error,
+        isLoading: floorsQuery.isLoading,
+        isError: floorsQuery.isError,
+        error: floorsQuery.error,
     }
 }
 
