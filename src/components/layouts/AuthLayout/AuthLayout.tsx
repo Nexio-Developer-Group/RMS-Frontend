@@ -1,6 +1,6 @@
 import { useMemo, lazy } from 'react'
 import type { CommonProps } from '@/@types/common'
-import type { LazyExoticComponent } from 'react'
+import type { JSX, LazyExoticComponent } from 'react'
 
 type LayoutType = 'simple'
 

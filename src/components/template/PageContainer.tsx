@@ -30,6 +30,7 @@ interface PageContainerBodyProps {
 interface PageContainerFooterProps {
     className?: string
     footer?: boolean
+    pageContainerType?: string
 }
 
 const CustomHeader = <T extends ElementType>({
@@ -171,9 +172,7 @@ const PageContainer = (props: PageContainerProps) => {
                     </main>
                     <PageContainerFooter
                         footer={footer}
-                        pageContainerType={
-                            pageContainerType as FooterPageContainerType
-                        }
+                        pageContainerType={pageContainerType}
                     />
                 </div>
             )}

@@ -5,6 +5,7 @@ import { useSessionUser } from '@/store/authStore'
 import { Link } from 'react-router-dom'
 import { PiUserDuotone, PiSignOutDuotone } from 'react-icons/pi'
 import { useAuth } from '@/auth'
+import type { JSX } from 'react'
 
 type DropdownList = {
     label: string

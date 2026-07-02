@@ -17,7 +17,9 @@ const convertToKDSOrders = (): KDSOrder[] => {
             quantity: item.qty,
             price: item.amount,
             total: item.total,
-            status: order.status
+            // Shared OrderStatus doesn't fully overlap KDSItemStatus;
+            // map preparing through, everything else starts pending
+            status: order.status === 'preparing' ? ('preparing' as const) : ('pending' as const)
         })),
         overallStatus: order.status
     }))

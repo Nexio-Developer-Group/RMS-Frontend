@@ -1,4 +1,4 @@
-import { Order } from '@/@types/orders'
+import { KDSOrder } from '@/@types/kds'
 import { KDSItemRow } from '../components/KDSItemRow'
 import { cn } from '@/components/shadcn/utils'
 import { Badge } from '@/components/shadcn/ui/badge'
@@ -6,7 +6,7 @@ import { CardHeader } from '@/components/shadcn/ui/card'
 import { Check, Expand } from 'lucide-react'
 
 type KDSCardProps = {
-    order: Order
+    order: KDSOrder
     onApproveItem: (orderId: string, itemId: string) => void
     onCompleteOrder: (orderId: string) => void
 }
@@ -59,7 +59,7 @@ const KDSCard = ({ order, onApproveItem, onCompleteOrder }: KDSCardProps) => {
                 </p>
 
                 <div className="divide-y">
-                    {order.items.map((item: Order['items'][number], index: number) => (
+                    {order.items.map((item: KDSOrder['items'][number], index: number) => (
                         <KDSItemRow
                             key={item.id || `item-${index}`}
                             item={item}

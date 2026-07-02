@@ -102,10 +102,37 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
+// Explicit prop types — recharts v3 no longer exposes payload/label on
+// the Tooltip component props type
+type ChartTooltipItem = {
+    name?: string
+    dataKey?: string | number
+    value?: number | string
+    color?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    payload?: any
+}
+
 const ChartTooltipContent = React.forwardRef<
     HTMLDivElement,
-    React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
     React.ComponentProps<"div"> & {
+        active?: boolean
+        payload?: ChartTooltipItem[]
+        label?: string | number
+        labelFormatter?: (
+            value: React.ReactNode,
+            payload: ChartTooltipItem[],
+        ) => React.ReactNode
+        labelClassName?: string
+        formatter?: (
+            value: number | string,
+            name: string,
+            item: ChartTooltipItem,
+            index: number,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            payload: any,
+        ) => React.ReactNode
+        color?: string
         hideLabel?: boolean
         hideIndicator?: boolean
         indicator?: "line" | "dot" | "dashed"
@@ -260,8 +287,13 @@ const ChartLegend = RechartsPrimitive.Legend
 
 const ChartLegendContent = React.forwardRef<
     HTMLDivElement,
-    React.ComponentProps<"div"> &
-    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+    React.ComponentProps<"div"> & {
+        payload?: Array<{
+            value?: string
+            dataKey?: string | number
+            color?: string
+        }>
+        verticalAlign?: "top" | "middle" | "bottom"
         hideIcon?: boolean
         nameKey?: string
     }

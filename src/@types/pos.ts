@@ -7,6 +7,14 @@ import {
     BaseCampaign,
 } from './shared'
 
+// Re-export shared types that POS components import from this module
+export type { OrderType, MenuCategory, BaseTable }
+
+/**
+ * Alias for BaseTable for backwards compatibility
+ */
+export type Table = BaseTable
+
 /**
  * POS menu item with category reference
  */
@@ -18,6 +26,11 @@ export interface POSMenuItem extends BaseMenuItem {
  * Alias for POSMenuItem for backwards compatibility
  */
 export type MenuItem = POSMenuItem
+
+/**
+ * Alias for POSOrderItem for backwards compatibility
+ */
+export type OrderItem = POSOrderItem
 
 /**
  * POS addon/modifier

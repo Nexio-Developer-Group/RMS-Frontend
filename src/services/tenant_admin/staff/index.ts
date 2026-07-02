@@ -217,7 +217,7 @@ export async function apiUploadDocument(
         const response = await ApiService.fetchDataWithAxios<StaffDocument>({
             url: `/users/${id}/documents`,
             method: 'post',
-            data: formData,
+            data: formData as unknown as Record<string, unknown>,
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
