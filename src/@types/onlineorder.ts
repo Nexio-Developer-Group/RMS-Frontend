@@ -1,5 +1,4 @@
 import {
-    OrderStatus,
     OnlinePlatform,
     PaymentMethod,
     PaymentStatus,
@@ -9,6 +8,18 @@ import {
     OrderPricing,
     RevenueStats,
 } from './shared'
+
+/**
+ * Online order lifecycle status (richer than the shared OrderStatus —
+ * online orders pass through accepted/ready states)
+ */
+export type OnlineOrderStatus =
+    | 'pending'
+    | 'accepted'
+    | 'preparing'
+    | 'ready'
+    | 'completed'
+    | 'cancelled'
 
 /**
  * Online order item with pricing details
@@ -30,7 +41,7 @@ export interface OnlineOrder extends OrderPricing {
     orderCode: string
     platform: OnlinePlatform
     customer: CustomerWithAddress
-    status: OrderStatus
+    status: OnlineOrderStatus
     timeline: OrderTimeline
     items: OnlineOrderItem[]
     payment: PaymentMethod

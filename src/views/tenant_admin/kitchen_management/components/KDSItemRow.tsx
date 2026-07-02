@@ -1,10 +1,10 @@
 import { Check, MoreVertical } from "lucide-react"
 import { Button } from "@/components/shadcn/ui/button"
 import { Badge } from "@/components/shadcn/ui/badge"
-import type { OrderItem } from "@/@types/kds"
+import type { KDSOrderItem } from "@/@types/kds"
 
 type Props = {
-  item: OrderItem
+  item: KDSOrderItem
   onApprove: () => void
 }
 
@@ -28,7 +28,7 @@ export const KDSItemRow = ({ item, onApprove }: Props) => {
 
       {/* Right: Actions */}
       <div className="flex items-center gap-2">
-        {item.status === "prepared" ? (
+        {item.status === "ready" || item.status === "served" ? (
           <Badge
             variant="secondary"
             className="rounded-full bg-green-100 text-green-600 font-medium"

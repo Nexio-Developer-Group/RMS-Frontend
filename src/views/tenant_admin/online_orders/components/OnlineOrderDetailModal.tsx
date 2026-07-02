@@ -241,7 +241,7 @@ const OnlineOrderDetailModal = ({ order, open, onClose }: OnlineOrderDetailModal
                                     <p className="font-medium text-foreground flex items-center gap-2">
                                         <span className={cn(
                                             'w-2 h-2 rounded-full',
-                                            order.paymentStatus === 'Paid' ? 'bg-green-500' : 'bg-yellow-500'
+                                            order.paymentStatus === 'paid' ? 'bg-green-500' : 'bg-yellow-500'
                                         )} />
                                         {order.paymentStatus}
                                     </p>
@@ -273,7 +273,7 @@ const OnlineOrderDetailModal = ({ order, open, onClose }: OnlineOrderDetailModal
                             KOT Print
                         </Button>
 
-                        {order.status === 'Pending' && (
+                        {order.status === 'pending' && (
                             <Button
                                 className="bg-green-600 hover:bg-green-700 text-white"
                                 onClick={handleAcceptOrder}
@@ -282,7 +282,7 @@ const OnlineOrderDetailModal = ({ order, open, onClose }: OnlineOrderDetailModal
                             </Button>
                         )}
 
-                        {order.status === 'Accepted' && (
+                        {order.status === 'accepted' && (
                             <Button
                                 className="bg-orange-600 hover:bg-orange-700 text-white"
                                 onClick={handleStartPreparing}
@@ -291,7 +291,7 @@ const OnlineOrderDetailModal = ({ order, open, onClose }: OnlineOrderDetailModal
                             </Button>
                         )}
 
-                        {order.status === 'Preparing' && (
+                        {order.status === 'preparing' && (
                             <Button
                                 className="bg-blue-600 hover:bg-blue-700 text-white"
                                 onClick={handleMarkAsReady}

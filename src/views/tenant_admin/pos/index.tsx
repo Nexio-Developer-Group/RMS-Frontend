@@ -407,7 +407,7 @@ function MenuBrowserPanel({ selectedCartId, error, onDismissError, onAddItem, is
 
     const { data: categories = [], isLoading: catsLoading } = useQuery<Category[]>({
         queryKey: ['categories-with-items-pos', effectiveMenuId],
-        queryFn: () => apiGetCategoriesWithItems(effectiveMenuId, 'item'),
+        queryFn: () => apiGetCategoriesWithItems(effectiveMenuId, 'ITEM'),
         enabled: !!effectiveMenuId,
     })
 
@@ -512,7 +512,7 @@ function MenuBrowserPanel({ selectedCartId, error, onDismissError, onAddItem, is
                     <>
                         {/* Categories */}
                         {filteredCategories.map((cat) => {
-                            const catId = String(cat.category_id ?? cat.id ?? cat.name)
+                            const catId = String(cat.category_id ?? cat.name)
                             const isExpanded = expandedCategories.has(catId)
                             return (
                                 <div key={catId} className="border rounded-lg overflow-hidden">
@@ -527,9 +527,9 @@ function MenuBrowserPanel({ selectedCartId, error, onDismissError, onAddItem, is
                                     </button>
                                     {isExpanded && (
                                         <div className="divide-y">
-                                            {(cat.items ?? []).map((item: { id?: string; item_id?: string; name: string; price?: number; base_price?: number }) => {
-                                                const itemId = String(item.id ?? item.item_id ?? '')
-                                                const price = item.price ?? item.base_price ?? 0
+                                            {(cat.items ?? []).map((item) => {
+                                                const itemId = String(item.item_id ?? '')
+                                                const price = Number(item.price ?? 0)
                                                 return (
                                                     <div
                                                         key={itemId}
@@ -584,9 +584,9 @@ function MenuBrowserPanel({ selectedCartId, error, onDismissError, onAddItem, is
                                 </button>
                                 {expandedCombos && (
                                     <div className="divide-y">
-                                        {filteredCombos.map((combo: { combo_id?: string; id?: string; name: string; price?: number; base_price?: number }) => {
-                                            const comboId = String(combo.combo_id ?? combo.id ?? '')
-                                            const price = combo.price ?? combo.base_price ?? 0
+                                        {filteredCombos.map((combo) => {
+                                            const comboId = String(combo.combo_id ?? '')
+                                            const price = Number(combo.price ?? 0)
                                             return (
                                                 <div
                                                     key={comboId}
@@ -779,8 +779,8 @@ function NewCartDialog({ open, onClose, onCreated, waiterId }: NewCartDialogProp
                                 </SelectTrigger>
                                 <SelectContent>
                                     {tables.map((t) => (
-                                        <SelectItem key={String(t.id)} value={String(t.id)}>
-                                            {t.name || `Table ${t.id}`}
+                                        <SelectItem key={String(t.floor_id)} value={String(t.floor_id)}>
+                                            {t.name || `Table ${t.floor_id}`}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

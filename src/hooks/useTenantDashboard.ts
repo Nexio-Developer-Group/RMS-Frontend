@@ -54,8 +54,8 @@ export const useOrderActions = () => {
     })
 
     return {
-        acceptOrder: (data: { orderId: string }) => acceptOrderMutation.mutate(data.orderId),
-        rejectOrder: (data: { orderId: string }) => rejectOrderMutation.mutate(data.orderId),
+        acceptOrder: (orderId: string) => acceptOrderMutation.mutate(orderId),
+        rejectOrder: (orderId: string) => rejectOrderMutation.mutate(orderId),
         isAccepting: acceptOrderMutation.isPending,
         isRejecting: rejectOrderMutation.isPending,
     }

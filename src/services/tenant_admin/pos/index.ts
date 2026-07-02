@@ -26,8 +26,10 @@ export interface CartItem {
 }
 
 export interface CreateCartDto {
-    table_id: string
-    waiter_id: string
+    /** Table (floor node) id — omit for takeaway/delivery */
+    table_id?: string
+    /** Waiter user id — backend defaults to the authenticated user */
+    waiter_id?: string
     notes?: string
 }
 

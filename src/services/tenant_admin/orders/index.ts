@@ -123,6 +123,20 @@ export async function apiUpdateOrderItemStatus(
     }
 }
 
+export async function apiPayOrder(id: string): Promise<Order> {
+    try {
+        // POS counter payment — marks the order paid, bypassing the kitchen status chain
+        const response = await ApiService.fetchDataWithAxios<Order>({
+            url: `/orders/${id}/pay`,
+            method: 'post',
+        })
+        return response
+    } catch (error) {
+        console.error('Error paying order:', error)
+        throw error
+    }
+}
+
 export async function apiCancelOrder(id: string): Promise<void> {
     try {
         await ApiService.fetchDataWithAxios<void>({
