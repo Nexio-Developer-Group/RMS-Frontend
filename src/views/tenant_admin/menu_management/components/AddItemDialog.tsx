@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Plus } from 'lucide-react'
 import type { MenuItem, MenuCategory } from '@/services/tenant_admin/menu_management/types'
+import AddCategoryDialog from './AddCategoryDialog'
 
 type AddItemDialogProps = {
     isOpen: boolean
@@ -9,6 +10,7 @@ type AddItemDialogProps = {
     categories: MenuCategory[]
     menuId: string
     editItem?: MenuItem | null
+    onCreateCategory?: (name: string) => Promise<void>
 }
 
 const AddItemDialog = ({
@@ -18,12 +20,14 @@ const AddItemDialog = ({
     categories,
     menuId,
     editItem,
+    onCreateCategory,
 }: AddItemDialogProps) => {
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
     const [categoryId, setCategoryId] = useState('')
     const [image, setImage] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showCategoryDialog, setShowCategoryDialog] = useState(false)
 
     useEffect(() => {
         if (editItem) {
@@ -66,6 +70,17 @@ const AddItemDialog = ({
     if (!isOpen) return null
 
     return (
+        <>
+        {onCreateCategory && (
+            <AddCategoryDialog
+                isOpen={showCategoryDialog}
+                onClose={() => setShowCategoryDialog(false)}
+                onSubmit={async (name) => {
+                    await onCreateCategory(name)
+                    setShowCategoryDialog(false)
+                }}
+            />
+        )}
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-card rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
                 {/* Header */}
@@ -117,21 +132,47 @@ const AddItemDialog = ({
 
                     {/* Category */}
                     <div>
-                        <label className="block text-sm font-medium text-foreground mb-1">
-                            Category *
-                        </label>
-                        <select
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                            className="w-full px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                            required
-                        >
-                            {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="flex items-center justify-between mb-1">
+                            <label className="block text-sm font-medium text-foreground">
+                                Category *
+                            </label>
+                            {onCreateCategory && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowCategoryDialog(true)}
+                                    className="flex items-center gap-1 text-xs text-primary hover:underline"
+                                >
+                                    <Plus size={12} /> Create Category
+                                </button>
+                            )}
+                        </div>
+                        {categories.length === 0 ? (
+                            <div className="w-full px-3 py-2 border rounded-lg bg-muted text-muted-foreground text-sm">
+                                No categories yet.{' '}
+                                {onCreateCategory && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowCategoryDialog(true)}
+                                        className="text-primary hover:underline"
+                                    >
+                                        Create one first.
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            <select
+                                value={categoryId}
+                                onChange={(e) => setCategoryId(e.target.value)}
+                                className="w-full px-3 py-2 border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                                required
+                            >
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
                     </div>
 
                     {/* Image Upload */}
@@ -200,6 +241,7 @@ const AddItemDialog = ({
                 </form>
             </div>
         </div>
+        </>
     )
 }
 

@@ -360,6 +360,15 @@ const MenuManagement = () => {
                     categories={menuData?.categories || []}
                     menuId={menuId}
                     editItem={editingItem}
+                    onCreateCategory={async (name: string) => {
+                        await categoryActions.createCategory({
+                            name,
+                            menu_id: Number(menuId),
+                            category_type: 'ITEM',
+                            description: '',
+                            is_active: true,
+                        })
+                    }}
                 />
             )}
 

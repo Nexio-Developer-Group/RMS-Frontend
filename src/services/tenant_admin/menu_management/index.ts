@@ -95,13 +95,11 @@ export async function apiDeleteMenu(menuId: string, floorId?: number | string) {
 
 export async function apiCreateCategory(data: CreateCategoryRequest) {
     try {
-        // menu_id and category_type are required as query params per the API spec
-        const { menu_id, category_type, ...body } = data;
-        const response = await ApiService.fetchDataWithAxios<Category, Omit<CreateCategoryRequest, 'menu_id' | 'category_type'>>({
+        // Backend POST /categories expects all fields including menu_id and category_type in @Body()
+        const response = await ApiService.fetchDataWithAxios<Category, CreateCategoryRequest>({
             url: '/categories',
             method: 'post',
-            data: body,
-            params: { menu_id, category_type },
+            data,
         });
         return response;
     } catch (error) {

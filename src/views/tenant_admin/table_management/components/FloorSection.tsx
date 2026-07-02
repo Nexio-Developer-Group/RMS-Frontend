@@ -9,7 +9,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/shadcn/ui/dropdown-menu'
-import { Edit2, Trash2 } from 'lucide-react'
+import { Edit2, Trash2, Power } from 'lucide-react'
 
 type FloorSectionProps = {
     floor: FloorModel
@@ -19,6 +19,7 @@ type FloorSectionProps = {
     onTableClick: (table: TableModel) => void
     onEditFloor?: (floor: FloorModel) => void
     onDeleteFloor?: (id: string) => void
+    onToggleFloorStatus?: (id: string) => void
     onDeleteTable: (id: string) => void
 }
 
@@ -30,6 +31,7 @@ const FloorSection = ({
     onTableClick,
     onEditFloor,
     onDeleteFloor,
+    onToggleFloorStatus,
     onDeleteTable,
 }: FloorSectionProps) => {
     return (
@@ -64,6 +66,12 @@ const FloorSection = ({
                                 <DropdownMenuItem onClick={() => onEditFloor(floor)}>
                                     <Edit2 className="mr-2 h-4 w-4" />
                                     <span>Edit Floor</span>
+                                </DropdownMenuItem>
+                            )}
+                            {onToggleFloorStatus && (
+                                <DropdownMenuItem onClick={() => onToggleFloorStatus(floor.id)}>
+                                    <Power className="mr-2 h-4 w-4" />
+                                    <span>{floor.isActive ? 'Disable Floor' : 'Enable Floor'}</span>
                                 </DropdownMenuItem>
                             )}
                             {onDeleteFloor && (
