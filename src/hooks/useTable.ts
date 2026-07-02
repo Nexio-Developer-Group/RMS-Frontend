@@ -207,13 +207,27 @@ export const useFloorActions = () => {
         onSuccess: invalidate,
     })
 
+    const toggleFloorStatus = useMutation({
+        mutationFn: async (id: string) => {
+            const data = await apiGetTableById(id, 'floor')
+            return apiUpdateTable(id, 'floor', {
+                type: 'floor',
+                name: data.name,
+                is_active: !data.is_active,
+            })
+        },
+        onSuccess: invalidate,
+    })
+
     return {
         createFloor: createFloor.mutateAsync,
         updateFloor: updateFloor.mutateAsync,
         deleteFloor: deleteFloor.mutateAsync,
+        toggleFloorStatus: toggleFloorStatus.mutateAsync,
         isCreating: createFloor.isPending,
         isUpdating: updateFloor.isPending,
         isDeleting: deleteFloor.isPending,
+        isTogglingFloor: toggleFloorStatus.isPending,
     }
 }
 
@@ -252,4 +266,9 @@ export const useUpdateFloor = () => {
 export const useDeleteFloor = () => {
     const { deleteFloor, isDeleting } = useFloorActions()
     return { mutateAsync: deleteFloor, isPending: isDeleting }
+}
+
+export const useToggleFloorStatus = () => {
+    const { toggleFloorStatus, isTogglingFloor } = useFloorActions()
+    return { mutateAsync: toggleFloorStatus, isPending: isTogglingFloor }
 }

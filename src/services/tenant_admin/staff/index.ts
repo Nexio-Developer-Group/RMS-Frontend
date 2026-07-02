@@ -95,11 +95,12 @@ export async function apiGetRoles(): Promise<Role[]> {
 
 export async function apiGetStaff(): Promise<Staff[]> {
     try {
-        const response = await ApiService.fetchDataWithAxios<Staff[]>({
+        const response = await ApiService.fetchDataWithAxios<any>({
             url: '/users/staff',
             method: 'get',
         });
-        return response;
+        // Backend returns { staff: [...], stats: {} } — unwrap the array
+        return Array.isArray(response) ? response : (response?.staff ?? []);
     } catch (error) {
         console.error('Error fetching staff:', error);
         throw error;

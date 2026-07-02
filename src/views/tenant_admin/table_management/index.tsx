@@ -7,6 +7,7 @@ import {
     useCreateTable,
     useUpdateTable,
     useToggleTableStatus,
+    useToggleFloorStatus,
     useDeleteFloor,
     useDeleteTable,
 } from '@/hooks/useTable'
@@ -50,6 +51,7 @@ const TableManagement = () => {
     const createTable = useCreateTable()
     const updateTable = useUpdateTable()
     const toggleStatus = useToggleTableStatus()
+    const toggleFloorStatus = useToggleFloorStatus()
     const deleteFloor = useDeleteFloor()
     const deleteTable = useDeleteTable()
 
@@ -104,6 +106,17 @@ const TableManagement = () => {
         }
     }
 
+    const handleToggleFloorStatus = async (id: string) => {
+        setActionError(null)
+        try {
+            await toggleFloorStatus.mutateAsync(id)
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Failed to toggle floor status. Please try again.'
+            setActionError(message)
+            console.error('Error toggling floor status:', error)
+        }
+    }
+
     const tablesByFloor = useMemo(() => {
         if (!floors.length) return []
         return floors.map((floor) => ({
@@ -125,7 +138,8 @@ const TableManagement = () => {
         updateTable.isPending ||
         deleteFloor.isPending ||
         deleteTable.isPending ||
-        toggleStatus.isPending
+        toggleStatus.isPending ||
+        toggleFloorStatus.isPending
 
     /* ---------------- LOADING / ERROR STATES ---------------- */
 
@@ -216,6 +230,7 @@ const TableManagement = () => {
                                 setShowFloorDialog(true)
                             }}
                             onDeleteFloor={handleDeleteFloor}
+                            onToggleFloorStatus={handleToggleFloorStatus}
                             onDeleteTable={handleDeleteTable}
                         />
                     ))}
